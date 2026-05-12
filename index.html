@@ -10,7 +10,7 @@
         body { background-color: #000000; color: #ffffff; line-height: 1.6; overflow-x: hidden; }
         
         /* Navigation */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: #1a1a1a; border-bottom: 2px solid #d4af37; position: sticky; top: 0; z-index: 1000; }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: #111; border-bottom: 2px solid #d4af37; position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 20px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; color: #d4af37; cursor: pointer; }
         .nav-links { display: flex; gap: 15px; list-style: none; }
         .nav-links a { text-decoration: none; color: #ffffff; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; cursor: pointer; }
@@ -19,48 +19,38 @@
         /* Search Section */
         .search-container { text-align: center; padding: 50px 5%; background: #0a0a0a; border-top: 1px solid #1a1a1a; margin-top: 40px; }
         .search-label { display: block; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; color: #d4af37; }
-        .search-input { width: 100%; max-width: 500px; padding: 12px 20px; border: 1.5px solid #d4af37; background: #111; color: white; border-radius: 25px; outline: none; font-size: 14px; font-style: italic; text-align: center; }
-
-        /* Sections Visibility */
-        #about-page, #policy-page { display: none; padding: 40px 10%; min-height: 70vh; background: #000; }
-        .info-box { border: 1px solid #d4af37; padding: 20px; margin-bottom: 20px; text-align: center; background: #111; font-size: 14px; color: #eee; }
+        .search-input { width: 100%; max-width: 500px; padding: 12px 20px; border: 1.5px solid #d4af37; background: #000; color: #fff; border-radius: 25px; outline: none; font-size: 14px; text-align: center; }
 
         /* Hero & Shop */
-        .hero { height: 50vh; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&q=80&w=1500') no-repeat center center/cover; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white; border-bottom: 5px solid #d4af37; padding: 20px; }
+        .hero { height: 50vh; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&q=80&w=1500') no-repeat center center/cover; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border-bottom: 5px solid #d4af37; padding: 20px; }
         .hero h2 { font-size: 28px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; color: #d4af37; }
-        .hero p { font-style: italic; font-size: 14px; margin-bottom: 25px; color: #fff; }
+        .hero p { font-style: italic; font-size: 14px; color: #fff; }
 
         .container { padding: 40px 5%; background: #000; }
-        .section-title { text-align: center; margin-bottom: 30px; font-size: 20px; text-transform: uppercase; letter-spacing: 3px; color: #d4af37; position: relative; }
-        .section-title::after { content: ''; display: block; width: 40px; height: 2px; background: #d4af37; margin: 10px auto; }
+        .section-title { text-align: center; margin-bottom: 30px; font-size: 20px; text-transform: uppercase; letter-spacing: 3px; color: #d4af37; }
 
         /* Products Grid */
         .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .product-card { background: #111; padding: 0 0 15px 0; text-align: center; border: 1px solid #1a1a1a; transition: 0.4s; position: relative; }
-        .product-image { width: 100%; height: 180px; background-color: #050505; margin-bottom: 10px; overflow: hidden; }
-        .product-image img { width: 100%; height: 100%; object-fit: contain; } /* Contain for perfume bottle clarity */
+        .product-card { background: #111; padding: 0 0 15px 0; text-align: center; border: 1px solid #1a1a1a; position: relative; }
+        .product-image { width: 100%; height: 180px; background-color: #050505; overflow: hidden; }
+        .product-image img { width: 100%; height: 100%; object-fit: contain; }
         
-        .product-card h3 { font-size: 14px; padding: 0 5px; color: #fff; }
         .status-badge { position: absolute; top: 10px; right: 10px; padding: 3px 8px; font-size: 8px; font-weight: bold; text-transform: uppercase; z-index: 5; }
         .available { background-color: #d4af37; color: black; }
         .sold-out { background-color: #333; color: white; }
         .price { color: #d4af37; font-weight: bold; margin-bottom: 10px; font-size: 13px; display: block; }
         
-        .btn { padding: 10px; background: #d4af37; color: black; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; font-size: 10px; font-weight: bold; border: none; cursor: pointer; width: 90%; transition: 0.3s; }
-        .btn:hover { background: #fff; color: #000; }
+        .btn { padding: 10px; background: #d4af37; color: black; font-weight: bold; text-transform: uppercase; font-size: 10px; border: none; cursor: pointer; width: 90%; transition: 0.3s; }
+        .btn:hover { background: #fff; }
 
         /* Cart Overlay */
         .cart-overlay { position: fixed; top: 0; right: 0; width: 100%; max-width: 350px; height: 100%; background: #111; color: white; z-index: 2000; box-shadow: -5px 0 15px rgba(0,0,0,0.5); padding: 20px; display: none; border-left: 4px solid #d4af37; overflow-y: auto; }
         .close-cart { position: absolute; top: 15px; right: 15px; font-size: 24px; cursor: pointer; color: #d4af37; }
         .cart-input { width: 100%; padding: 8px; border: 1px solid #d4af37; background: #000; color: white; margin-bottom: 12px; outline: none; font-size: 13px; }
 
-        #admin-section { display: none; background: #0a0a0a; padding: 30px 5%; border-top: 2px solid #d4af37; }
-        footer { background: #000; color: #888; text-align: center; padding: 40px 5%; border-top: 2px solid #1a1a1a; font-size: 12px; }
+        footer { background: #000; color: #555; text-align: center; padding: 40px 5%; border-top: 2px solid #1a1a1a; font-size: 12px; }
 
-        @media (min-width: 768px) {
-            .product-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
-            .product-image { height: 280px; }
-        }
+        @media (min-width: 768px) { .product-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); } .product-image { height: 280px; } }
     </style>
 </head>
 <body>
@@ -79,9 +69,8 @@
 
     <div id="cart-sidebar" class="cart-overlay">
         <div class="close-cart" onclick="toggleCart()">&times;</div>
-        <h3 style="text-transform: uppercase; margin-bottom: 15px; font-size: 18px; color: #d4af37;">Your Order</h3>
+        <h3 style="text-transform: uppercase; margin-bottom: 15px; font-size: 18px; color: #d4af37;">Your Selection</h3>
         <div id="cart-items-list"></div>
-        
         <div style="font-size: 13px; margin-top: 10px; border-top: 1px solid #222; padding-top: 10px;">
             <div style="display: flex; justify-content: space-between;">
                 <span>Subtotal:</span>
@@ -96,12 +85,9 @@
                 <span style="color: #d4af37;"><span id="cart-grand-total">0</span> NLE</span>
             </div>
         </div>
-
         <div class="cart-form">
-            <label style="font-size: 10px; color: #888;">FULL NAME</label>
-            <input type="text" id="cust-name" class="cart-input" placeholder="Enter your name">
-            <label style="font-size: 10px; color: #888;">DELIVERY ADDRESS</label>
-            <input type="text" id="cust-address" class="cart-input" placeholder="Address in Freetown">
+            <input type="text" id="cust-name" class="cart-input" placeholder="Full Name">
+            <input type="text" id="cust-address" class="cart-input" placeholder="Delivery Address in Freetown">
         </div>
         <button class="btn" style="background: #25D366; color: white; width: 100%; margin-bottom: 10px;" onclick="checkoutWhatsApp()">ORDER VIA WHATSAPP</button>
         <button class="btn" style="background: #222; color: #fff; width: 100%;" onclick="toggleCart()">CONTINUE SHOPPING</button>
@@ -109,4 +95,133 @@
 
     <div id="home-content">
         <section class="hero">
-            <h2>Exquisite
+            <h2>Luxury Fragrances</h2>
+            <p>24/7 Delivery Across Freetown</p>
+        </section>
+        <div class="container" id="shop">
+            <h2 class="section-title">The Collection</h2>
+            <div class="product-grid" id="product-grid"></div>
+        </div>
+    </div>
+
+    <div id="about-page" style="display:none; padding: 50px 5%; text-align: center;">
+        <h2 class="section-title">About Us</h2>
+        <p>ARISA PERFUME STORE offers the finest selection of luxury scents.</p>
+    </div>
+
+    <div id="policy-page" style="display:none; padding: 50px 5%; text-align: center;">
+        <h2 class="section-title">Store Policy</h2>
+        <p>Swift delivery within 24 hours. Quality guaranteed.</p>
+    </div>
+
+    <div class="search-container">
+        <span class="search-label">Find Your Scent</span>
+        <input type="text" id="perfume-search" class="search-input" placeholder="Search brands..." onkeyup="filterProducts()">
+    </div>
+
+    <footer>
+        <p>&copy; 2026 ARISA PERFUME STORE. OPEN 24/7.</p>
+        <button onclick="loginAdmin()" style="background: none; border: none; color: #222; cursor: pointer; margin-top: 10px;">Staff Login</button>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyD6VOairMfPk1fM9VApccmNEPAdMIb3HO4",
+            authDomain: "arisa-perfume-store.firebaseapp.com",
+            databaseURL: "https://arisa-perfume-store-default-rtdb.firebaseio.com",
+            projectId: "arisa-perfume-store",
+            storageBucket: "arisa-perfume-store.firebasestorage.app",
+            messagingSenderId: "49919010733",
+            appId: "1:49919010733:web:2087407e3f6bd41c1fe324"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        const myWhatsAppNumber = "232074170733";
+        let cart = [];
+        let perfumes = [];
+
+        db.ref('perfumes').on('value', (snapshot) => {
+            const data = snapshot.val();
+            perfumes = [];
+            if (data) {
+                Object.keys(data).forEach(key => perfumes.push({ firebaseId: key, ...data[key] }));
+            }
+            renderProducts(perfumes);
+        });
+
+        function renderProducts(list) {
+            const grid = document.getElementById('product-grid');
+            if(!grid) return;
+            grid.innerHTML = '';
+            list.forEach((data) => {
+                const isSoldOut = data.status === 'sold-out';
+                grid.innerHTML += `
+                    <div class="product-card">
+                        <span class="status-badge ${data.status}">${data.status}</span>
+                        <div class="product-image"><img src="${data.image}"></div>
+                        <h3>${data.name}</h3>
+                        <span class="price">${data.price} NLE</span>
+                        <button class="btn" onclick="${isSoldOut ? '' : `addToBag('${data.name}')`}" ${isSoldOut ? 'disabled' : ''}>
+                            ${isSoldOut ? 'Sold Out' : 'Add to Bag'}
+                        </button>
+                    </div>`;
+            });
+        }
+
+        window.addToBag = (name) => {
+            const item = perfumes.find(p => p.name === name);
+            if(item) { cart.push(item); updateCartUI(); toggleCart(); }
+        };
+
+        window.toggleCart = () => { 
+            const s = document.getElementById('cart-sidebar'); 
+            s.style.display = (s.style.display === 'block') ? 'none' : 'block'; 
+        };
+
+        function updateCartUI() {
+            const list = document.getElementById('cart-items-list');
+            document.getElementById('cart-counter').innerText = cart.length;
+            let subtotal = 0;
+            list.innerHTML = cart.map(item => {
+                subtotal += parseFloat(item.price);
+                return `<div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:12px; color:#ccc;"><span>${item.name}</span><span>${item.price} NLE</span></div>`;
+            }).join('');
+
+            // AUTOMATIC DISCOUNT CALCULATION
+            let discount = 0;
+            if (cart.length === 2) {
+                discount = subtotal * 0.05; // 5% for 2 items
+            } else if (cart.length >= 3) {
+                discount = subtotal * 0.10; // 10% for 3+ items
+            }
+
+            document.getElementById('cart-subtotal').innerText = subtotal.toFixed(2);
+            document.getElementById('cart-discount').innerText = discount.toFixed(2);
+            document.getElementById('cart-grand-total').innerText = (subtotal - discount).toFixed(2);
+            document.getElementById('discount-row').style.display = (discount > 0) ? 'flex' : 'none';
+        }
+
+        window.checkoutWhatsApp = () => {
+            const name = document.getElementById('cust-name').value;
+            const address = document.getElementById('cust-address').value;
+            if(!name || !address) return alert("Please enter delivery details.");
+            let msg = `*ARISA LUXURY ORDER*\n*Customer:* ${name}\n*Address:* ${address}\n*Items:*\n` + cart.map(i => `- ${i.name}`).join('\n') + `\n*Final Total:* ${document.getElementById('cart-grand-total').innerText} NLE`;
+            window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`);
+        };
+
+        function filterProducts() {
+            const term = document.getElementById('perfume-search').value.toLowerCase();
+            renderProducts(perfumes.filter(p => p.name.toLowerCase().includes(term)));
+        }
+
+        function showHome() { hideAll(); document.getElementById('home-content').style.display = 'block'; }
+        function showAbout() { hideAll(); document.getElementById('about-page').style.display = 'block'; }
+        function showPolicy() { hideAll(); document.getElementById('policy-page').style.display = 'block'; }
+        function hideAll() { ['home-content', 'about-page', 'policy-page'].forEach(id => { document.getElementById(id).style.display = 'none'; }); }
+        function loginAdmin() { if(prompt("Password:") === "@Thomas74170733") alert("Admin mode enabled (Visual only in this preview)"); }
+    </script>
+</body>
+</html>
