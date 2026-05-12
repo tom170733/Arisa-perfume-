@@ -19,6 +19,12 @@
         #admin-panel { display: none; background: #111; padding: 30px 5%; border-bottom: 2px solid #d4af37; text-align: center; }
         .admin-input { padding: 10px; margin: 5px; border: 1px solid #d4af37; background: #000; color: #fff; width: 100%; max-width: 200px; }
 
+        /* Info Boxes Section */
+        .info-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 40px 5%; background: #050505; }
+        .info-box { border: 1px solid #d4af37; padding: 20px; text-align: center; background: #111; transition: 0.3s; }
+        .info-box h4 { color: #d4af37; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px; }
+        .info-box p { font-size: 13px; color: #ccc; }
+
         /* Hero & Shop */
         .hero { height: 50vh; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&q=80&w=1500') no-repeat center center/cover; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border-bottom: 5px solid #d4af37; }
         .hero h2 { font-size: 28px; letter-spacing: 3px; text-transform: uppercase; color: #d4af37; }
@@ -34,21 +40,18 @@
         .sold-out { background-color: #333; color: white; }
         .price { color: #d4af37; font-weight: bold; display: block; margin: 10px 0; }
         
-        /* Quantity and Buttons */
         .qty-input { width: 50px; background: #000; border: 1px solid #d4af37; color: white; padding: 5px; text-align: center; margin-bottom: 10px; }
         .btn { padding: 10px; background: #d4af37; color: black; font-weight: bold; text-transform: uppercase; font-size: 10px; border: none; cursor: pointer; width: 100%; transition: 0.3s; }
         .btn:hover { background: #fff; }
+        .view-bag-btn { background: #ffffff; color: #000; margin-top: 5px; display: none; }
 
-        /* Page Content (About/Policy) */
         #page-content { display: none; padding: 60px 10%; background: #000; min-height: 70vh; }
         .content-box { border: 1px solid #d4af37; padding: 30px; background: #0a0a0a; }
         .content-box h2 { color: #d4af37; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* Cart Sidebar */
         .cart-overlay { position: fixed; top: 0; right: 0; width: 100%; max-width: 350px; height: 100%; background: #111; z-index: 2000; padding: 20px; display: none; border-left: 4px solid #d4af37; overflow-y: auto; }
         .cart-input { width: 100%; padding: 10px; border: 1px solid #d4af37; background: #000; color: white; margin-bottom: 10px; }
 
-        /* Suggestion Box */
         .suggestion-section { padding: 40px 5%; background: #0a0a0a; text-align: center; border-top: 1px solid #1a1a1a; }
         .suggest-input { width: 100%; max-width: 500px; height: 100px; background: #000; border: 1px solid #d4af37; color: #fff; padding: 10px; margin-bottom: 10px; }
 
@@ -80,6 +83,7 @@
             <option value="available">Available</option>
             <option value="sold-out">Sold Out</option>
         </select>
+        <!-- PHOTO UPLOAD BOX - VISIBLE ONLY TO LOGGED IN STAFF -->
         <input type="file" id="admin-p-file" class="admin-input" accept="image/*">
         <br>
         <button class="btn" style="width: 200px; margin-top: 10px;" onclick="adminUpload()">ADD PRODUCT</button>
@@ -108,17 +112,31 @@
             <h2>Luxury Fragrances</h2>
             <p>24/7 Delivery in Freetown</p>
         </section>
+
+        <section class="info-section">
+            <div class="info-box">
+                <h4>Authenticity</h4>
+                <p>100% Genuine designer fragrances sourced from certified distributors.</p>
+            </div>
+            <div class="info-box">
+                <h4>Fast Delivery</h4>
+                <p>Swift delivery within Freetown. Your scent arrives within hours.</p>
+            </div>
+            <div class="info-box">
+                <h4>24/7 Support</h4>
+                <p>Our WhatsApp lines are open day and night for your inquiries.</p>
+            </div>
+        </section>
+
         <div class="container">
             <div class="product-grid" id="product-grid"></div>
         </div>
     </div>
 
-    <!-- About and Policy Pages -->
     <div id="page-content">
         <div class="content-box" id="page-inner-content"></div>
     </div>
 
-    <!-- Suggestion Box Section -->
     <div class="suggestion-section" id="user-suggestion-box">
         <h3 style="color:#d4af37; margin-bottom:10px;">SUGGESTIONS</h3>
         <textarea id="user-suggestion" class="suggest-input" placeholder="What scent should we add next?"></textarea><br>
@@ -160,7 +178,6 @@
             const grid = document.getElementById('product-grid');
             grid.innerHTML = '';
             const isAdmin = sessionStorage.getItem('isArisaAdmin') === 'true';
-            
             document.getElementById('user-suggestion-box').style.display = isAdmin ? 'none' : 'block';
 
             perfumes.forEach((p) => {
@@ -175,6 +192,7 @@
                         <button class="btn" onclick="${sold ? '' : `addToBag('${p.firebaseId}')`}" ${sold ? 'disabled' : ''}>
                             ${sold ? 'OUT OF STOCK' : 'ADD TO BAG'}
                         </button>
+                        <button id="view-bag-${p.firebaseId}" class="btn view-bag-btn" onclick="toggleCart()">VIEW BAG & CHECKOUT</button>
                         ${isAdmin ? `<button class="btn" style="background:#444; margin-top:5px;" onclick="toggleStatus('${p.firebaseId}','${p.status}')">Toggle Status</button>
                                      <button class="btn" style="background:red; margin-top:5px;" onclick="deleteProduct('${p.firebaseId}')">Delete</button>` : ''}
                     </div>`;
@@ -184,14 +202,10 @@
         window.addToBag = (id) => {
             const item = perfumes.find(p => p.firebaseId === id);
             const qty = parseInt(document.getElementById(`qty-${id}`).value) || 1;
-            
-            // Add multiple based on quantity input
-            for(let i = 0; i < qty; i++) {
-                cart.push({...item});
-            }
-            
+            for(let i = 0; i < qty; i++) { cart.push({...item}); }
             updateCartUI();
-            document.getElementById('cart-sidebar').style.display = 'block';
+            // Show the "View Bag" button for this specific item instead of opening the sidebar
+            document.getElementById(`view-bag-${id}`).style.display = 'block';
         };
 
         function updateCartUI() {
@@ -218,7 +232,6 @@
             c.style.display = c.style.display === 'block' ? 'none' : 'block';
         };
 
-        /* NAVIGATION LOGIC */
         window.showHome = () => {
             document.getElementById('home-content').style.display = 'block';
             document.getElementById('page-content').style.display = 'none';
@@ -230,23 +243,16 @@
             document.getElementById('page-content').style.display = 'block';
             document.getElementById('page-inner-content').innerHTML = `
                 <h2>About Arisa Perfume Store</h2>
-                <p>Welcome to ARISA, Freetown's premier destination for luxury fragrances. We specialize in sourcing high-quality, long-lasting scents that define elegance and sophistication.</p>
-                <p style="margin-top:20px;">Founded on a passion for premium branding, ARISA provides 24/7 delivery across Freetown, ensuring you never have to be without your signature scent.</p>
+                <p>Welcome to ARISA, Freetown's premier destination for luxury fragrances.</p>
             `;
         };
 
         window.showPolicy = () => {
             document.getElementById('home-content').style.display = 'none';
             document.getElementById('page-content').style.display = 'block';
-            document.getElementById('page-inner-content').innerHTML = `
-                <h2>Our Policy</h2>
-                <p><strong>Delivery:</strong> We offer 24/7 delivery services within Freetown. Orders are usually processed and delivered within 1-2 hours.</p>
-                <p style="margin-top:15px;"><strong>Returns:</strong> Due to the nature of our products, we only accept returns if the seal is unbroken and the bottle is undamaged.</p>
-                <p style="margin-top:15px;"><strong>Payments:</strong> All orders are finalized via WhatsApp. We accept Cash on Delivery and Orange/Africell Money.</p>
-            `;
+            document.getElementById('page-inner-content').innerHTML = `<h2>Our Policy</h2><p>Standard delivery and return terms apply.</p>`;
         };
 
-        /* ADMIN FUNCTIONS */
         window.loginAdmin = () => {
             if(prompt("Staff Password:") === "@Thomas74170733") {
                 sessionStorage.setItem('isArisaAdmin', 'true');
@@ -262,6 +268,12 @@
         };
 
         window.adminUpload = () => {
+            // Check if admin is truly logged in before processing upload
+            if(sessionStorage.getItem('isArisaAdmin') !== 'true') {
+                alert("Unauthorized: Only staff can upload products.");
+                return;
+            }
+
             const name = document.getElementById('admin-p-name').value;
             const price = document.getElementById('admin-p-price').value;
             const status = document.getElementById('admin-p-status').value;
@@ -273,6 +285,7 @@
                     alert("Product Added Successfully!");
                     document.getElementById('admin-p-name').value = '';
                     document.getElementById('admin-p-price').value = '';
+                    document.getElementById('admin-p-file').value = '';
                 };
                 reader.readAsDataURL(file);
             } else {
@@ -298,12 +311,9 @@
             const addr = document.getElementById('cust-address').value;
             if(!name || !addr) return alert("Please enter your name and delivery address.");
             const total = document.getElementById('cart-grand-total').innerText;
-            
-            // Summarize multiple items
             const itemCounts = {};
             cart.forEach(i => itemCounts[i.name] = (itemCounts[i.name] || 0) + 1);
             const itemsMsg = Object.keys(itemCounts).map(name => `${name} (x${itemCounts[name]})`).join(', ');
-
             const msg = `*NEW ARISA ORDER*\nCustomer: ${name}\nAddress: ${addr}\nItems: ${itemsMsg}\nTotal: ${total} NLE`;
             window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`);
         };
