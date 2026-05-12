@@ -15,9 +15,9 @@
         .nav-links { display: flex; gap: 15px; list-style: none; }
         .nav-links a { text-decoration: none; color: #ffffff; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
 
-        /* Top Logo Branding */
-        .branding-header { background: #000; text-align: center; padding: 20px 0; border-bottom: 1px solid #1a1a1a; }
-        .main-logo-img { max-width: 200px; height: auto; border: 1px solid #d4af37; padding: 5px; background: #fff; }
+        /* Top Text Branding */
+        .branding-header { background: #000; text-align: center; padding: 40px 0; border-bottom: 1px solid #1a1a1a; }
+        .main-brand-title { font-size: 42px; font-weight: bold; color: #d4af37; letter-spacing: 8px; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
 
         /* Admin Panel Styling */
         #admin-panel { display: none; background: #111; padding: 30px 5%; border-bottom: 2px solid #d4af37; text-align: center; }
@@ -31,7 +31,6 @@
 
         /* Hero & Logo Area */
         .hero { height: 30vh; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border-top: 5px solid #d4af37; margin-top: 20px; }
-        .business-logo { max-width: 150px; margin-bottom: 15px; border: 1px solid #d4af37; padding: 10px; }
         .hero h2 { font-size: 24px; letter-spacing: 3px; text-transform: uppercase; color: #d4af37; }
 
         .container { padding: 20px 5%; background: #000; }
@@ -60,7 +59,7 @@
 
         footer { background: #000; color: #444; text-align: center; padding: 30px; border-top: 1px solid #111; font-size: 10px; }
 
-        @media (min-width: 768px) { .product-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); } }
+        @media (min-width: 768px) { .product-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); } .main-brand-title { font-size: 60px; } }
     </style>
 </head>
 <body>
@@ -77,9 +76,9 @@
         </div>
     </nav>
 
-    <!-- NEW LOGO AT THE TOP -->
+    <!-- REPLACED IMAGE WITH TEXT -->
     <header class="branding-header">
-        <img src="Screenshot 2026-05-12 185055.png" alt="ARISA LUXURY LOGO" class="main-logo-img">
+        <h1 class="main-brand-title">ARISA STORE</h1>
     </header>
 
     <div id="admin-panel">
@@ -112,7 +111,6 @@
     </div>
 
     <div id="home-content">
-        <!-- PRODUCTS COLLECTIONS -->
         <div class="container">
             <h2 style="color:#d4af37; text-align:center; margin-bottom:20px; font-size:16px; letter-spacing:2px;">SHOP COLLECTIONS</h2>
             <p style="text-align:center; font-size:10px; color:#888; margin-bottom:15px;">Tip: Tap once to add, Double-tap for more!</p>
