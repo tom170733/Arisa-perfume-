@@ -5,41 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARISA PERFUME STORE | Luxury Scents</title>
     <style>
-        /* General Styling */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Georgia', serif; }
         body { background-color: #ffffff; color: #1a1a1a; line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
         
-        /* Navigation */
         nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: #ffffff; border-bottom: 1px solid #d4af37; position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 20px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; color: #1a1a1a; cursor: pointer; }
         .nav-links { display: flex; gap: 15px; list-style: none; }
         .nav-links a { text-decoration: none; color: #1a1a1a; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; cursor: pointer; }
-        .nav-links a:hover { color: #d4af37; }
 
-        /* Permanent Search Bar Section */
+        /* PERMANENT SEARCH BAR */
         .search-section { text-align: center; padding: 40px 5%; background: #fdfdfd; border-top: 1px solid #eee; margin-top: auto; }
-        .search-label { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; color: #888; }
-        .search-input { width: 90%; max-width: 500px; padding: 12px 25px; border: 2px solid #0047AB; border-radius: 30px; outline: none; font-size: 14px; font-style: italic; transition: 0.3s; text-align: center; }
-        .search-input:focus { box-shadow: 0 5px 15px rgba(0, 71, 171, 0.2); border-color: #002D62; }
+        .search-input { width: 90%; max-width: 500px; padding: 12px 25px; border: 2px solid #0047AB; border-radius: 30px; outline: none; font-size: 14px; font-style: italic; text-align: center; }
 
-        /* Products Grid */
+        /* BOX STYLING FOR PERFUMES */
         .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; }
-        .product-card { background: white; padding: 0 0 15px 0; text-align: center; border: 1px solid #eee; transition: 0.4s; position: relative; }
-        .product-image { width: 100%; height: 180px; background-color: #f9f9f9; overflow: hidden; }
-        .product-image img { width: 100%; height: 100%; object-fit: cover; }
+        .product-card { 
+            background: white; 
+            padding: 10px; 
+            text-align: center; 
+            border: 1px solid #d4af37; /* Gold border for the 'box' look */
+            transition: 0.4s; 
+            position: relative; 
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.05); /* Soft shadow to look like a physical box */
+        }
+        .product-image { width: 100%; height: 180px; background-color: #fff; overflow: hidden; }
+        .product-image img { width: 100%; height: 100%; object-fit: contain; }
         
         .status-badge { position: absolute; top: 10px; right: 10px; padding: 3px 8px; font-size: 8px; font-weight: bold; text-transform: uppercase; z-index: 5; }
         .available { background-color: #d4af37; color: white; }
         .sold-out { background-color: #333; color: white; }
         
-        .btn { padding: 10px; background: #1a1a1a; color: white; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; font-size: 10px; border: none; cursor: pointer; width: 90%; margin: 5px auto; display: block; }
+        .btn { padding: 10px; background: #1a1a1a; color: white; text-decoration: none; text-transform: uppercase; letter-spacing: 1px; font-size: 10px; border: none; cursor: pointer; width: 100%; margin-top: 10px; display: block; }
         
-        /* Content Visibility */
         #about-page, #policy-page { display: none; padding: 60px 10%; min-height: 60vh; text-align: center; }
-        .hero { height: 40vh; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&q=80&w=1500') no-repeat center center/cover; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white; border-bottom: 5px solid #d4af37; }
-        
         .info-box { border: 1px solid #d4af37; padding: 30px; background: #fafafa; max-width: 800px; margin: 0 auto; text-align: left; }
-        .info-box h3 { text-align: center; margin-bottom: 15px; color: #1a1a1a; letter-spacing: 1px; }
 
         footer { background: #000; color: white; text-align: center; padding: 30px 5%; font-size: 11px; }
 
@@ -62,10 +61,6 @@
     </nav>
 
     <div id="home-content">
-        <section class="hero">
-            <h2 style="text-transform: uppercase; letter-spacing: 4px;">Exquisite Fragrance</h2>
-            <p style="font-style: italic;">Curated Luxury Scents</p>
-        </section>
         <div class="container" style="padding: 40px 5%;">
             <h2 style="text-align: center; text-transform: uppercase; font-size: 18px; letter-spacing: 2px;">Our Collection</h2>
             <div class="product-grid" id="product-grid"></div>
@@ -75,32 +70,18 @@
     <div id="about-page">
         <h2 style="text-transform: uppercase; letter-spacing: 3px; margin-bottom: 30px;">About Us</h2>
         <div class="info-box">
-            <h3>Our Story</h3>
-            <p>Welcome to <strong>ARISA PERFUME STORE</strong>, the premier destination for high-end fragrances in Freetown, Sierra Leone. Founded on a passion for exquisite scents, we believe that a perfume is more than just a signature—it is a reflection of your personality.</p>
-            <br>
-            <p>We carefully curate our collection from the finest fragrance houses across the globe to ensure that every bottle represents true luxury. Whether you are looking for something bold and adventurous or soft and sophisticated, we are here to help you find your signature match.</p>
+            <p>Welcome to <strong>ARISA PERFUME STORE</strong>, based in Freetown, Sierra Leone. We provide authentic, high-end fragrances for those who appreciate luxury.</p>
         </div>
     </div>
 
     <div id="policy-page">
-        <h2 style="text-transform: uppercase; letter-spacing: 3px; margin-bottom: 30px;">Store Policies</h2>
+        <h2 style="text-transform: uppercase; letter-spacing: 3px; margin-bottom: 30px;">Policies</h2>
         <div class="info-box">
-            <h4 style="color: #d4af37; margin-bottom: 5px;">Delivery & Shipping</h4>
-            <p>We offer fast and reliable delivery within 24 hours to any location in Freetown. For customers outside the capital, please contact us via WhatsApp for special arrangements.</p>
-            <br>
-            <h4 style="color: #d4af37; margin-bottom: 5px;">Authenticity Guarantee</h4>
-            <p>At ARISA, we guarantee that all our perfumes are 100% authentic. Quality and trust are our top priorities; we do not stock imitations.</p>
-            <br>
-            <h4 style="color: #d4af37; margin-bottom: 5px;">Payment Options</h4>
-            <p>For your convenience, we accept <strong>Cash on Delivery</strong>, <strong>Orange Money</strong>, and <strong>Afrimoney</strong>. Please confirm your payment method during checkout.</p>
-            <br>
-            <h4 style="color: #d4af37; margin-bottom: 5px;">Returns</h4>
-            <p>Due to health and safety regulations regarding fragrance products, all sales are final. We encourage customers to inspect their package thoroughly upon delivery.</p>
+            <p><strong>Delivery:</strong> 24-hour service in Freetown.<br><strong>Payment:</strong> Cash, Orange Money, or Afrimoney.</p>
         </div>
     </div>
 
     <section class="search-section">
-        <span class="search-label">Find Your Perfect Scent</span>
         <input type="text" id="perfume-search" class="search-input" placeholder="Search brands or scents..." onkeyup="filterProducts()">
     </section>
 
@@ -113,7 +94,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
 
     <script>
-        // Use your existing Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyD6VOairMfPk1fM9VApccmNEPAdMIb3HO4",
             authDomain: "arisa-perfume-store.firebaseapp.com",
@@ -128,7 +108,6 @@
         const db = firebase.database();
         let perfumes = [];
 
-        // Load data from Firebase
         db.ref('perfumes').on('value', (snapshot) => {
             const data = snapshot.val();
             perfumes = [];
@@ -140,14 +119,10 @@
             renderProducts(perfumes);
         });
 
-        // Updated Filter Logic
         function filterProducts() {
             const term = document.getElementById('perfume-search').value.toLowerCase();
             const filtered = perfumes.filter(p => p.name.toLowerCase().includes(term));
-            
-            // Bring user back to Home results if they are searching from another page
             if(term.length > 0) showHome();
-            
             renderProducts(filtered);
         }
 
@@ -155,3 +130,36 @@
             const grid = document.getElementById('product-grid');
             if(!grid) return;
             grid.innerHTML = '';
+            productsToDisplay.forEach(data => {
+                const isSoldOut = data.status === 'sold-out';
+                grid.innerHTML += `
+                    <div class="product-card">
+                        <span class="status-badge ${data.status || 'available'}">${data.status || 'available'}</span>
+                        <div class="product-image"><img src="${data.image}"></div>
+                        <h3 style="font-size: 13px; margin: 10px 0;">${data.name}</h3>
+                        <p style="color: #d4af37; font-weight: bold; font-size: 12px;">${data.price} NLE</p>
+                        <button class="btn" ${isSoldOut ? 'disabled' : ''}>${isSoldOut ? 'Sold Out' : 'Add to Bag'}</button>
+                    </div>`;
+            });
+        }
+
+        function showHome() { hideAll(); document.getElementById('home-content').style.display = 'block'; }
+        function showAbout() { hideAll(); document.getElementById('about-page').style.display = 'block'; }
+        function showPolicy() { hideAll(); document.getElementById('policy-page').style.display = 'block'; }
+        function hideAll() { ['home-content', 'about-page', 'policy-page'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).style.display = 'none'; }); }
+        
+        // UPDATED STAFF LOGIN
+        function loginAdmin() { 
+            const pass = prompt("Enter Staff Password:");
+            if(pass === "@Thomas74170733") {
+                alert("Welcome back, Aroun. Accessing dashboard...");
+                // This only works if you have an admin.html file! 
+                // If you don't have one, it will show a 'Not Found' error.
+                window.location.href = "admin.html"; 
+            } else if (pass !== null) {
+                alert("Access Denied.");
+            }
+        }
+    </script>
+</body>
+</html>
