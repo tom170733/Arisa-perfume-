@@ -111,3 +111,59 @@
             <input type="text" id="cust-name" class="cart-input" placeholder="Full Name">
             <input type="text" id="cust-address" class="cart-input" placeholder="Delivery Address">
         </div>
+        <button class="btn" style="background: #25D366; color: white; width: 100%; margin-bottom: 10px;" onclick="checkoutWhatsApp()">ORDER VIA WHATSAPP</button>
+    </div>
+
+    <div id="home-content">
+        <section class="hero">
+            <h2>Luxury Fragrances</h2>
+            <p>24/7 Delivery Across Freetown</p>
+        </section>
+        <div class="container" id="shop">
+            <h2 class="section-title">The Collection</h2>
+            <div class="product-grid" id="product-grid"></div>
+        </div>
+    </div>
+
+    <div id="about-page" style="display:none; padding: 50px 5%; text-align: center;">
+        <h2 class="section-title">About Us</h2>
+        <p>ARISA PERFUME STORE offers the finest selection of luxury scents.</p>
+    </div>
+
+    <div id="policy-page" style="display:none; padding: 50px 5%; text-align: center;">
+        <h2 class="section-title">Store Policy</h2>
+        <p>Swift delivery within 24 hours. Quality guaranteed.</p>
+    </div>
+
+    <div class="search-container">
+        <span class="search-label">Find Your Scent</span>
+        <input type="text" id="perfume-search" class="search-input" placeholder="Search brands..." onkeyup="filterProducts()">
+    </div>
+
+    <div class="suggestion-box">
+        <h2 class="section-title">Suggestions</h2>
+        <p style="margin-bottom: 15px; color: #888;">Is there a scent we are missing? Let us know!</p>
+        <textarea id="user-suggestion" class="suggest-input" placeholder="Write your suggestion here..."></textarea><br>
+        <button class="btn" style="width: 200px;" onclick="sendSuggestion()">SEND SUGGESTION</button>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 ARISA PERFUME STORE. OPEN 24/7.</p>
+        <button onclick="loginAdmin()" id="admin-login-link" style="background: none; border: none; color: #222; cursor: pointer; margin-top: 10px;">Staff Login</button>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyD6VOairMfPk1fM9VApccmNEPAdMIb3HO4",
+            authDomain: "arisa-perfume-store.firebaseapp.com",
+            databaseURL: "https://arisa-perfume-store-default-rtdb.firebaseio.com",
+            projectId: "arisa-perfume-store",
+            storageBucket: "arisa-perfume-store.firebasestorage.app",
+            messagingSenderId: "49919010733",
+            appId: "1:49919010733:web:2087407e3f6bd41c1fe324"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.
