@@ -34,8 +34,15 @@
         .sold-out { background-color: #333; color: white; }
         .price { color: #d4af37; font-weight: bold; display: block; margin: 10px 0; }
         
+        /* Quantity and Buttons */
+        .qty-input { width: 50px; background: #000; border: 1px solid #d4af37; color: white; padding: 5px; text-align: center; margin-bottom: 10px; }
         .btn { padding: 10px; background: #d4af37; color: black; font-weight: bold; text-transform: uppercase; font-size: 10px; border: none; cursor: pointer; width: 100%; transition: 0.3s; }
         .btn:hover { background: #fff; }
+
+        /* Page Content (About/Policy) */
+        #page-content { display: none; padding: 60px 10%; background: #000; min-height: 70vh; }
+        .content-box { border: 1px solid #d4af37; padding: 30px; background: #0a0a0a; }
+        .content-box h2 { color: #d4af37; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; }
 
         /* Cart Sidebar */
         .cart-overlay { position: fixed; top: 0; right: 0; width: 100%; max-width: 350px; height: 100%; background: #111; z-index: 2000; padding: 20px; display: none; border-left: 4px solid #d4af37; overflow-y: auto; }
@@ -64,6 +71,7 @@
         </div>
     </nav>
 
+    <!-- Staff Management Panel -->
     <div id="admin-panel">
         <h3 style="color:#d4af37; margin-bottom:15px;">STAFF CONTROL PANEL</h3>
         <input type="text" id="admin-p-name" class="admin-input" placeholder="Product Name">
@@ -78,6 +86,7 @@
         <button class="btn" style="width: 200px; background:#333; color:white;" onclick="logoutAdmin()">LOGOUT</button>
     </div>
 
+    <!-- Cart Sidebar -->
     <div id="cart-sidebar" class="cart-overlay">
         <h3 style="color:#d4af37; margin-bottom:20px;">YOUR BAG</h3>
         <div id="cart-items-list"></div>
@@ -93,6 +102,7 @@
         <button class="btn" style="background:#222; color:white; margin-top:10px;" onclick="toggleCart()">CLOSE</button>
     </div>
 
+    <!-- Home/Shop Content -->
     <div id="home-content">
         <section class="hero">
             <h2>Luxury Fragrances</h2>
@@ -103,6 +113,12 @@
         </div>
     </div>
 
+    <!-- About and Policy Pages -->
+    <div id="page-content">
+        <div class="content-box" id="page-inner-content"></div>
+    </div>
+
+    <!-- Suggestion Box Section -->
     <div class="suggestion-section" id="user-suggestion-box">
         <h3 style="color:#d4af37; margin-bottom:10px;">SUGGESTIONS</h3>
         <textarea id="user-suggestion" class="suggest-input" placeholder="What scent should we add next?"></textarea><br>
@@ -145,7 +161,6 @@
             grid.innerHTML = '';
             const isAdmin = sessionStorage.getItem('isArisaAdmin') === 'true';
             
-            // Hide suggestion box if Admin is logged in
             document.getElementById('user-suggestion-box').style.display = isAdmin ? 'none' : 'block';
 
             perfumes.forEach((p) => {
@@ -156,6 +171,7 @@
                         <div class="product-image"><img src="${p.image}"></div>
                         <h3>${p.name}</h3>
                         <span class="price">${p.price} NLE</span>
+                        ${!sold ? `<input type="number" value="1" min="1" id="qty-${p.firebaseId}" class="qty-input">` : ''}
                         <button class="btn" onclick="${sold ? '' : `addToBag('${p.firebaseId}')`}" ${sold ? 'disabled' : ''}>
                             ${sold ? 'OUT OF STOCK' : 'ADD TO BAG'}
                         </button>
@@ -167,7 +183,13 @@
 
         window.addToBag = (id) => {
             const item = perfumes.find(p => p.firebaseId === id);
-            cart.push(item);
+            const qty = parseInt(document.getElementById(`qty-${id}`).value) || 1;
+            
+            // Add multiple based on quantity input
+            for(let i = 0; i < qty; i++) {
+                cart.push({...item});
+            }
+            
             updateCartUI();
             document.getElementById('cart-sidebar').style.display = 'block';
         };
@@ -196,6 +218,35 @@
             c.style.display = c.style.display === 'block' ? 'none' : 'block';
         };
 
+        /* NAVIGATION LOGIC */
+        window.showHome = () => {
+            document.getElementById('home-content').style.display = 'block';
+            document.getElementById('page-content').style.display = 'none';
+            renderProducts();
+        };
+
+        window.showAbout = () => {
+            document.getElementById('home-content').style.display = 'none';
+            document.getElementById('page-content').style.display = 'block';
+            document.getElementById('page-inner-content').innerHTML = `
+                <h2>About Arisa Perfume Store</h2>
+                <p>Welcome to ARISA, Freetown's premier destination for luxury fragrances. We specialize in sourcing high-quality, long-lasting scents that define elegance and sophistication.</p>
+                <p style="margin-top:20px;">Founded on a passion for premium branding, ARISA provides 24/7 delivery across Freetown, ensuring you never have to be without your signature scent.</p>
+            `;
+        };
+
+        window.showPolicy = () => {
+            document.getElementById('home-content').style.display = 'none';
+            document.getElementById('page-content').style.display = 'block';
+            document.getElementById('page-inner-content').innerHTML = `
+                <h2>Our Policy</h2>
+                <p><strong>Delivery:</strong> We offer 24/7 delivery services within Freetown. Orders are usually processed and delivered within 1-2 hours.</p>
+                <p style="margin-top:15px;"><strong>Returns:</strong> Due to the nature of our products, we only accept returns if the seal is unbroken and the bottle is undamaged.</p>
+                <p style="margin-top:15px;"><strong>Payments:</strong> All orders are finalized via WhatsApp. We accept Cash on Delivery and Orange/Africell Money.</p>
+            `;
+        };
+
+        /* ADMIN FUNCTIONS */
         window.loginAdmin = () => {
             if(prompt("Staff Password:") === "@Thomas74170733") {
                 sessionStorage.setItem('isArisaAdmin', 'true');
@@ -247,12 +298,16 @@
             const addr = document.getElementById('cust-address').value;
             if(!name || !addr) return alert("Please enter your name and delivery address.");
             const total = document.getElementById('cart-grand-total').innerText;
-            const items = cart.map(i => i.name).join(', ');
-            const msg = `*NEW ARISA ORDER*\nCustomer: ${name}\nAddress: ${addr}\nItems: ${items}\nTotal: ${total} NLE`;
+            
+            // Summarize multiple items
+            const itemCounts = {};
+            cart.forEach(i => itemCounts[i.name] = (itemCounts[i.name] || 0) + 1);
+            const itemsMsg = Object.keys(itemCounts).map(name => `${name} (x${itemCounts[name]})`).join(', ');
+
+            const msg = `*NEW ARISA ORDER*\nCustomer: ${name}\nAddress: ${addr}\nItems: ${itemsMsg}\nTotal: ${total} NLE`;
             window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`);
         };
 
-        function showHome() { renderProducts(); }
         if(sessionStorage.getItem('isArisaAdmin') === 'true') document.getElementById('admin-panel').style.display = 'block';
     </script>
 </body>
