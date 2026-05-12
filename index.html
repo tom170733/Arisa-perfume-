@@ -15,6 +15,10 @@
         .nav-links { display: flex; gap: 15px; list-style: none; }
         .nav-links a { text-decoration: none; color: #ffffff; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
 
+        /* Top Logo Branding */
+        .branding-header { background: #000; text-align: center; padding: 20px 0; border-bottom: 1px solid #1a1a1a; }
+        .main-logo-img { max-width: 200px; height: auto; border: 1px solid #d4af37; padding: 5px; background: #fff; }
+
         /* Admin Panel Styling */
         #admin-panel { display: none; background: #111; padding: 30px 5%; border-bottom: 2px solid #d4af37; text-align: center; }
         .admin-input { padding: 10px; margin: 5px; border: 1px solid #d4af37; background: #000; color: #fff; width: 100%; max-width: 200px; }
@@ -25,8 +29,8 @@
         .info-box h4 { color: #d4af37; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px; }
         .info-box p { font-size: 13px; color: #ccc; }
 
-        /* Hero & Logo */
-        .hero { height: 40vh; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border-top: 5px solid #d4af37; margin-top: 20px; }
+        /* Hero & Logo Area */
+        .hero { height: 30vh; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border-top: 5px solid #d4af37; margin-top: 20px; }
         .business-logo { max-width: 150px; margin-bottom: 15px; border: 1px solid #d4af37; padding: 10px; }
         .hero h2 { font-size: 24px; letter-spacing: 3px; text-transform: uppercase; color: #d4af37; }
 
@@ -73,6 +77,11 @@
         </div>
     </nav>
 
+    <!-- NEW LOGO AT THE TOP -->
+    <header class="branding-header">
+        <img src="Screenshot 2026-05-12 185055.png" alt="ARISA LUXURY LOGO" class="main-logo-img">
+    </header>
+
     <div id="admin-panel">
         <h3 style="color:#d4af37; margin-bottom:15px;">STAFF CONTROL PANEL</h3>
         <input type="text" id="admin-p-name" class="admin-input" placeholder="Product Name">
@@ -103,22 +112,18 @@
     </div>
 
     <div id="home-content">
-        <!-- PRODUCTS ARE NOW FIRST -->
+        <!-- PRODUCTS COLLECTIONS -->
         <div class="container">
             <h2 style="color:#d4af37; text-align:center; margin-bottom:20px; font-size:16px; letter-spacing:2px;">SHOP COLLECTIONS</h2>
             <p style="text-align:center; font-size:10px; color:#888; margin-bottom:15px;">Tip: Tap once to add, Double-tap for more!</p>
             <div class="product-grid" id="product-grid"></div>
         </div>
 
-        <!-- HERO SECTION MOVED DOWN WITH LOGO -->
         <section class="hero">
-            <!-- REPLACE logo.png WITH YOUR ACTUAL LOGO URL -->
-            <img src="logo.png" alt="ARISA LOGO" class="business-logo" onerror="this.src='https://via.placeholder.com/150/000000/d4af37?text=ARISA+LOGO'">
             <h2>Luxury Fragrances</h2>
             <p>24/7 Delivery in Freetown</p>
         </section>
 
-        <!-- INFO SECTION MOVED DOWN -->
         <section class="info-section">
             <div class="info-box">
                 <h4>Authenticity</h4>
@@ -199,18 +204,17 @@
             });
         }
 
-        // Logic for single and double/multiple taps
         let tapTimer = null;
         window.handleProductTap = (id) => {
             if (tapTimer === null) {
                 tapTimer = setTimeout(() => {
                     addToBag(id);
                     tapTimer = null;
-                }, 300); // Wait 300ms to see if another tap comes
+                }, 300);
             } else {
                 clearTimeout(tapTimer);
                 tapTimer = null;
-                addToBag(id); // Second tap adds another one
+                addToBag(id);
             }
         };
 
@@ -264,10 +268,7 @@
         window.showAbout = () => {
             document.getElementById('home-content').style.display = 'none';
             document.getElementById('page-content').style.display = 'block';
-            document.getElementById('page-inner-content').innerHTML = `
-                <h2>About Arisa Perfume Store</h2>
-                <p>Welcome to ARISA, Freetown's premier destination for luxury fragrances.</p>
-            `;
+            document.getElementById('page-inner-content').innerHTML = `<h2>About Arisa Perfume Store</h2><p>Welcome to ARISA, Freetown's premier destination for luxury fragrances.</p>`;
         };
 
         window.showPolicy = () => {
