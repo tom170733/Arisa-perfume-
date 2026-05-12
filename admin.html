@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARISA | Staff Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f4f4; color: #333; }
+        
+        header { background: #1a1a1a; color: #d4af37; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #d4af37; }
+        .admin-logo { font-weight: bold; letter-spacing: 2px; }
+        
+        .container { padding: 40px 5%; max-width: 1200px; margin: 0 auto; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .stat-card { background: white; padding: 20px; border-radius: 8px; border-left: 5px solid #d4af37; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .stat-card h3 { font-size: 12px; text-transform: uppercase; color: #888; }
+        .stat-card p { font-size: 24px; font-weight: bold; margin-top: 10px; }
+
+        .action-box { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .btn-add { background: #1a1a1a; color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
+        .btn-add:hover { background: #d4af37; }
+
+        .logout-btn { color: #ff4d4d; text-decoration: none; font-size: 14px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="admin-logo">ARISA STAFF PANEL</div>
+        <a href="index.html" class="logout-btn">SECURE LOGOUT</a>
+    </header>
+
+    <div class="container">
+        <h2 style="margin-bottom: 20px;">Welcome, Aroun Thomas Turay</h2>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Products</h3>
+                <p id="total-count">Loading...</p>
+            </div>
+            <div class="stat-card">
+                <h3>Store Status</h3>
+                <p style="color: green;">Online 24/7</p>
+            </div>
+            <div class="stat-card">
+                <h3>Currency</h3>
+                <p>NLE</p>
+            </div>
+        </div>
+
+        <div class="action-box">
+            <h3>Inventory Management</h3>
+            <p style="color: #666; margin-bottom: 20px; font-size: 14px;">Use your Firebase console to add new luxury perfumes or update prices. Your website will update automatically.</p>
+            <button class="btn-add" onclick="window.open('https://console.firebase.google.com/')">Open Firebase Console</button>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyD6VOairMfPk1fM9VApccmNEPAdMIb3HO4",
+            authDomain: "arisa-perfume-store.firebaseapp.com",
+            databaseURL: "https://arisa-perfume-store-default-rtdb.firebaseio.com",
+            projectId: "arisa-perfume-store",
+            storageBucket: "arisa-perfume-store.firebasestorage.app",
+            messagingSenderId: "49919010733",
+            appId: "1:49919010733:web:2087407e3f6bd41c1fe324"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        db.ref('perfumes').on('value', (snapshot) => {
+            const data = snapshot.val();
+            const count = data ? Object.keys(data).length : 0;
+            document.getElementById('total-count').innerText = count;
+        });
+    </script>
+</body>
+</html>
