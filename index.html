@@ -25,14 +25,15 @@
         .info-box h4 { color: #d4af37; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px; }
         .info-box p { font-size: 13px; color: #ccc; }
 
-        /* Hero & Shop */
-        .hero { height: 50vh; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&q=80&w=1500') no-repeat center center/cover; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border-bottom: 5px solid #d4af37; }
-        .hero h2 { font-size: 28px; letter-spacing: 3px; text-transform: uppercase; color: #d4af37; }
+        /* Hero & Logo */
+        .hero { height: 40vh; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border-top: 5px solid #d4af37; margin-top: 20px; }
+        .business-logo { max-width: 150px; margin-bottom: 15px; border: 1px solid #d4af37; padding: 10px; }
+        .hero h2 { font-size: 24px; letter-spacing: 3px; text-transform: uppercase; color: #d4af37; }
 
-        .container { padding: 40px 5%; background: #000; }
+        .container { padding: 20px 5%; background: #000; }
         .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .product-card { background: #111; padding: 15px; text-align: center; border: 1px solid #1a1a1a; position: relative; }
-        .product-image { width: 100%; height: 180px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; background: #050505; }
+        .product-card { background: #111; padding: 15px; text-align: center; border: 1px solid #1a1a1a; position: relative; cursor: pointer; user-select: none; }
+        .product-image { width: 100%; height: 180px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; background: #050505; pointer-events: none; }
         .product-image img { max-width: 100%; max-height: 100%; object-fit: contain; }
         
         .status-badge { position: absolute; top: 10px; right: 10px; padding: 3px 8px; font-size: 8px; font-weight: bold; text-transform: uppercase; border-radius: 2px; }
@@ -40,14 +41,12 @@
         .sold-out { background-color: #333; color: white; }
         .price { color: #d4af37; font-weight: bold; display: block; margin: 10px 0; }
         
-        .qty-input { width: 50px; background: #000; border: 1px solid #d4af37; color: white; padding: 5px; text-align: center; margin-bottom: 10px; }
-        .btn { padding: 10px; background: #d4af37; color: black; font-weight: bold; text-transform: uppercase; font-size: 10px; border: none; cursor: pointer; width: 100%; transition: 0.3s; }
+        .btn { padding: 10px; background: #d4af37; color: black; font-weight: bold; text-transform: uppercase; font-size: 10px; border: none; cursor: pointer; width: 100%; transition: 0.3s; margin-top: 5px; }
         .btn:hover { background: #fff; }
-        .view-bag-btn { background: #ffffff; color: #000; margin-top: 5px; display: none; }
+        .remove-btn { background: #550000; color: white; font-size: 9px; padding: 2px 5px; width: auto; }
 
         #page-content { display: none; padding: 60px 10%; background: #000; min-height: 70vh; }
         .content-box { border: 1px solid #d4af37; padding: 30px; background: #0a0a0a; }
-        .content-box h2 { color: #d4af37; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; }
 
         .cart-overlay { position: fixed; top: 0; right: 0; width: 100%; max-width: 350px; height: 100%; background: #111; z-index: 2000; padding: 20px; display: none; border-left: 4px solid #d4af37; overflow-y: auto; }
         .cart-input { width: 100%; padding: 10px; border: 1px solid #d4af37; background: #000; color: white; margin-bottom: 10px; }
@@ -74,7 +73,6 @@
         </div>
     </nav>
 
-    <!-- Staff Management Panel -->
     <div id="admin-panel">
         <h3 style="color:#d4af37; margin-bottom:15px;">STAFF CONTROL PANEL</h3>
         <input type="text" id="admin-p-name" class="admin-input" placeholder="Product Name">
@@ -83,14 +81,12 @@
             <option value="available">Available</option>
             <option value="sold-out">Sold Out</option>
         </select>
-        <!-- PHOTO UPLOAD BOX - VISIBLE ONLY TO LOGGED IN STAFF -->
         <input type="file" id="admin-p-file" class="admin-input" accept="image/*">
         <br>
         <button class="btn" style="width: 200px; margin-top: 10px;" onclick="adminUpload()">ADD PRODUCT</button>
         <button class="btn" style="width: 200px; background:#333; color:white;" onclick="logoutAdmin()">LOGOUT</button>
     </div>
 
-    <!-- Cart Sidebar -->
     <div id="cart-sidebar" class="cart-overlay">
         <h3 style="color:#d4af37; margin-bottom:20px;">YOUR BAG</h3>
         <div id="cart-items-list"></div>
@@ -106,13 +102,23 @@
         <button class="btn" style="background:#222; color:white; margin-top:10px;" onclick="toggleCart()">CLOSE</button>
     </div>
 
-    <!-- Home/Shop Content -->
     <div id="home-content">
+        <!-- PRODUCTS ARE NOW FIRST -->
+        <div class="container">
+            <h2 style="color:#d4af37; text-align:center; margin-bottom:20px; font-size:16px; letter-spacing:2px;">SHOP COLLECTIONS</h2>
+            <p style="text-align:center; font-size:10px; color:#888; margin-bottom:15px;">Tip: Tap once to add, Double-tap for more!</p>
+            <div class="product-grid" id="product-grid"></div>
+        </div>
+
+        <!-- HERO SECTION MOVED DOWN WITH LOGO -->
         <section class="hero">
+            <!-- REPLACE logo.png WITH YOUR ACTUAL LOGO URL -->
+            <img src="logo.png" alt="ARISA LOGO" class="business-logo" onerror="this.src='https://via.placeholder.com/150/000000/d4af37?text=ARISA+LOGO'">
             <h2>Luxury Fragrances</h2>
             <p>24/7 Delivery in Freetown</p>
         </section>
 
+        <!-- INFO SECTION MOVED DOWN -->
         <section class="info-section">
             <div class="info-box">
                 <h4>Authenticity</h4>
@@ -127,10 +133,6 @@
                 <p>Our WhatsApp lines are open day and night for your inquiries.</p>
             </div>
         </section>
-
-        <div class="container">
-            <div class="product-grid" id="product-grid"></div>
-        </div>
     </div>
 
     <div id="page-content">
@@ -183,29 +185,44 @@
             perfumes.forEach((p) => {
                 const sold = p.status === 'sold-out';
                 grid.innerHTML += `
-                    <div class="product-card">
+                    <div class="product-card" onclick="${sold ? '' : `handleProductTap('${p.firebaseId}')`}">
                         <span class="status-badge ${p.status}">${p.status.replace('-', ' ')}</span>
                         <div class="product-image"><img src="${p.image}"></div>
                         <h3>${p.name}</h3>
                         <span class="price">${p.price} NLE</span>
-                        ${!sold ? `<input type="number" value="1" min="1" id="qty-${p.firebaseId}" class="qty-input">` : ''}
-                        <button class="btn" onclick="${sold ? '' : `addToBag('${p.firebaseId}')`}" ${sold ? 'disabled' : ''}>
+                        <button class="btn" ${sold ? 'disabled' : ''}>
                             ${sold ? 'OUT OF STOCK' : 'ADD TO BAG'}
                         </button>
-                        <button id="view-bag-${p.firebaseId}" class="btn view-bag-btn" onclick="toggleCart()">VIEW BAG & CHECKOUT</button>
-                        ${isAdmin ? `<button class="btn" style="background:#444; margin-top:5px;" onclick="toggleStatus('${p.firebaseId}','${p.status}')">Toggle Status</button>
-                                     <button class="btn" style="background:red; margin-top:5px;" onclick="deleteProduct('${p.firebaseId}')">Delete</button>` : ''}
+                        ${isAdmin ? `<button class="btn" style="background:#444; margin-top:5px;" onclick="event.stopPropagation(); toggleStatus('${p.firebaseId}','${p.status}')">Toggle Status</button>
+                                     <button class="btn" style="background:red; margin-top:5px;" onclick="event.stopPropagation(); deleteProduct('${p.firebaseId}')">Delete</button>` : ''}
                     </div>`;
             });
         }
 
+        // Logic for single and double/multiple taps
+        let tapTimer = null;
+        window.handleProductTap = (id) => {
+            if (tapTimer === null) {
+                tapTimer = setTimeout(() => {
+                    addToBag(id);
+                    tapTimer = null;
+                }, 300); // Wait 300ms to see if another tap comes
+            } else {
+                clearTimeout(tapTimer);
+                tapTimer = null;
+                addToBag(id); // Second tap adds another one
+            }
+        };
+
         window.addToBag = (id) => {
             const item = perfumes.find(p => p.firebaseId === id);
-            const qty = parseInt(document.getElementById(`qty-${id}`).value) || 1;
-            for(let i = 0; i < qty; i++) { cart.push({...item}); }
+            cart.push({...item, cartId: Date.now() + Math.random()}); 
             updateCartUI();
-            // Show the "View Bag" button for this specific item instead of opening the sidebar
-            document.getElementById(`view-bag-${id}`).style.display = 'block';
+        };
+
+        window.removeFromBag = (cartId) => {
+            cart = cart.filter(item => item.cartId !== cartId);
+            updateCartUI();
         };
 
         function updateCartUI() {
@@ -214,7 +231,13 @@
             let subtotal = 0;
             list.innerHTML = cart.map(i => {
                 subtotal += parseFloat(i.price);
-                return `<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>${i.name}</span><span>${i.price} NLE</span></div>`;
+                return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #222; padding-bottom:5px;">
+                            <span style="font-size:12px;">${i.name}</span>
+                            <div>
+                                <span style="color:#d4af37; margin-right:10px;">${i.price} NLE</span>
+                                <button class="btn remove-btn" onclick="removeFromBag(${i.cartId})">REDO</button>
+                            </div>
+                        </div>`;
             }).join('');
 
             let discount = 0;
@@ -268,12 +291,7 @@
         };
 
         window.adminUpload = () => {
-            // Check if admin is truly logged in before processing upload
-            if(sessionStorage.getItem('isArisaAdmin') !== 'true') {
-                alert("Unauthorized: Only staff can upload products.");
-                return;
-            }
-
+            if(sessionStorage.getItem('isArisaAdmin') !== 'true') return;
             const name = document.getElementById('admin-p-name').value;
             const price = document.getElementById('admin-p-price').value;
             const status = document.getElementById('admin-p-status').value;
@@ -282,14 +300,9 @@
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     db.ref('perfumes').push({ name, price, status, image: e.target.result });
-                    alert("Product Added Successfully!");
-                    document.getElementById('admin-p-name').value = '';
-                    document.getElementById('admin-p-price').value = '';
-                    document.getElementById('admin-p-file').value = '';
+                    alert("Product Added!");
                 };
                 reader.readAsDataURL(file);
-            } else {
-                alert("Please fill in all fields and select a photo.");
             }
         };
 
@@ -297,7 +310,7 @@
             db.ref('perfumes/' + id).update({ status: cur === 'available' ? 'sold-out' : 'available' });
         };
 
-        window.deleteProduct = (id) => { if(confirm("Delete this product permanently?")) db.ref('perfumes/' + id).remove(); };
+        window.deleteProduct = (id) => { if(confirm("Delete product?")) db.ref('perfumes/' + id).remove(); };
 
         window.sendSuggestion = () => {
             const text = document.getElementById('user-suggestion').value;
@@ -309,7 +322,7 @@
         window.checkoutWhatsApp = () => {
             const name = document.getElementById('cust-name').value;
             const addr = document.getElementById('cust-address').value;
-            if(!name || !addr) return alert("Please enter your name and delivery address.");
+            if(!name || !addr) return alert("Please enter your name and address.");
             const total = document.getElementById('cart-grand-total').innerText;
             const itemCounts = {};
             cart.forEach(i => itemCounts[i.name] = (itemCounts[i.name] || 0) + 1);
