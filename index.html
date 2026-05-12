@@ -4,166 +4,434 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARISA PERFUME STORE | Luxury Scents</title>
+
     <style>
-        /* LUXURY BLACK AND GOLD THEME */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Georgia', serif; }
-        body { background-color: #000000; color: #ffffff; line-height: 1.6; overflow-x: hidden; }
-        
-        /* Navigation */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: #111; border-bottom: 2px solid #d4af37; position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 20px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; color: #d4af37; cursor: pointer; }
-        .nav-links { display: flex; gap: 15px; list-style: none; }
-        .nav-links a { text-decoration: none; color: #ffffff; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; cursor: pointer; }
-        .nav-links a:hover { color: #d4af37; }
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Georgia', serif;
+        }
 
-        /* Admin Section Styling */
-        #admin-panel { display: none; background: #111; padding: 30px 5%; border-bottom: 2px solid #d4af37; text-align: center; }
-        .admin-input { padding: 10px; margin: 5px; border: 1px solid #d4af37; background: #000; color: #fff; width: 100%; max-width: 200px; }
+        body{
+            background:#ffffff;
+            color:#1a1a1a;
+            line-height:1.6;
+        }
 
-        /* Search Section */
-        .search-container { text-align: center; padding: 50px 5%; background: #0a0a0a; border-top: 1px solid #1a1a1a; margin-top: 40px; }
-        .search-label { display: block; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; color: #d4af37; }
-        .search-input { width: 100%; max-width: 500px; padding: 12px 20px; border: 1.5px solid #d4af37; background: #000; color: #fff; border-radius: 25px; outline: none; font-size: 14px; text-align: center; }
+        /* NAVIGATION */
+        nav{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:15px 5%;
+            background:#fff;
+            border-bottom:1px solid #d4af37;
+            position:sticky;
+            top:0;
+            z-index:1000;
+        }
 
-        /* Hero & Shop */
-        .hero { height: 50vh; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&q=80&w=1500') no-repeat center center/cover; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border-bottom: 5px solid #d4af37; padding: 20px; }
-        .hero h2 { font-size: 28px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; color: #d4af37; }
-        .hero p { font-style: italic; font-size: 14px; color: #fff; }
+        .logo{
+            font-size:20px;
+            font-weight:bold;
+            letter-spacing:2px;
+            text-transform:uppercase;
+            cursor:pointer;
+        }
 
-        .container { padding: 40px 5%; background: #000; }
-        .section-title { text-align: center; margin-bottom: 30px; font-size: 20px; text-transform: uppercase; letter-spacing: 3px; color: #d4af37; }
+        .nav-links{
+            display:flex;
+            gap:15px;
+            list-style:none;
+        }
 
-        /* Products Grid */
-        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .product-card { background: #111; padding: 0 0 15px 0; text-align: center; border: 1px solid #1a1a1a; position: relative; }
-        .product-image { width: 100%; height: 180px; background-color: #050505; overflow: hidden; }
-        .product-image img { width: 100%; height: 100%; object-fit: contain; }
-        
-        .status-badge { position: absolute; top: 10px; right: 10px; padding: 3px 8px; font-size: 8px; font-weight: bold; text-transform: uppercase; z-index: 5; }
-        .available { background-color: #d4af37; color: black; }
-        .sold-out { background-color: #333; color: white; }
-        .price { color: #d4af37; font-weight: bold; margin-bottom: 10px; font-size: 13px; display: block; }
-        
-        .btn { padding: 10px; background: #d4af37; color: black; font-weight: bold; text-transform: uppercase; font-size: 10px; border: none; cursor: pointer; width: 90%; transition: 0.3s; margin-bottom: 5px; }
-        .btn:hover { background: #fff; }
+        .nav-links a{
+            text-decoration:none;
+            color:#1a1a1a;
+            font-size:11px;
+            text-transform:uppercase;
+            letter-spacing:1px;
+            cursor:pointer;
+            transition:0.3s;
+        }
 
-        /* Suggestion Box */
-        .suggestion-box { background: #111; padding: 40px 5%; border-top: 1px solid #d4af37; text-align: center; }
-        .suggest-input { width: 100%; max-width: 500px; height: 80px; padding: 15px; background: #000; color: #fff; border: 1px solid #d4af37; margin-bottom: 10px; resize: none; }
+        .nav-links a:hover{
+            color:#d4af37;
+        }
 
-        /* Cart Overlay */
-        .cart-overlay { position: fixed; top: 0; right: 0; width: 100%; max-width: 350px; height: 100%; background: #111; color: white; z-index: 2000; box-shadow: -5px 0 15px rgba(0,0,0,0.5); padding: 20px; display: none; border-left: 4px solid #d4af37; overflow-y: auto; }
-        .close-cart { position: absolute; top: 15px; right: 15px; font-size: 24px; cursor: pointer; color: #d4af37; }
-        .cart-input { width: 100%; padding: 8px; border: 1px solid #d4af37; background: #000; color: white; margin-bottom: 12px; outline: none; font-size: 13px; }
+        /* TOP SEARCH */
+        .top-search{
+            padding:20px 5%;
+            background:#fafafa;
+            border-bottom:1px solid #eee;
+            text-align:center;
+        }
 
-        footer { background: #000; color: #555; text-align: center; padding: 40px 5%; border-top: 2px solid #1a1a1a; font-size: 12px; }
+        .top-search input{
+            width:90%;
+            max-width:600px;
+            padding:14px 20px;
+            border:2px solid #d4af37;
+            border-radius:30px;
+            outline:none;
+            font-size:14px;
+            text-align:center;
+        }
 
-        @media (min-width: 768px) { .product-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); } .product-image { height: 280px; } }
+        /* HERO */
+        .hero{
+            height:40vh;
+            background:
+            linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+            url('https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&q=80&w=1500')
+            no-repeat center center/cover;
+
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            text-align:center;
+            color:white;
+            border-bottom:5px solid #d4af37;
+        }
+
+        /* PRODUCTS */
+        .container{
+            padding:40px 5%;
+        }
+
+        .product-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+            gap:20px;
+            margin-top:30px;
+        }
+
+        .product-card{
+            background:white;
+            border:1px solid #eee;
+            overflow:hidden;
+            transition:0.4s;
+            position:relative;
+            text-align:center;
+            padding-bottom:15px;
+        }
+
+        .product-card:hover{
+            transform:translateY(-5px);
+            box-shadow:0 10px 20px rgba(0,0,0,0.08);
+        }
+
+        .product-image{
+            width:100%;
+            height:250px;
+            overflow:hidden;
+            background:#f5f5f5;
+        }
+
+        .product-image img{
+            width:100%;
+            height:100%;
+            object-fit:cover;
+        }
+
+        .status-badge{
+            position:absolute;
+            top:10px;
+            right:10px;
+            padding:4px 8px;
+            font-size:9px;
+            font-weight:bold;
+            text-transform:uppercase;
+            color:white;
+        }
+
+        .available{
+            background:#d4af37;
+        }
+
+        .sold-out{
+            background:#333;
+        }
+
+        .btn{
+            width:90%;
+            margin:auto;
+            margin-top:10px;
+            padding:10px;
+            border:none;
+            background:#1a1a1a;
+            color:white;
+            cursor:pointer;
+            text-transform:uppercase;
+            font-size:11px;
+            letter-spacing:1px;
+        }
+
+        /* ABOUT SECTION */
+        .about-section{
+            padding:60px 8%;
+            text-align:center;
+            background:#fff;
+        }
+
+        .about-section p{
+            max-width:900px;
+            margin:auto;
+            color:#555;
+            line-height:1.9;
+        }
+
+        /* POLICY SECTION */
+        .policy-section{
+            padding:60px 8%;
+            background:#fafafa;
+            border-top:1px solid #eee;
+        }
+
+        .policy-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+            gap:20px;
+            margin-top:30px;
+        }
+
+        .policy-card{
+            background:white;
+            padding:25px;
+            border:1px solid #eee;
+        }
+
+        .policy-card h3{
+            color:#d4af37;
+            margin-bottom:10px;
+        }
+
+        .policy-card p{
+            color:#555;
+        }
+
+        /* FOOTER */
+        footer{
+            background:black;
+            color:white;
+            text-align:center;
+            padding:30px 5%;
+            margin-top:40px;
+            font-size:11px;
+        }
+
     </style>
 </head>
+
 <body>
 
+    <!-- NAVIGATION -->
     <nav>
-        <div class="logo" onclick="showHome()">ARISA</div>
+        <div class="logo">ARISA</div>
+
         <ul class="nav-links">
-            <li><a onclick="showHome()">Home</a></li>
-            <li><a onclick="showAbout()">About</a></li>
-            <li><a onclick="showPolicy()">Policy</a></li>
+            <li><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#policy">Policy</a></li>
         </ul>
-        <div onclick="toggleCart()" style="cursor:pointer; font-weight: bold; font-size: 13px; color: #d4af37;">
-            BAG <span id="cart-counter" style="background:#d4af37; color:black; border-radius:50%; padding:1px 6px; font-size:10px;">0</span>
+
+        <div style="font-weight:bold; font-size:13px;">
+            BAG
+            <span style="
+                background:#d4af37;
+                color:white;
+                border-radius:50%;
+                padding:2px 7px;
+                font-size:10px;
+            ">
+                0
+            </span>
         </div>
     </nav>
 
-    <div id="admin-panel">
-        <h3 style="color:#d4af37; margin-bottom:15px;">ADMIN PANEL</h3>
-        <input type="text" id="admin-p-name" class="admin-input" placeholder="Perfume Name">
-        <input type="number" id="admin-p-price" class="admin-input" placeholder="Price (NLE)">
-        <select id="admin-p-status" class="admin-input">
-            <option value="available">Available</option>
-            <option value="sold-out">Sold Out</option>
-        </select>
-        <input type="file" id="admin-p-file" class="admin-input" style="border:none;" accept="image/*">
-        <br>
-        <button class="btn" style="width: 200px;" onclick="adminUpload()">UPLOAD PRODUCT</button>
-        <button class="btn" style="width: 200px; background:#333; color:#fff;" onclick="logoutAdmin()">LOGOUT</button>
-    </div>
+    <!-- SEARCH -->
+    <section class="top-search">
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search perfumes, brands, or scents..."
+            onkeyup="filterProducts()"
+        >
+    </section>
 
-    <div id="cart-sidebar" class="cart-overlay">
-        <div class="close-cart" onclick="toggleCart()">&times;</div>
-        <h3 style="text-transform: uppercase; margin-bottom: 15px; font-size: 18px; color: #d4af37;">Your Selection</h3>
-        <div id="cart-items-list"></div>
-        <div style="font-size: 13px; margin-top: 10px; border-top: 1px solid #222; padding-top: 10px;">
-            <div style="display: flex; justify-content: space-between;">
-                <span>Subtotal:</span>
-                <span><span id="cart-subtotal">0</span> NLE</span>
+    <!-- HERO -->
+    <section class="hero">
+        <h1 style="letter-spacing:4px; text-transform:uppercase;">
+            Exquisite Fragrance
+        </h1>
+
+        <p style="font-style:italic;">
+            Curated Luxury Scents
+        </p>
+    </section>
+
+    <!-- PRODUCTS -->
+    <div class="container">
+
+        <h2 style="
+            text-align:center;
+            text-transform:uppercase;
+            letter-spacing:3px;
+        ">
+            Our Collection
+        </h2>
+
+        <div class="product-grid">
+
+            <!-- PRODUCT 1 -->
+            <div class="product-card">
+                <span class="status-badge available">Available</span>
+
+                <div class="product-image">
+                    <img src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=800&q=80">
+                </div>
+
+                <h3 style="margin-top:15px;">Dior Sauvage</h3>
+                <p>$120</p>
+
+                <button class="btn">Add to Bag</button>
             </div>
-            <div id="discount-row" style="display: none; justify-content: space-between; color: #d4af37; font-weight: bold; margin-top: 5px;">
-                <span id="discount-text">Multi-buy Discount:</span>
-                <span>-<span id="cart-discount">0</span> NLE</span>
+
+            <!-- PRODUCT 2 -->
+            <div class="product-card">
+                <span class="status-badge available">Available</span>
+
+                <div class="product-image">
+                    <img src="https://images.unsplash.com/photo-1615634260167-c8cdede054de?auto=format&fit=crop&w=800&q=80">
+                </div>
+
+                <h3 style="margin-top:15px;">Chanel No.5</h3>
+                <p>$150</p>
+
+                <button class="btn">Add to Bag</button>
             </div>
-            <div style="font-weight: bold; font-size: 16px; display: flex; justify-content: space-between; margin: 15px 0; border-top: 1px solid #d4af37; padding-top: 10px;">
-                <span>Total:</span>
-                <span style="color: #d4af37;"><span id="cart-grand-total">0</span> NLE</span>
+
+            <!-- PRODUCT 3 -->
+            <div class="product-card">
+                <span class="status-badge sold-out">Sold Out</span>
+
+                <div class="product-image">
+                    <img src="https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=800&q=80">
+                </div>
+
+                <h3 style="margin-top:15px;">Versace Eros</h3>
+                <p>$110</p>
+
+                <button class="btn">Unavailable</button>
             </div>
-        </div>
-        <div class="cart-form">
-            <input type="text" id="cust-name" class="cart-input" placeholder="Full Name">
-            <input type="text" id="cust-address" class="cart-input" placeholder="Delivery Address">
-        </div>
-        <button class="btn" style="background: #25D366; color: white; width: 100%; margin-bottom: 10px;" onclick="checkoutWhatsApp()">ORDER VIA WHATSAPP</button>
-    </div>
 
-    <div id="home-content">
-        <section class="hero">
-            <h2>Luxury Fragrances</h2>
-            <p>24/7 Delivery Across Freetown</p>
-        </section>
-        <div class="container" id="shop">
-            <h2 class="section-title">The Collection</h2>
-            <div class="product-grid" id="product-grid"></div>
         </div>
     </div>
 
-    <div id="about-page" style="display:none; padding: 50px 5%; text-align: center;">
-        <h2 class="section-title">About Us</h2>
-        <p>ARISA PERFUME STORE offers the finest selection of luxury scents.</p>
-    </div>
+    <!-- ABOUT -->
+    <section class="about-section" id="about">
 
-    <div id="policy-page" style="display:none; padding: 50px 5%; text-align: center;">
-        <h2 class="section-title">Store Policy</h2>
-        <p>Swift delivery within 24 hours. Quality guaranteed.</p>
-    </div>
+        <h2 style="
+            text-transform:uppercase;
+            letter-spacing:3px;
+            margin-bottom:20px;
+        ">
+            About Us
+        </h2>
 
-    <div class="search-container">
-        <span class="search-label">Find Your Scent</span>
-        <input type="text" id="perfume-search" class="search-input" placeholder="Search brands..." onkeyup="filterProducts()">
-    </div>
+        <p>
+            ARISA PERFUME STORE is dedicated to bringing luxury fragrances
+            to customers across Sierra Leone. We carefully select premium
+            perfumes from trusted brands around the world to ensure quality,
+            elegance, and long-lasting scents. Our mission is to help every
+            customer discover a fragrance that matches their personality and
+            lifestyle.
+        </p>
 
-    <div class="suggestion-box">
-        <h2 class="section-title">Suggestions</h2>
-        <p style="margin-bottom: 15px; color: #888;">Is there a scent we are missing? Let us know!</p>
-        <textarea id="user-suggestion" class="suggest-input" placeholder="Write your suggestion here..."></textarea><br>
-        <button class="btn" style="width: 200px;" onclick="sendSuggestion()">SEND SUGGESTION</button>
-    </div>
+    </section>
 
+    <!-- POLICY -->
+    <section class="policy-section" id="policy">
+
+        <h2 style="
+            text-align:center;
+            text-transform:uppercase;
+            letter-spacing:3px;
+        ">
+            Store Policies
+        </h2>
+
+        <div class="policy-grid">
+
+            <div class="policy-card">
+                <h3>Delivery</h3>
+                <p>
+                    Fast delivery available within Freetown and selected areas nationwide.
+                </p>
+            </div>
+
+            <div class="policy-card">
+                <h3>Authentic Products</h3>
+                <p>
+                    All perfumes sold by ARISA are original and sourced from trusted suppliers.
+                </p>
+            </div>
+
+            <div class="policy-card">
+                <h3>Payments</h3>
+                <p>
+                    We accept Cash on Delivery, Orange Money, and Afrimoney payments.
+                </p>
+            </div>
+
+            <div class="policy-card">
+                <h3>Returns</h3>
+                <p>
+                    Products can only be returned if damaged during delivery.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- FOOTER -->
     <footer>
-        <p>&copy; 2026 ARISA PERFUME STORE. OPEN 24/7.</p>
-        <button onclick="loginAdmin()" id="admin-login-link" style="background: none; border: none; color: #222; cursor: pointer; margin-top: 10px;">Staff Login</button>
+        <p>&copy; 2026 ARISA PERFUME STORE. Open 24/7.</p>
     </footer>
 
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
-
+    <!-- SEARCH FUNCTION -->
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyD6VOairMfPk1fM9VApccmNEPAdMIb3HO4",
-            authDomain: "arisa-perfume-store.firebaseapp.com",
-            databaseURL: "https://arisa-perfume-store-default-rtdb.firebaseio.com",
-            projectId: "arisa-perfume-store",
-            storageBucket: "arisa-perfume-store.firebasestorage.app",
-            messagingSenderId: "49919010733",
-            appId: "1:49919010733:web:2087407e3f6bd41c1fe324"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.
+
+        function filterProducts(){
+
+            let input =
+            document.getElementById("searchInput")
+            .value
+            .toLowerCase();
+
+            let cards =
+            document.querySelectorAll(".product-card");
+
+            cards.forEach(card => {
+
+                let text =
+                card.innerText.toLowerCase();
+
+                if(text.includes(input)){
+                    card.style.display = "block";
+                }
+                else{
+                    card.style.display = "none";
+                }
+
+            });
+
+        }
+
+    </script>
+
+</body>
+</html>
