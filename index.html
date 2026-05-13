@@ -274,7 +274,7 @@
                         ${p.color ? `<span class="color-label">${p.color}</span>` : ''}
                         <span class="price">${p.price} NLE</span>
                         <button class="btn" ${sold ? 'disabled' : ''}>
-                            ${sold ? 'OUT' : 'ADD +'}
+                            ${sold ? 'SOLD OUT' : 'BUY'}
                         </button>
                         ${isAdmin ? `<button class="btn" style="background:#444; margin-top:5px; font-size:8px;" onclick="event.stopPropagation(); toggleStatus('${p.firebaseId}','${p.status}')">Status</button>
                                      <button class="btn" style="background:red; margin-top:5px; font-size:8px;" onclick="event.stopPropagation(); deleteProduct('${p.firebaseId}')">Del</button>` : ''}
