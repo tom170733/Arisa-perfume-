@@ -54,6 +54,9 @@
         .cart-overlay { position: fixed; top: 0; right: 0; width: 100%; max-width: 350px; height: 100%; background: #111; z-index: 2000; padding: 20px; display: none; border-left: 4px solid #d4af37; overflow-y: auto; }
         .cart-input { width: 100%; padding: 10px; border: 1px solid #d4af37; background: #000; color: white; margin-bottom: 10px; }
 
+        /* Floating Checkout Button */
+        #floating-cart-btn { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; z-index: 1500; box-shadow: 0px 0px 15px rgba(212, 175, 55, 0.4); }
+
         .suggestion-section { padding: 40px 5%; background: #0a0a0a; text-align: center; border-top: 1px solid #1a1a1a; }
         .suggest-input { width: 100%; max-width: 500px; height: 100px; background: #000; border: 1px solid #d4af37; color: #fff; padding: 10px; margin-bottom: 10px; }
 
@@ -76,7 +79,6 @@
         </div>
     </nav>
 
-    <!-- REPLACED IMAGE WITH TEXT -->
     <header class="branding-header">
         <h1 class="main-brand-title">ARISA STORE</h1>
     </header>
@@ -108,6 +110,11 @@
         <input type="text" id="cust-address" class="cart-input" placeholder="Delivery Address">
         <button class="btn" style="background:#25D366; color:white;" onclick="checkoutWhatsApp()">ORDER ON WHATSAPP</button>
         <button class="btn" style="background:#222; color:white; margin-top:10px;" onclick="toggleCart()">CLOSE</button>
+    </div>
+
+    <!-- GUIDE BUTTON FOR CUSTOMERS -->
+    <div id="floating-cart-btn">
+        <button class="btn" style="height: 50px; font-size: 14px; border: 2px solid white;" onclick="toggleCart()">View Bag & Checkout →</button>
     </div>
 
     <div id="home-content">
@@ -220,11 +227,14 @@
             const item = perfumes.find(p => p.firebaseId === id);
             cart.push({...item, cartId: Date.now() + Math.random()}); 
             updateCartUI();
+            // Show the guide button after adding item
+            document.getElementById('floating-cart-btn').style.display = 'block';
         };
 
         window.removeFromBag = (cartId) => {
             cart = cart.filter(item => item.cartId !== cartId);
             updateCartUI();
+            if(cart.length === 0) document.getElementById('floating-cart-btn').style.display = 'none';
         };
 
         function updateCartUI() {
@@ -266,13 +276,28 @@
         window.showAbout = () => {
             document.getElementById('home-content').style.display = 'none';
             document.getElementById('page-content').style.display = 'block';
-            document.getElementById('page-inner-content').innerHTML = `<h2>About Arisa Perfume Store</h2><p>Welcome to ARISA, Freetown's premier destination for luxury fragrances.</p>`;
+            document.getElementById('page-inner-content').innerHTML = `
+                <h2 style="color:#d4af37; margin-bottom:20px;">ABOUT ARISA</h2>
+                <p style="margin-bottom:15px;">ARISA PERFUME STORE is Freetown's premier destination for high-end luxury fragrances. Established by Aroun Thomas Turay, we specialize in bringing the world's most exquisite scents to Sierra Leone.</p>
+                <p style="margin-bottom:15px;">Our mission is to provide an accessible luxury experience. Whether you are looking for a signature everyday scent or a bold fragrance for a special occasion, our curated collection ensures quality and authenticity in every bottle.</p>
+                <p>We pride ourselves on 24/7 delivery services and a commitment to customer satisfaction.</p>
+            `;
         };
 
         window.showPolicy = () => {
             document.getElementById('home-content').style.display = 'none';
             document.getElementById('page-content').style.display = 'block';
-            document.getElementById('page-inner-content').innerHTML = `<h2>Our Policy</h2><p>Standard delivery and return terms apply.</p>`;
+            document.getElementById('page-inner-content').innerHTML = `
+                <h2 style="color:#d4af37; margin-bottom:20px;">STORE POLICIES</h2>
+                <h4 style="color:#d4af37;">1. Delivery Policy</h4>
+                <p style="margin-bottom:15px;">We offer 24/7 delivery within Freetown. Orders are processed immediately upon WhatsApp confirmation and typically arrive within 1-3 hours depending on your location.</p>
+                <h4 style="color:#d4af37;">2. Authenticity Guarantee</h4>
+                <p style="margin-bottom:15px;">We guarantee that all perfumes sold at ARISA are 100% genuine and sourced from certified international distributors.</p>
+                <h4 style="color:#d4af37;">3. Returns & Exchanges</h4>
+                <p style="margin-bottom:15px;">Due to the nature of fragrance products, we only accept returns if the item was damaged during delivery or if the wrong item was sent. Please inspect your package upon arrival.</p>
+                <h4 style="color:#d4af37;">4. Multi-Buy Discounts</h4>
+                <p>Enjoy 5% off when you buy 2 items and 10% off for 3 or more items automatically calculated in your bag.</p>
+            `;
         };
 
         window.loginAdmin = () => {
