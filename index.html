@@ -120,15 +120,22 @@
         </div>
 
         <div style="margin-top:20px;">
+            <p style="font-size:11px; color:#d4af37; margin-bottom:5px;">SERVICE TYPE:</p>
+            <select id="service-type" class="cart-input">
+                <option value="Delivery">Delivery (Fee based on location)</option>
+                <option value="Pickup">Pickup at Store</option>
+            </select>
+
             <p style="font-size:11px; color:#d4af37; margin-bottom:5px;">PAYMENT METHOD:</p>
             <select id="payment-method" class="cart-input">
                 <option value="After Delivery">Pay After Delivery</option>
+                <option value="Orange Money">Orange Money</option>
                 <option value="Online/Advance">Pay Now (Confirm on WhatsApp)</option>
             </select>
         </div>
 
         <input type="text" id="cust-name" class="cart-input" placeholder="Full Name">
-        <input type="text" id="cust-address" class="cart-input" placeholder="Delivery Address">
+        <input type="text" id="cust-address" class="cart-input" placeholder="Address / Pickup Note">
         <button class="btn" style="background:#25D366; color:white;" onclick="checkoutWhatsApp()">ORDER ON WHATSAPP</button>
         <button class="btn" style="background:#222; color:white; margin-top:10px;" onclick="toggleCart()">CLOSE</button>
     </div>
@@ -146,7 +153,7 @@
 
         <section class="hero">
             <h2>Luxury Fragrances</h2>
-            <p>24/7 Delivery in Freetown</p>
+            <p>9:00 AM - 6:00 PM Service in Freetown</p>
         </section>
 
         <section class="review-container">
@@ -166,15 +173,15 @@
         <section class="info-section">
             <div class="info-box">
                 <h4>Authenticity</h4>
-                <p>100% Genuine designer fragrances sourced from certified distributors.</p>
+                <p>100% Genuine designer fragrances.</p>
             </div>
             <div class="info-box">
-                <h4>Fast Delivery</h4>
-                <p>Swift delivery within Freetown. Your scent arrives within hours.</p>
+                <h4>Delivery & Pickup</h4>
+                <p>Delivery available (fees based on location) or Pickup at store.</p>
             </div>
             <div class="info-box">
-                <h4>24/7 Support</h4>
-                <p>Our WhatsApp lines are open day and night for your inquiries.</p>
+                <h4>Business Hours</h4>
+                <p>9:00 AM to 6:00 PM</p>
             </div>
         </section>
     </div>
@@ -354,7 +361,7 @@
                 <h2 style="color:#d4af37; margin-bottom:20px;">ABOUT ARISA</h2>
                 <p style="margin-bottom:15px;">ARISA PERFUME STORE is Freetown's premier destination for high-end luxury fragrances. Established by Aroun Thomas Turay, we specialize in bringing the world's most exquisite scents to Sierra Leone.</p>
                 <p style="margin-bottom:15px;">Our mission is to provide an accessible luxury experience. Whether you are looking for a signature everyday scent or a bold fragrance for a special occasion, our curated collection ensures quality and authenticity in every bottle.</p>
-                <p>We pride ourselves on 24/7 delivery services and a commitment to customer satisfaction.</p>
+                <p>We pride ourselves on professional service and a commitment to customer satisfaction during our business hours of 9:00 AM to 6:00 PM.</p>
             `;
         };
 
@@ -363,10 +370,10 @@
             document.getElementById('page-content').style.display = 'block';
             document.getElementById('page-inner-content').innerHTML = `
                 <h2 style="color:#d4af37; margin-bottom:20px;">STORE POLICIES</h2>
-                <h4 style="color:#d4af37;">1. Delivery Policy</h4>
-                <p style="margin-bottom:15px;">We offer 24/7 delivery within Freetown. Orders are processed immediately upon WhatsApp confirmation and typically arrive within 1-3 hours depending on your location.</p>
+                <h4 style="color:#d4af37;">1. Delivery & Pickup</h4>
+                <p style="margin-bottom:15px;">We offer delivery within Freetown from 9:00 AM to 6:00 PM. <strong>Delivery fees are based on your specific location</strong>. Alternatively, you may choose to pick up your order at our store.</p>
                 <h4 style="color:#d4af37;">2. Authenticity Guarantee</h4>
-                <p style="margin-bottom:15px;">We guarantee that all perfumes sold at ARISA are 100% genuine and sourced from certified international distributors.</p>
+                <p style="margin-bottom:15px;">We guarantee that all perfumes sold at ARISA are 100% genuine.</p>
                 <h4 style="color:#d4af37;">3. Returns & Exchanges</h4>
                 <p style="margin-bottom:15px;">Due to the nature of fragrance products, we only accept returns if the item was damaged during delivery or if the wrong item was sent. Please inspect your package upon arrival.</p>
                 <h4 style="color:#d4af37;">4. Multi-Buy Discounts</h4>
@@ -421,13 +428,25 @@
             const name = document.getElementById('cust-name').value;
             const addr = document.getElementById('cust-address').value;
             const payMethod = document.getElementById('payment-method').value;
+            const serviceType = document.getElementById('service-type').value;
             if(!name || !addr) return alert("Please enter your name and address.");
             const total = document.getElementById('cart-grand-total').innerText;
             const itemCounts = {};
             cart.forEach(i => itemCounts[i.name] = (itemCounts[i.name] || 0) + 1);
             const itemsMsg = Object.keys(itemCounts).map(name => `${name} (x${itemCounts[name]})`).join(', ');
-            const msg = `*NEW ARISA ORDER*\nCustomer: ${name}\nAddress: ${addr}\nPayment: ${payMethod}\nItems: ${itemsMsg}\nTotal: ${total} NLE`;
+            const msg = `*NEW ARISA ORDER*\nCustomer: ${name}\nService: ${serviceType}\nAddress/Note: ${addr}\nPayment: ${payMethod}\nItems: ${itemsMsg}\nTotal: ${total} NLE\n(Note: Delivery fee is based on location)`;
+            
+            // Open WhatsApp
             window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`);
+            
+            // Thank the customer
+            alert("Thank you for your purchase from ARISA PERFUME STORE! Your order has been initiated.");
+            
+            // Clear cart and reset UI
+            cart = [];
+            updateCartUI();
+            toggleCart();
+            document.getElementById('floating-cart-btn').style.display = 'none';
         };
 
         if(sessionStorage.getItem('isArisaAdmin') === 'true') document.getElementById('admin-panel').style.display = 'block';
