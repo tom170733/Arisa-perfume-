@@ -47,12 +47,18 @@
         .btn { padding: 10px; background: #d4af37; color: black; font-weight: bold; text-transform: uppercase; font-size: 10px; border: none; cursor: pointer; width: 100%; transition: 0.3s; margin-top: 5px; }
         .btn:hover { background: #fff; }
         .remove-btn { background: #550000; color: white; font-size: 9px; padding: 2px 5px; width: auto; }
+        .save-btn { background: #333; color: #d4af37; font-size: 9px; padding: 2px 5px; width: auto; border: 1px solid #d4af37; }
 
         #page-content { display: none; padding: 60px 10%; background: #000; min-height: 70vh; }
         .content-box { border: 1px solid #d4af37; padding: 30px; background: #0a0a0a; }
 
         .cart-overlay { position: fixed; top: 0; right: 0; width: 100%; max-width: 350px; height: 100%; background: #111; z-index: 2000; padding: 20px; display: none; border-left: 4px solid #d4af37; overflow-y: auto; }
         .cart-input { width: 100%; padding: 10px; border: 1px solid #d4af37; background: #000; color: white; margin-bottom: 10px; }
+
+        /* Review Section */
+        .review-container { padding: 40px 5%; background: #050505; border-top: 1px solid #1a1a1a; }
+        .review-card { background: #111; border: 1px solid #222; padding: 15px; margin-bottom: 10px; }
+        .stars { color: #d4af37; margin-bottom: 5px; }
 
         /* Floating Checkout Button */
         #floating-cart-btn { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; z-index: 1500; box-shadow: 0px 0px 15px rgba(212, 175, 55, 0.4); }
@@ -75,7 +81,7 @@
             <li><a onclick="showPolicy()">Policy</a></li>
         </ul>
         <div onclick="toggleCart()" style="cursor:pointer; color: #d4af37; font-weight: bold;">
-            BAG <span id="cart-counter" style="background:#d4af37; color:black; border-radius:50%; padding:2px 7px; font-size:11px;">0</span>
+            CART <span id="cart-counter" style="background:#d4af37; color:black; border-radius:50%; padding:2px 7px; font-size:11px;">0</span>
         </div>
     </nav>
 
@@ -98,23 +104,37 @@
     </div>
 
     <div id="cart-sidebar" class="cart-overlay">
-        <h3 style="color:#d4af37; margin-bottom:20px;">YOUR BAG</h3>
+        <h3 style="color:#d4af37; margin-bottom:20px;">YOUR CART</h3>
         <div id="cart-items-list"></div>
+        
+        <div id="saved-items-container" style="display:none; margin-top:20px;">
+            <h4 style="color:#d4af37; font-size:12px; margin-bottom:10px;">SAVED FOR LATER</h4>
+            <div id="saved-items-list"></div>
+        </div>
+
         <hr style="border:0; border-top:1px solid #333; margin:15px 0;">
         <div style="font-size:14px;">
             <p>Subtotal: <span id="cart-subtotal">0</span> NLE</p>
             <p id="discount-row" style="color:#d4af37; display:none; font-weight: bold;">Multi-buy Discount: -<span id="cart-discount">0</span> NLE</p>
             <p style="font-size:18px; font-weight:bold; margin-top:10px;">Total: <span id="cart-grand-total">0</span> NLE</p>
         </div>
-        <input type="text" id="cust-name" class="cart-input" placeholder="Full Name" style="margin-top:20px;">
+
+        <div style="margin-top:20px;">
+            <p style="font-size:11px; color:#d4af37; margin-bottom:5px;">PAYMENT METHOD:</p>
+            <select id="payment-method" class="cart-input">
+                <option value="After Delivery">Pay After Delivery</option>
+                <option value="Online/Advance">Pay Now (Confirm on WhatsApp)</option>
+            </select>
+        </div>
+
+        <input type="text" id="cust-name" class="cart-input" placeholder="Full Name">
         <input type="text" id="cust-address" class="cart-input" placeholder="Delivery Address">
         <button class="btn" style="background:#25D366; color:white;" onclick="checkoutWhatsApp()">ORDER ON WHATSAPP</button>
         <button class="btn" style="background:#222; color:white; margin-top:10px;" onclick="toggleCart()">CLOSE</button>
     </div>
 
-    <!-- GUIDE BUTTON FOR CUSTOMERS -->
     <div id="floating-cart-btn">
-        <button class="btn" style="height: 50px; font-size: 14px; border: 2px solid white;" onclick="toggleCart()">View Bag & Checkout →</button>
+        <button class="btn" style="height: 50px; font-size: 14px; border: 2px solid white;" onclick="toggleCart()">View Cart & Checkout →</button>
     </div>
 
     <div id="home-content">
@@ -127,6 +147,20 @@
         <section class="hero">
             <h2>Luxury Fragrances</h2>
             <p>24/7 Delivery in Freetown</p>
+        </section>
+
+        <section class="review-container">
+            <h3 style="color:#d4af37; text-align:center; margin-bottom:20px; letter-spacing:2px;">CLIENT REVIEWS</h3>
+            <div id="reviews-list">
+                <div class="review-card">
+                    <div class="stars">★★★★★</div>
+                    <p style="font-size:12px; font-style:italic;">"The scent is absolutely divine and authentic. Delivery was incredibly fast!"</p>
+                    <p style="font-size:10px; text-align:right; color:#888;">- Marie K.</p>
+                </div>
+            </div>
+            <div style="margin-top:20px; text-align:center;">
+                <button class="btn" style="width:150px; background:#111; color:#d4af37; border:1px solid #d4af37;" onclick="addReview()">Write a Review</button>
+            </div>
         </section>
 
         <section class="info-section">
@@ -177,6 +211,7 @@
         const db = firebase.database();
         const myWhatsAppNumber = "232074170733";
         let cart = [];
+        let savedItems = [];
         let perfumes = [];
 
         db.ref('perfumes').on('value', (snapshot) => {
@@ -201,7 +236,7 @@
                         <h3>${p.name}</h3>
                         <span class="price">${p.price} NLE</span>
                         <button class="btn" ${sold ? 'disabled' : ''}>
-                            ${sold ? 'OUT OF STOCK' : 'ADD TO BAG'}
+                            ${sold ? 'OUT OF STOCK' : 'ADD TO CART'}
                         </button>
                         ${isAdmin ? `<button class="btn" style="background:#444; margin-top:5px;" onclick="event.stopPropagation(); toggleStatus('${p.firebaseId}','${p.status}')">Toggle Status</button>
                                      <button class="btn" style="background:red; margin-top:5px;" onclick="event.stopPropagation(); deleteProduct('${p.firebaseId}')">Delete</button>` : ''}
@@ -213,44 +248,71 @@
         window.handleProductTap = (id) => {
             if (tapTimer === null) {
                 tapTimer = setTimeout(() => {
-                    addToBag(id);
+                    addToCart(id);
                     tapTimer = null;
                 }, 300);
             } else {
                 clearTimeout(tapTimer);
                 tapTimer = null;
-                addToBag(id);
+                addToCart(id);
             }
         };
 
-        window.addToBag = (id) => {
+        window.addToCart = (id) => {
             const item = perfumes.find(p => p.firebaseId === id);
             cart.push({...item, cartId: Date.now() + Math.random()}); 
             updateCartUI();
-            // Show the guide button after adding item
             document.getElementById('floating-cart-btn').style.display = 'block';
         };
 
-        window.removeFromBag = (cartId) => {
+        window.removeFromCart = (cartId) => {
             cart = cart.filter(item => item.cartId !== cartId);
             updateCartUI();
             if(cart.length === 0) document.getElementById('floating-cart-btn').style.display = 'none';
         };
 
+        window.saveForLater = (cartId) => {
+            const item = cart.find(i => i.cartId === cartId);
+            savedItems.push(item);
+            cart = cart.filter(i => i.cartId !== cartId);
+            updateCartUI();
+        };
+
+        window.moveToCart = (cartId) => {
+            const item = savedItems.find(i => i.cartId === cartId);
+            cart.push(item);
+            savedItems = savedItems.filter(i => i.cartId !== cartId);
+            updateCartUI();
+        };
+
         function updateCartUI() {
             document.getElementById('cart-counter').innerText = cart.length;
             const list = document.getElementById('cart-items-list');
+            const savedList = document.getElementById('saved-items-list');
             let subtotal = 0;
+
             list.innerHTML = cart.map(i => {
                 subtotal += parseFloat(i.price);
-                return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #222; padding-bottom:5px;">
-                            <span style="font-size:12px;">${i.name}</span>
-                            <div>
-                                <span style="color:#d4af37; margin-right:10px;">${i.price} NLE</span>
-                                <button class="btn remove-btn" onclick="removeFromBag(${i.cartId})">REDO</button>
+                return `<div style="display:flex; flex-direction:column; margin-bottom:10px; border-bottom:1px solid #222; padding-bottom:5px;">
+                            <div style="display:flex; justify-content:space-between;">
+                                <span style="font-size:12px;">${i.name}</span>
+                                <span style="color:#d4af37;">${i.price} NLE</span>
+                            </div>
+                            <div style="display:flex; gap:10px; margin-top:5px;">
+                                <button class="btn remove-btn" onclick="removeFromCart(${i.cartId})">REMOVE</button>
+                                <button class="btn save-btn" onclick="saveForLater(${i.cartId})">SAVE FOR LATER</button>
                             </div>
                         </div>`;
             }).join('');
+
+            savedList.innerHTML = savedItems.map(i => {
+                return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; opacity:0.6;">
+                            <span style="font-size:10px;">${i.name}</span>
+                            <button class="btn save-btn" style="width:auto;" onclick="moveToCart(${i.cartId})">ADD TO CART</button>
+                        </div>`;
+            }).join('');
+            
+            document.getElementById('saved-items-container').style.display = savedItems.length > 0 ? 'block' : 'none';
 
             let discount = 0;
             if(cart.length === 2) discount = subtotal * 0.05;
@@ -261,6 +323,18 @@
             document.getElementById('cart-grand-total').innerText = (subtotal - discount).toFixed(2);
             document.getElementById('discount-row').style.display = discount > 0 ? 'block' : 'none';
         }
+
+        window.addReview = () => {
+            const name = prompt("Your Name:");
+            const text = prompt("Your Review:");
+            if(name && text) {
+                const reviewsList = document.getElementById('reviews-list');
+                const newReview = document.createElement('div');
+                newReview.className = 'review-card';
+                newReview.innerHTML = `<div class="stars">★★★★★</div><p style="font-size:12px; font-style:italic;">"${text}"</p><p style="font-size:10px; text-align:right; color:#888;">- ${name}</p>`;
+                reviewsList.prepend(newReview);
+            }
+        };
 
         window.toggleCart = () => {
             const c = document.getElementById('cart-sidebar');
@@ -296,7 +370,7 @@
                 <h4 style="color:#d4af37;">3. Returns & Exchanges</h4>
                 <p style="margin-bottom:15px;">Due to the nature of fragrance products, we only accept returns if the item was damaged during delivery or if the wrong item was sent. Please inspect your package upon arrival.</p>
                 <h4 style="color:#d4af37;">4. Multi-Buy Discounts</h4>
-                <p>Enjoy 5% off when you buy 2 items and 10% off for 3 or more items automatically calculated in your bag.</p>
+                <p>Enjoy 5% off when you buy 2 items and 10% off for 3 or more items automatically calculated in your cart.</p>
             `;
         };
 
@@ -346,13 +420,25 @@
         window.checkoutWhatsApp = () => {
             const name = document.getElementById('cust-name').value;
             const addr = document.getElementById('cust-address').value;
+            const payMethod = document.getElementById('payment-method').value;
             if(!name || !addr) return alert("Please enter your name and address.");
             const total = document.getElementById('cart-grand-total').innerText;
             const itemCounts = {};
             cart.forEach(i => itemCounts[i.name] = (itemCounts[i.name] || 0) + 1);
             const itemsMsg = Object.keys(itemCounts).map(name => `${name} (x${itemCounts[name]})`).join(', ');
-            const msg = `*NEW ARISA ORDER*\nCustomer: ${name}\nAddress: ${addr}\nItems: ${itemsMsg}\nTotal: ${total} NLE`;
+            const msg = `*NEW ARISA ORDER*\nCustomer: ${name}\nAddress: ${addr}\nPayment: ${payMethod}\nItems: ${itemsMsg}\nTotal: ${total} NLE`;
+            
+            // Open WhatsApp
             window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`);
+            
+            // Thank the customer
+            alert("Thank you for your purchase from ARISA PERFUME STORE! Your order has been initiated.");
+            
+            // Clear cart and reset UI
+            cart = [];
+            updateCartUI();
+            toggleCart();
+            document.getElementById('floating-cart-btn').style.display = 'none';
         };
 
         if(sessionStorage.getItem('isArisaAdmin') === 'true') document.getElementById('admin-panel').style.display = 'block';
