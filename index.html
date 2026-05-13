@@ -29,10 +29,13 @@
         .info-box h4 { color: #d4af37; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px; }
         .info-box p { font-size: 13px; color: #ccc; }
 
-        /* Product Grid */
+        /* Hero & Logo Area */
+        .hero { height: 30vh; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border-top: 5px solid #d4af37; margin-top: 20px; }
+        .hero h2 { font-size: 24px; letter-spacing: 3px; text-transform: uppercase; color: #d4af37; }
+
         .container { padding: 20px 5%; background: #000; }
         .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .product-card { background: #111; padding: 15px; text-align: center; border: 1px solid #1a1a1a; position: relative; cursor: pointer; transition: 0.3s; }
+        .product-card { background: #111; padding: 15px; text-align: center; border: 1px solid #1a1a1a; position: relative; cursor: pointer; user-select: none; }
         .product-image { width: 100%; height: 180px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; background: #050505; pointer-events: none; }
         .product-image img { max-width: 100%; max-height: 100%; object-fit: contain; }
         
@@ -43,18 +46,19 @@
         
         .btn { padding: 10px; background: #d4af37; color: black; font-weight: bold; text-transform: uppercase; font-size: 10px; border: none; cursor: pointer; width: 100%; transition: 0.3s; margin-top: 5px; }
         .btn:hover { background: #fff; }
-        .save-later-btn { background: #333; color: #d4af37; border: 1px solid #d4af37; }
+        .remove-btn { background: #550000; color: white; font-size: 9px; padding: 2px 5px; width: auto; }
 
-        /* Cart Overlay */
+        #page-content { display: none; padding: 60px 10%; background: #000; min-height: 70vh; }
+        .content-box { border: 1px solid #d4af37; padding: 30px; background: #0a0a0a; }
+
         .cart-overlay { position: fixed; top: 0; right: 0; width: 100%; max-width: 350px; height: 100%; background: #111; z-index: 2000; padding: 20px; display: none; border-left: 4px solid #d4af37; overflow-y: auto; }
-        .cart-input { width: 100%; padding: 10px; border: 1px solid #d4af37; background: #000; color: white; margin-bottom: 10px; font-size: 12px; }
-        .qty-btn { background: #d4af37; border: none; width: 25px; height: 25px; color: black; font-weight: bold; cursor: pointer; border-radius: 3px; }
+        .cart-input { width: 100%; padding: 10px; border: 1px solid #d4af37; background: #000; color: white; margin-bottom: 10px; }
 
-        /* Testimonials Section */
-        .review-section { padding: 40px 5%; background: #000; text-align: center; }
-        .review-grid { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 10px; }
-        .review-card { min-width: 250px; background: #111; padding: 15px; border: 1px solid #d4af37; text-align: left; }
-        .stars { color: #d4af37; margin-bottom: 5px; }
+        /* Floating Checkout Button */
+        #floating-cart-btn { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; z-index: 1500; box-shadow: 0px 0px 15px rgba(212, 175, 55, 0.4); }
+
+        .suggestion-section { padding: 40px 5%; background: #0a0a0a; text-align: center; border-top: 1px solid #1a1a1a; }
+        .suggest-input { width: 100%; max-width: 500px; height: 100px; background: #000; border: 1px solid #d4af37; color: #fff; padding: 10px; margin-bottom: 10px; }
 
         footer { background: #000; color: #444; text-align: center; padding: 30px; border-top: 1px solid #111; font-size: 10px; }
 
@@ -71,7 +75,7 @@
             <li><a onclick="showPolicy()">Policy</a></li>
         </ul>
         <div onclick="toggleCart()" style="cursor:pointer; color: #d4af37; font-weight: bold;">
-            CART <span id="cart-counter" style="background:#d4af37; color:black; border-radius:50%; padding:2px 7px; font-size:11px;">0</span>
+            BAG <span id="cart-counter" style="background:#d4af37; color:black; border-radius:50%; padding:2px 7px; font-size:11px;">0</span>
         </div>
     </nav>
 
@@ -79,7 +83,6 @@
         <h1 class="main-brand-title">ARISA STORE</h1>
     </header>
 
-    <!-- Admin Panel -->
     <div id="admin-panel">
         <h3 style="color:#d4af37; margin-bottom:15px;">STAFF CONTROL PANEL</h3>
         <input type="text" id="admin-p-name" class="admin-input" placeholder="Product Name">
@@ -94,75 +97,67 @@
         <button class="btn" style="width: 200px; background:#333; color:white;" onclick="logoutAdmin()">LOGOUT</button>
     </div>
 
-    <!-- Cart Sidebar -->
     <div id="cart-sidebar" class="cart-overlay">
-        <h3 style="color:#d4af37; margin-bottom:20px; letter-spacing: 2px;">YOUR SHOPPING CART</h3>
+        <h3 style="color:#d4af37; margin-bottom:20px;">YOUR BAG</h3>
         <div id="cart-items-list"></div>
-        
-        <div id="wishlist-section" style="margin-top: 20px; border-top: 1px solid #333; padding-top: 10px;">
-            <h4 style="color:#d4af37; font-size: 12px; margin-bottom: 10px;">SAVED FOR LATER</h4>
-            <div id="wishlist-items-list" style="opacity: 0.7;"></div>
-        </div>
-
         <hr style="border:0; border-top:1px solid #333; margin:15px 0;">
         <div style="font-size:14px;">
             <p>Subtotal: <span id="cart-subtotal">0</span> NLE</p>
+            <p id="discount-row" style="color:#d4af37; display:none; font-weight: bold;">Multi-buy Discount: -<span id="cart-discount">0</span> NLE</p>
             <p style="font-size:18px; font-weight:bold; margin-top:10px;">Total: <span id="cart-grand-total">0</span> NLE</p>
         </div>
+        <input type="text" id="cust-name" class="cart-input" placeholder="Full Name" style="margin-top:20px;">
+        <input type="text" id="cust-address" class="cart-input" placeholder="Delivery Address">
+        <button class="btn" style="background:#25D366; color:white;" onclick="checkoutWhatsApp()">ORDER ON WHATSAPP</button>
+        <button class="btn" style="background:#222; color:white; margin-top:10px;" onclick="toggleCart()">CLOSE</button>
+    </div>
 
-        <div style="margin-top:20px;">
-            <label style="font-size: 11px; color:#d4af37;">PAYMENT OPTION</label>
-            <select id="payment-method" class="cart-input">
-                <option value="Pay on Delivery">Pay on Delivery (Cash/Orange Money)</option>
-                <option value="Pay Now">Pay Now (Confirm via WhatsApp)</option>
-            </select>
-            <input type="text" id="cust-name" class="cart-input" placeholder="Your Name">
-            <input type="text" id="cust-address" class="cart-input" placeholder="Delivery Town/Street">
-            <button class="btn" style="background:#25D366; color:white;" onclick="checkoutWhatsApp()">COMPLETE ORDER</button>
-            <button class="btn" style="background:#222; color:white; margin-top:10px;" onclick="toggleCart()">CONTINUE SHOPPING</button>
-        </div>
+    <!-- GUIDE BUTTON FOR CUSTOMERS -->
+    <div id="floating-cart-btn">
+        <button class="btn" style="height: 50px; font-size: 14px; border: 2px solid white;" onclick="toggleCart()">View Bag & Checkout →</button>
     </div>
 
     <div id="home-content">
         <div class="container">
-            <h2 style="color:#d4af37; text-align:center; margin-bottom:20px; font-size:16px; letter-spacing:2px;">OUR EXCLUSIVE COLLECTION</h2>
+            <h2 style="color:#d4af37; text-align:center; margin-bottom:20px; font-size:16px; letter-spacing:2px;">SHOP COLLECTIONS</h2>
+            <p style="text-align:center; font-size:10px; color:#888; margin-bottom:15px;">Tip: Tap once to add, Double-tap for more!</p>
             <div class="product-grid" id="product-grid"></div>
         </div>
 
-        <!-- Testimonials -->
-        <section class="review-section">
-            <h3 style="color:#d4af37; letter-spacing:2px; margin-bottom:20px;">WHAT OUR CLIENTS SAY</h3>
-            <div class="review-grid">
-                <div class="review-card">
-                    <div class="stars">★★★★★</div>
-                    <p style="font-size:12px; font-style:italic;">"The scent lasts all day. Best perfume plug in Freetown!"</p>
-                    <p style="font-size:10px; margin-top:10px; color:#d4af37;">- Mohamed K.</p>
-                </div>
-                <div class="review-card">
-                    <div class="stars">★★★★★</div>
-                    <p style="font-size:12px; font-style:italic;">"Super fast delivery to Aberdeen. Highly recommended."</p>
-                    <p style="font-size:10px; margin-top:10px; color:#d4af37;">- Fatmata S.</p>
-                </div>
-                <div class="review-card">
-                    <div class="stars">★★★★☆</div>
-                    <p style="font-size:12px; font-style:italic;">"Authentic designer brands. I love my new fragrance."</p>
-                    <p style="font-size:10px; margin-top:10px; color:#d4af37;">- Zainab B.</p>
-                </div>
-            </div>
+        <section class="hero">
+            <h2>Luxury Fragrances</h2>
+            <p>24/7 Delivery in Freetown</p>
         </section>
 
         <section class="info-section">
-            <div class="info-box"><h4>Authenticity</h4><p>100% Genuine designer fragrances.</p></div>
-            <div class="info-box"><h4>Fast Delivery</h4><p>Swift delivery within Freetown hours.</p></div>
-            <div class="info-box"><h4>Payment</h4><p>Pay on delivery or via Orange Money.</p></div>
+            <div class="info-box">
+                <h4>Authenticity</h4>
+                <p>100% Genuine designer fragrances sourced from certified distributors.</p>
+            </div>
+            <div class="info-box">
+                <h4>Fast Delivery</h4>
+                <p>Swift delivery within Freetown. Your scent arrives within hours.</p>
+            </div>
+            <div class="info-box">
+                <h4>24/7 Support</h4>
+                <p>Our WhatsApp lines are open day and night for your inquiries.</p>
+            </div>
         </section>
     </div>
 
-    <div id="page-content"><div class="content-box" id="page-inner-content"></div></div>
+    <div id="page-content">
+        <div class="content-box" id="page-inner-content"></div>
+    </div>
+
+    <div class="suggestion-section" id="user-suggestion-box">
+        <h3 style="color:#d4af37; margin-bottom:10px;">SUGGESTIONS</h3>
+        <textarea id="user-suggestion" class="suggest-input" placeholder="What scent should we add next?"></textarea><br>
+        <button class="btn" style="width: 200px;" onclick="sendSuggestion()">SEND TO STAFF</button>
+    </div>
 
     <footer>
         <p>&copy; 2026 ARISA PERFUME STORE.</p>
-        <button onclick="loginAdmin()" style="background:none; border:none; color:#111; cursor:pointer;">Staff Access</button>
+        <button onclick="loginAdmin()" style="background:none; border:none; color:#111; cursor:pointer;">Staff Login</button>
     </footer>
 
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
@@ -182,7 +177,6 @@
         const db = firebase.database();
         const myWhatsAppNumber = "232074170733";
         let cart = [];
-        let wishlist = [];
         let perfumes = [];
 
         db.ref('perfumes').on('value', (snapshot) => {
@@ -196,84 +190,76 @@
             const grid = document.getElementById('product-grid');
             grid.innerHTML = '';
             const isAdmin = sessionStorage.getItem('isArisaAdmin') === 'true';
+            document.getElementById('user-suggestion-box').style.display = isAdmin ? 'none' : 'block';
 
             perfumes.forEach((p) => {
                 const sold = p.status === 'sold-out';
                 grid.innerHTML += `
-                    <div class="product-card">
+                    <div class="product-card" onclick="${sold ? '' : `handleProductTap('${p.firebaseId}')`}">
                         <span class="status-badge ${p.status}">${p.status.replace('-', ' ')}</span>
                         <div class="product-image"><img src="${p.image}"></div>
                         <h3>${p.name}</h3>
                         <span class="price">${p.price} NLE</span>
-                        <button class="btn" onclick="addToCart('${p.firebaseId}')" ${sold ? 'disabled' : ''}>${sold ? 'SOLD OUT' : 'ADD TO CART'}</button>
-                        ${isAdmin ? `<button class="btn" style="background:#444;" onclick="toggleStatus('${p.firebaseId}','${p.status}')">Status</button>
-                                     <button class="btn" style="background:red;" onclick="deleteProduct('${p.firebaseId}')">Del</button>` : ''}
+                        <button class="btn" ${sold ? 'disabled' : ''}>
+                            ${sold ? 'OUT OF STOCK' : 'ADD TO BAG'}
+                        </button>
+                        ${isAdmin ? `<button class="btn" style="background:#444; margin-top:5px;" onclick="event.stopPropagation(); toggleStatus('${p.firebaseId}','${p.status}')">Toggle Status</button>
+                                     <button class="btn" style="background:red; margin-top:5px;" onclick="event.stopPropagation(); deleteProduct('${p.firebaseId}')">Delete</button>` : ''}
                     </div>`;
             });
         }
 
-        window.addToCart = (id) => {
+        let tapTimer = null;
+        window.handleProductTap = (id) => {
+            if (tapTimer === null) {
+                tapTimer = setTimeout(() => {
+                    addToBag(id);
+                    tapTimer = null;
+                }, 300);
+            } else {
+                clearTimeout(tapTimer);
+                tapTimer = null;
+                addToBag(id);
+            }
+        };
+
+        window.addToBag = (id) => {
             const item = perfumes.find(p => p.firebaseId === id);
-            const exists = cart.find(c => c.firebaseId === id);
-            if(exists) exists.qty++;
-            else cart.push({...item, qty: 1});
+            cart.push({...item, cartId: Date.now() + Math.random()}); 
             updateCartUI();
+            // Show the guide button after adding item
+            document.getElementById('floating-cart-btn').style.display = 'block';
         };
 
-        window.changeQty = (id, delta) => {
-            const item = cart.find(c => c.firebaseId === id);
-            item.qty += delta;
-            if(item.qty < 1) cart = cart.filter(c => c.firebaseId !== id);
+        window.removeFromBag = (cartId) => {
+            cart = cart.filter(item => item.cartId !== cartId);
             updateCartUI();
-        };
-
-        window.saveForLater = (id) => {
-            const item = cart.find(c => c.firebaseId === id);
-            wishlist.push(item);
-            cart = cart.filter(c => c.firebaseId !== id);
-            updateCartUI();
-        };
-
-        window.moveToCart = (id) => {
-            const item = wishlist.find(w => w.firebaseId === id);
-            cart.push(item);
-            wishlist = wishlist.filter(w => w.firebaseId !== id);
-            updateCartUI();
+            if(cart.length === 0) document.getElementById('floating-cart-btn').style.display = 'none';
         };
 
         function updateCartUI() {
-            document.getElementById('cart-counter').innerText = cart.reduce((acc, obj) => acc + obj.qty, 0);
+            document.getElementById('cart-counter').innerText = cart.length;
             const list = document.getElementById('cart-items-list');
-            const wishListElem = document.getElementById('wishlist-items-list');
             let subtotal = 0;
-
             list.innerHTML = cart.map(i => {
-                subtotal += (parseFloat(i.price) * i.qty);
-                return `<div style="margin-bottom:15px; border-bottom:1px solid #222; padding-bottom:10px;">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span style="font-size:12px;">${i.name}</span>
-                        <span style="color:#d4af37;">${i.price} NLE</span>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:5px;">
-                        <div>
-                            <button class="qty-btn" onclick="changeQty('${i.firebaseId}', -1)">-</button>
-                            <span style="margin:0 10px;">${i.qty}</span>
-                            <button class="qty-btn" onclick="changeQty('${i.firebaseId}', 1)">+</button>
-                        </div>
-                        <button style="background:none; border:none; color:#888; font-size:10px; cursor:pointer;" onclick="saveForLater('${i.firebaseId}')">Save for Later</button>
-                    </div>
-                </div>`;
+                subtotal += parseFloat(i.price);
+                return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #222; padding-bottom:5px;">
+                            <span style="font-size:12px;">${i.name}</span>
+                            <div>
+                                <span style="color:#d4af37; margin-right:10px;">${i.price} NLE</span>
+                                <button class="btn remove-btn" onclick="removeFromBag(${i.cartId})">REDO</button>
+                            </div>
+                        </div>`;
             }).join('');
 
-            wishListElem.innerHTML = wishlist.map(i => `
-                <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:5px;">
-                    <span>${i.name}</span>
-                    <button style="background:none; border:none; color:#d4af37; cursor:pointer;" onclick="moveToCart('${i.firebaseId}')">Move to Cart</button>
-                </div>
-            `).join('');
+            let discount = 0;
+            if(cart.length === 2) discount = subtotal * 0.05;
+            else if(cart.length >= 3) discount = subtotal * 0.10;
 
             document.getElementById('cart-subtotal').innerText = subtotal.toFixed(2);
-            document.getElementById('cart-grand-total').innerText = subtotal.toFixed(2);
+            document.getElementById('cart-discount').innerText = discount.toFixed(2);
+            document.getElementById('cart-grand-total').innerText = (subtotal - discount).toFixed(2);
+            document.getElementById('discount-row').style.display = discount > 0 ? 'block' : 'none';
         }
 
         window.toggleCart = () => {
@@ -284,19 +270,34 @@
         window.showHome = () => {
             document.getElementById('home-content').style.display = 'block';
             document.getElementById('page-content').style.display = 'none';
+            renderProducts();
         };
 
-        window.checkoutWhatsApp = () => {
-            const name = document.getElementById('cust-name').value;
-            const addr = document.getElementById('cust-address').value;
-            const pay = document.getElementById('payment-method').value;
-            if(!name || !addr) return alert("Please enter name and address.");
-            if(cart.length === 0) return alert("Cart is empty.");
+        window.showAbout = () => {
+            document.getElementById('home-content').style.display = 'none';
+            document.getElementById('page-content').style.display = 'block';
+            document.getElementById('page-inner-content').innerHTML = `
+                <h2 style="color:#d4af37; margin-bottom:20px;">ABOUT ARISA</h2>
+                <p style="margin-bottom:15px;">ARISA PERFUME STORE is Freetown's premier destination for high-end luxury fragrances. Established by Aroun Thomas Turay, we specialize in bringing the world's most exquisite scents to Sierra Leone.</p>
+                <p style="margin-bottom:15px;">Our mission is to provide an accessible luxury experience. Whether you are looking for a signature everyday scent or a bold fragrance for a special occasion, our curated collection ensures quality and authenticity in every bottle.</p>
+                <p>We pride ourselves on 24/7 delivery services and a commitment to customer satisfaction.</p>
+            `;
+        };
 
-            const itemsMsg = cart.map(i => `${i.name} (x${i.qty})`).join(', ');
-            const total = document.getElementById('cart-grand-total').innerText;
-            const msg = `*NEW ARISA ORDER*\n\nCustomer: ${name}\nAddress: ${addr}\nPayment: ${pay}\nItems: ${itemsMsg}\nTotal: ${total} NLE`;
-            window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`);
+        window.showPolicy = () => {
+            document.getElementById('home-content').style.display = 'none';
+            document.getElementById('page-content').style.display = 'block';
+            document.getElementById('page-inner-content').innerHTML = `
+                <h2 style="color:#d4af37; margin-bottom:20px;">STORE POLICIES</h2>
+                <h4 style="color:#d4af37;">1. Delivery Policy</h4>
+                <p style="margin-bottom:15px;">We offer 24/7 delivery within Freetown. Orders are processed immediately upon WhatsApp confirmation and typically arrive within 1-3 hours depending on your location.</p>
+                <h4 style="color:#d4af37;">2. Authenticity Guarantee</h4>
+                <p style="margin-bottom:15px;">We guarantee that all perfumes sold at ARISA are 100% genuine and sourced from certified international distributors.</p>
+                <h4 style="color:#d4af37;">3. Returns & Exchanges</h4>
+                <p style="margin-bottom:15px;">Due to the nature of fragrance products, we only accept returns if the item was damaged during delivery or if the wrong item was sent. Please inspect your package upon arrival.</p>
+                <h4 style="color:#d4af37;">4. Multi-Buy Discounts</h4>
+                <p>Enjoy 5% off when you buy 2 items and 10% off for 3 or more items automatically calculated in your bag.</p>
+            `;
         };
 
         window.loginAdmin = () => {
@@ -314,6 +315,7 @@
         };
 
         window.adminUpload = () => {
+            if(sessionStorage.getItem('isArisaAdmin') !== 'true') return;
             const name = document.getElementById('admin-p-name').value;
             const price = document.getElementById('admin-p-price').value;
             const status = document.getElementById('admin-p-status').value;
@@ -322,14 +324,38 @@
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     db.ref('perfumes').push({ name, price, status, image: e.target.result });
-                    alert("Added!");
+                    alert("Product Added!");
                 };
                 reader.readAsDataURL(file);
             }
         };
 
-        window.toggleStatus = (id, cur) => db.ref('perfumes/' + id).update({ status: cur === 'available' ? 'sold-out' : 'available' });
-        window.deleteProduct = (id) => { if(confirm("Delete?")) db.ref('perfumes/' + id).remove(); };
+        window.toggleStatus = (id, cur) => {
+            db.ref('perfumes/' + id).update({ status: cur === 'available' ? 'sold-out' : 'available' });
+        };
+
+        window.deleteProduct = (id) => { if(confirm("Delete product?")) db.ref('perfumes/' + id).remove(); };
+
+        window.sendSuggestion = () => {
+            const text = document.getElementById('user-suggestion').value;
+            if(!text) return;
+            window.open(`https://wa.me/${myWhatsAppNumber}?text=Suggestion: ${encodeURIComponent(text)}`);
+            document.getElementById('user-suggestion').value = '';
+        };
+
+        window.checkoutWhatsApp = () => {
+            const name = document.getElementById('cust-name').value;
+            const addr = document.getElementById('cust-address').value;
+            if(!name || !addr) return alert("Please enter your name and address.");
+            const total = document.getElementById('cart-grand-total').innerText;
+            const itemCounts = {};
+            cart.forEach(i => itemCounts[i.name] = (itemCounts[i.name] || 0) + 1);
+            const itemsMsg = Object.keys(itemCounts).map(name => `${name} (x${itemCounts[name]})`).join(', ');
+            const msg = `*NEW ARISA ORDER*\nCustomer: ${name}\nAddress: ${addr}\nItems: ${itemsMsg}\nTotal: ${total} NLE`;
+            window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`);
+        };
+
+        if(sessionStorage.getItem('isArisaAdmin') === 'true') document.getElementById('admin-panel').style.display = 'block';
     </script>
 </body>
 </html>
