@@ -83,6 +83,15 @@
 
         .cart-input { width: 100%; padding: 12px; border: 1px solid #d4af37; background: #000; color: white; margin-bottom: 10px; font-size: 14px; border-radius: 2px; }
 
+        /* Added arrow indicators for options boxes */
+        select.cart-input {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 15px;
+        }
+
         #floating-cart-btn { display: none; position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 92%; z-index: 1500; }
 
         .suggestion-section { padding: 25px 5%; background: #0a0a0a; text-align: center; border-top: 1px solid #1a1a1a; }
@@ -158,13 +167,13 @@
         </div>
 
         <div style="margin-top:20px;">
-            <p style="font-size:11px; color:#d4af37; margin-bottom:5px;">SERVICE TYPE:</p>
+            <p style="font-size:11px; color:#d4af37; margin-bottom:5px;">SERVICE TYPE (SELECT OPTION):</p>
             <select id="service-type" class="cart-input">
                 <option value="Delivery">Delivery (Fee based on location)</option>
                 <option value="Pickup">Pickup at Store</option>
             </select>
 
-            <p style="font-size:11px; color:#d4af37; margin-bottom:5px;">PAYMENT METHOD:</p>
+            <p style="font-size:11px; color:#d4af37; margin-bottom:5px;">PAYMENT METHOD (SELECT OPTION):</p>
             <select id="payment-method" class="cart-input">
                 <option value="After Delivery">Pay After Delivery</option>
                 <option value="Online/Advance">Pay Now (Confirm on WhatsApp)</option>
@@ -377,8 +386,13 @@
             document.getElementById('home-content').style.display = 'none';
             document.getElementById('page-content').style.display = 'block';
             document.getElementById('page-inner-content').innerHTML = `
-                <h2 style="color:#d4af37; margin-bottom:20px; font-size:18px;">ABOUT ARISA</h2>
-                <p style="margin-bottom:15px; font-size:13px;">ARISA PERFUME STORE is Freetown's premier destination for high-end luxury fragrances. Established by Aroun Thomas Turay, we specialize in bringing the world's most exquisite scents to Sierra Leone.</p>
+                <h2 style="color:#d4af37; margin-bottom:20px; font-size:18px; letter-spacing: 2px;">THE ARISA STORY</h2>
+                <p style="margin-bottom:15px; font-size:13px; color: #eee;">Founded in 2026 by Aroun Thomas Turay, <strong>ARISA PERFUME STORE</strong> was born from a passion for timeless elegance and the art of fine fragrance. We believe that a scent is more than just a smell—it is a signature, a memory, and a statement of luxury.</p>
+                <p style="margin-bottom:15px; font-size:13px; color: #eee;">Located in the heart of Freetown, Sierra Leone, we bridge the gap between global luxury brands and local connoisseurs. Every bottle in our collection is hand-selected to ensure authenticity, longevity, and a scent profile that commands respect.</p>
+                <div style="border-left: 2px solid #d4af37; padding-left: 15px; margin-top: 20px;">
+                    <h4 style="color: #d4af37; font-size: 14px; margin-bottom: 5px;">Our Vision</h4>
+                    <p style="font-size:12px; color: #ccc;">To become West Africa’s most trusted curator of luxury scents, providing an unparalleled shopping experience through modern technology and personalized service.</p>
+                </div>
             `;
         };
 
@@ -386,9 +400,19 @@
             document.getElementById('home-content').style.display = 'none';
             document.getElementById('page-content').style.display = 'block';
             document.getElementById('page-inner-content').innerHTML = `
-                <h2 style="color:#d4af37; margin-bottom:20px; font-size:18px;">STORE POLICIES</h2>
-                <h4 style="color:#d4af37; font-size:14px;">1. Delivery & Pickup</h4>
-                <p style="margin-bottom:15px; font-size:13px;">Delivery fees are based on your location in Freetown. Pickup is available at our physical store.</p>
+                <h2 style="color:#d4af37; margin-bottom:20px; font-size:18px; letter-spacing: 2px;">STORE POLICIES</h2>
+                
+                <h4 style="color:#d4af37; font-size:14px; margin-bottom: 8px;">1. Authenticity Guarantee</h4>
+                <p style="margin-bottom:15px; font-size:13px; color: #eee;">We guarantee that all perfumes sold at ARISA are 100% genuine. We do not deal in imitations or "grade" copies.</p>
+
+                <h4 style="color:#d4af37; font-size:14px; margin-bottom: 8px;">2. Delivery & Returns</h4>
+                <p style="margin-bottom:15px; font-size:13px; color: #eee;">Deliveries are processed within 24 hours in Freetown. Due to the nature of beauty products, we cannot accept returns once the seal or packaging has been opened. Please verify your scent choice before purchase.</p>
+
+                <h4 style="color:#d4af37; font-size:14px; margin-bottom: 8px;">3. Multi-Buy Discounts</h4>
+                <p style="margin-bottom:15px; font-size:13px; color: #eee;">Get <strong>5% OFF</strong> when you buy 2 perfumes, and <strong>10% OFF</strong> when you buy 3 or more. Discounts are automatically calculated in your cart.</p>
+
+                <h4 style="color:#d4af37; font-size:14px; margin-bottom: 8px;">4. Payment</h4>
+                <p style="margin-bottom:15px; font-size:13px; color: #eee;">We accept payment upon delivery (Cash/Orange Money) or advance payment for priority shipping.</p>
             `;
         };
 
