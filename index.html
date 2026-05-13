@@ -93,14 +93,23 @@
         <h3 style="color:#d4af37; margin-bottom:15px;">STAFF CONTROL PANEL</h3>
         <input type="text" id="admin-p-name" class="admin-input" placeholder="Product Name">
         <input type="number" id="admin-p-price" class="admin-input" placeholder="Price (NLE)">
+        
+        <p style="font-size:11px; color:#d4af37; margin-top:10px;">PRODUCT STATUS (Choose an option):</p>
         <select id="admin-p-status" class="admin-input">
             <option value="available">Available</option>
             <option value="sold-out">Sold Out</option>
         </select>
+        
         <input type="file" id="admin-p-file" class="admin-input" accept="image/*">
         <br>
         <button class="btn" style="width: 200px; margin-top: 10px;" onclick="adminUpload()">ADD PRODUCT</button>
-        <button class="btn" style="width: 200px; background:#333; color:white;" onclick="logoutAdmin()">LOGOUT</button>
+        
+        <div id="admin-suggestions" style="margin-top:20px; border-top:1px solid #333; padding-top:10px;">
+            <h4 style="color:#d4af37; font-size:12px;">CUSTOMER SUGGESTIONS</h4>
+            <div id="suggestion-display-list" style="font-size:11px; color:#ccc; margin-top:10px;"></div>
+        </div>
+
+        <button class="btn" style="width: 200px; background:#333; color:white; margin-top:20px;" onclick="logoutAdmin()">LOGOUT</button>
     </div>
 
     <div id="cart-sidebar" class="cart-overlay">
@@ -120,13 +129,13 @@
         </div>
 
         <div style="margin-top:20px;">
-            <p style="font-size:11px; color:#d4af37; margin-bottom:5px;">SERVICE TYPE:</p>
+            <p style="font-size:11px; color:#d4af37; margin-bottom:5px;">SERVICE TYPE (Choose an option):</p>
             <select id="service-type" class="cart-input">
                 <option value="Delivery">Delivery (Fee based on location)</option>
                 <option value="Pickup">Pickup at Store</option>
             </select>
 
-            <p style="font-size:11px; color:#d4af37; margin-bottom:5px;">PAYMENT METHOD:</p>
+            <p style="font-size:11px; color:#d4af37; margin-bottom:5px;">PAYMENT METHOD (Choose an option):</p>
             <select id="payment-method" class="cart-input">
                 <option value="After Delivery">Pay After Delivery</option>
                 <option value="Orange Money">Orange Money</option>
@@ -228,10 +237,21 @@
             renderProducts();
         });
 
+        // Fetch suggestions for Admin view
+        db.ref('suggestions').on('value', (snapshot) => {
+            const data = snapshot.val();
+            const display = document.getElementById('suggestion-display-list');
+            if (display && data) {
+                display.innerHTML = Object.values(data).map(s => `<p style="margin-bottom:5px;">• ${s}</p>`).join('');
+            }
+        });
+
         function renderProducts() {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = '';
             const isAdmin = sessionStorage.getItem('isArisaAdmin') === 'true';
+            
+            // Logic to hide Suggestion section for Admin
             document.getElementById('user-suggestion-box').style.display = isAdmin ? 'none' : 'block';
 
             perfumes.forEach((p) => {
@@ -385,14 +405,14 @@
             if(prompt("Staff Password:") === "@Thomas74170733") {
                 sessionStorage.setItem('isArisaAdmin', 'true');
                 document.getElementById('admin-panel').style.display = 'block';
-                renderProducts();
+                renderProducts(); // This will trigger hiding the suggestion box
             }
         };
 
         window.logoutAdmin = () => {
             sessionStorage.removeItem('isArisaAdmin');
             document.getElementById('admin-panel').style.display = 'none';
-            renderProducts();
+            renderProducts(); // This will trigger showing the suggestion box again
         };
 
         window.adminUpload = () => {
@@ -420,6 +440,7 @@
         window.sendSuggestion = () => {
             const text = document.getElementById('user-suggestion').value;
             if(!text) return;
+            db.ref('suggestions').push(text);
             window.open(`https://wa.me/${myWhatsAppNumber}?text=Suggestion: ${encodeURIComponent(text)}`);
             document.getElementById('user-suggestion').value = '';
         };
@@ -436,13 +457,9 @@
             const itemsMsg = Object.keys(itemCounts).map(name => `${name} (x${itemCounts[name]})`).join(', ');
             const msg = `*NEW ARISA ORDER*\nCustomer: ${name}\nService: ${serviceType}\nAddress/Note: ${addr}\nPayment: ${payMethod}\nItems: ${itemsMsg}\nTotal: ${total} NLE\n(Note: Delivery fee is based on location)`;
             
-            // Open WhatsApp
             window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`);
-            
-            // Thank the customer
             alert("Thank you for your purchase from ARISA PERFUME STORE! Your order has been initiated.");
             
-            // Clear cart and reset UI
             cart = [];
             updateCartUI();
             toggleCart();
