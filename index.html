@@ -5,17 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ARISA PERFUME STORE | Luxury Scents</title>
     <style>
-        /* LUXURY BLACK AND GOLD THEME */
+        /* LUXURY THEME VARIABLES */
+        :root {
+            --bg-color: #000000;
+            --surface-color: #111111;
+            --accent-color: #d4af37;
+            --text-color: #ffffff;
+            --border-color: #1a1a1a;
+        }
+
+        /* MIDNIGHT ROSE THEME */
+        [data-theme="rose"] {
+            --bg-color: #0d0608;
+            --surface-color: #1c1013;
+            --accent-color: #ff4d6d;
+            --text-color: #ffffff;
+            --border-color: #2b181d;
+        }
+
+        /* EMERALD DIAMOND THEME */
+        [data-theme="emerald"] {
+            --bg-color: #020f0a;
+            --surface-color: #072217;
+            --accent-color: #00e676;
+            --text-color: #ffffff;
+            --border-color: #0c3a27;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Georgia', serif; }
         
         /* Mobile Fix: Prevent side-scrolling and ensure full-width fit */
         html, body { 
-            background-color: #000000; 
-            color: #ffffff; 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
             line-height: 1.6; 
             overflow-x: hidden; 
             width: 100%; 
             position: relative; 
+            transition: background-color 0.3s, color 0.3s;
         }
 
         /* Navigation - Adjusted for Mobile */
@@ -24,35 +51,61 @@
             justify-content: space-between; 
             align-items: center; 
             padding: 15px 4%; 
-            background: #111; 
-            border-bottom: 2px solid #d4af37; 
+            background: var(--surface-color); 
+            border-bottom: 2px solid var(--accent-color); 
             position: sticky; 
             top: 0; 
             z-index: 1000; 
         }
-        .logo { font-size: 18px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; color: #d4af37; cursor: pointer; }
+        .logo { font-size: 18px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); cursor: pointer; }
         .nav-links { display: flex; gap: 8px; list-style: none; }
-        .nav-links a { text-decoration: none; color: #ffffff; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
+        .nav-links a { text-decoration: none; color: var(--text-color); font-size: 10px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
+
+        /* Theme Selector Container */
+        .theme-container {
+            text-align: center;
+            padding: 10px;
+            background: var(--surface-color);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .theme-label {
+            font-size: 11px;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .theme-btn {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            cursor: pointer;
+            outline: none;
+        }
 
         /* Top Text Branding */
-        .branding-header { background: #000; text-align: center; padding: 25px 0; border-bottom: 1px solid #1a1a1a; }
-        .main-brand-title { font-size: 24px; font-weight: bold; color: #d4af37; letter-spacing: 4px; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .branding-header { background: var(--bg-color); text-align: center; padding: 25px 0; border-bottom: 1px solid var(--border-color); }
+        .main-brand-title { font-size: 24px; font-weight: bold; color: var(--accent-color); letter-spacing: 4px; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
 
         /* Admin Panel Styling */
-        #admin-panel { display: none; background: #111; padding: 20px 5%; border-bottom: 2px solid #d4af37; text-align: center; }
-        .admin-input { padding: 12px; margin: 5px 0; border: 1px solid #d4af37; background: #000; color: #fff; width: 100%; max-width: 100%; }
+        #admin-panel { display: none; background: var(--surface-color); padding: 20px 5%; border-bottom: 2px solid var(--accent-color); text-align: center; }
+        .admin-input { padding: 12px; margin: 5px 0; border: 1px solid var(--accent-color); background: var(--bg-color); color: var(--text-color); width: 100%; max-width: 100%; }
 
         /* Info Boxes Section - Mobile Optimized Grid */
         .info-section { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; padding: 15px 4%; background: #050505; }
-        .info-box { border: 1px solid #d4af37; padding: 10px 5px; text-align: center; background: #111; }
-        .info-box h4 { color: #d4af37; text-transform: uppercase; margin-bottom: 3px; letter-spacing: 1px; font-size: 9px; }
+        .info-box { border: 1px solid var(--accent-color); padding: 10px 5px; text-align: center; background: var(--surface-color); }
+        .info-box h4 { color: var(--accent-color); text-transform: uppercase; margin-bottom: 3px; letter-spacing: 1px; font-size: 9px; }
         .info-box p { font-size: 8px; color: #ccc; }
 
         /* Hero & Logo Area */
-        .hero { height: 20vh; background: #000; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border-top: 3px solid #d4af37; margin-top: 15px; }
-        .hero h2 { font-size: 18px; letter-spacing: 3px; text-transform: uppercase; color: #d4af37; }
+        .hero { height: 20vh; background: var(--bg-color); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border-top: 3px solid var(--accent-color); margin-top: 15px; }
+        .hero h2 { font-size: 18px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent-color); }
 
-        .container { padding: 15px 4%; background: #000; }
+        .container { padding: 15px 4%; background: var(--bg-color); }
         
         /* Product Grid - Forced 2 columns on mobile for better fit */
         .product-grid { 
@@ -61,27 +114,27 @@
             gap: 10px; 
         }
         
-        .product-card { background: #111; padding: 10px; text-align: center; border: 1px solid #1a1a1a; position: relative; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; }
+        .product-card { background: var(--surface-color); padding: 10px; text-align: center; border: 1px solid var(--border-color); position: relative; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; }
         .product-image { width: 100%; height: 120px; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; background: #050505; pointer-events: none; }
         .product-image img { max-width: 100%; max-height: 100%; object-fit: contain; }
         
         .status-badge { position: absolute; top: 5px; right: 5px; padding: 2px 5px; font-size: 7px; font-weight: bold; text-transform: uppercase; border-radius: 2px; z-index: 10; }
-        .available { background-color: #d4af37; color: black; }
+        .available { background-color: var(--accent-color); color: black; }
         .sold-out { background-color: #333; color: white; }
-        .price { color: #d4af37; font-weight: bold; display: block; margin: 3px 0; font-size: 13px; }
+        .price { color: var(--accent-color); font-weight: bold; display: block; margin: 3px 0; font-size: 13px; }
         .color-label { font-size: 9px; color: #888; display: block; margin-bottom: 3px; text-transform: uppercase; }
         
-        .btn { padding: 12px; background: #d4af37; color: black; font-weight: bold; text-transform: uppercase; font-size: 10px; border: none; cursor: pointer; width: 100%; transition: 0.3s; margin-top: 5px; border-radius: 2px; }
+        .btn { padding: 12px; background: var(--accent-color); color: black; font-weight: bold; text-transform: uppercase; font-size: 10px; border: none; cursor: pointer; width: 100%; transition: 0.3s; margin-top: 5px; border-radius: 2px; }
         .remove-btn { background: #550000; color: white; font-size: 9px; padding: 8px; width: auto; }
-        .save-btn { background: #333; color: #d4af37; font-size: 9px; padding: 8px; width: auto; border: 1px solid #d4af37; }
+        .save-btn { background: #333; color: var(--accent-color); font-size: 9px; padding: 8px; width: auto; border: 1px solid var(--accent-color); }
 
-        #page-content { display: none; padding: 30px 5%; background: #000; min-height: 70vh; }
-        .content-box { border: 1px solid #d4af37; padding: 20px; background: #0a0a0a; }
+        #page-content { display: none; padding: 30px 5%; background: var(--bg-color); min-height: 70vh; }
+        .content-box { border: 1px solid var(--accent-color); padding: 20px; background: #0a0a0a; }
 
         /* Cart Overlay - Mobile Full Width */
-        .cart-overlay { position: fixed; top: 0; right: 0; width: 100%; height: 100%; background: #111; z-index: 2000; padding: 20px; display: none; border-left: 4px solid #d4af37; overflow-y: auto; }
+        .cart-overlay { position: fixed; top: 0; right: 0; width: 100%; height: 100%; background: var(--surface-color); z-index: 2000; padding: 20px; display: none; border-left: 4px solid var(--accent-color); overflow-y: auto; }
 
-        .cart-input { width: 100%; padding: 12px; border: 1px solid #d4af37; background: #000; color: white; margin-bottom: 10px; font-size: 14px; border-radius: 2px; }
+        .cart-input { width: 100%; padding: 12px; border: 1px solid var(--accent-color); background: var(--bg-color); color: white; margin-bottom: 10px; font-size: 14px; border-radius: 2px; }
 
         /* Added arrow indicators for options boxes */
         select.cart-input {
@@ -94,10 +147,17 @@
 
         #floating-cart-btn { display: none; position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 92%; z-index: 1500; }
 
-        .suggestion-section { padding: 25px 5%; background: #0a0a0a; text-align: center; border-top: 1px solid #1a1a1a; }
-        .suggest-input { width: 100%; height: 80px; background: #000; border: 1px solid #d4af37; color: #fff; padding: 10px; margin-bottom: 10px; border-radius: 2px; }
+        .suggestion-section { padding: 25px 5%; background: #0a0a0a; text-align: center; border-top: 1px solid var(--border-color); }
+        .suggest-input { width: 100%; height: 80px; background: var(--bg-color); border: 1px solid var(--accent-color); color: #fff; padding: 10px; margin-bottom: 10px; border-radius: 2px; }
 
-        footer { background: #000; color: #444; text-align: center; padding: 20px; border-top: 1px solid #111; font-size: 10px; }
+        /* Receipt Modal Pop-up Layout */
+        .receipt-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; display: none; justify-content: center; align-items: center; padding: 20px; }
+        .receipt-box { background: var(--surface-color); border: 2px solid var(--accent-color); width: 100%; max-width: 450px; padding: 25px; border-radius: 4px; box-shadow: 0 4px 25px rgba(0,0,0,0.7); max-height: 90vh; overflow-y: auto; }
+        .receipt-header { text-align: center; border-bottom: 1px dashed var(--accent-color); padding-bottom: 15px; margin-bottom: 15px; }
+        .receipt-title { font-size: 20px; color: var(--accent-color); font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }
+        .receipt-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; }
+
+        footer { background: var(--bg-color); color: #444; text-align: center; padding: 20px; border-top: 1px solid #111; font-size: 10px; }
 
         /* Desktop refinements */
         @media (min-width: 768px) { 
@@ -117,22 +177,29 @@
             <li><a onclick="showAbout()">About</a></li>
             <li><a onclick="showPolicy()">Policy</a></li>
         </ul>
-        <div onclick="toggleCart()" style="cursor:pointer; color: #d4af37; font-weight: bold; font-size: 11px;">
-            CART <span id="cart-counter" style="background:#d4af37; color:black; border-radius:50%; padding:2px 6px;">0</span>
+        <div onclick="toggleCart()" style="cursor:pointer; color: var(--accent-color); font-weight: bold; font-size: 11px;">
+            CART <span id="cart-counter" style="background:var(--accent-color); color:black; border-radius:50%; padding:2px 6px;">0</span>
         </div>
     </nav>
+
+    <div class="theme-container">
+        <span class="theme-label">Select Screen Theme:</span>
+        <button class="theme-btn" style="background: #d4af37;" onclick="setTheme('gold')" title="Luxury Gold"></button>
+        <button class="theme-btn" style="background: #ff4d6d;" onclick="setTheme('rose')" title="Midnight Rose"></button>
+        <button class="theme-btn" style="background: #00e676;" onclick="setTheme('emerald')" title="Emerald Diamond"></button>
+    </div>
 
     <header class="branding-header">
         <h1 class="main-brand-title">ARISA STORE</h1>
     </header>
 
     <div id="admin-panel">
-        <h3 style="color:#d4af37; margin-bottom:15px;">STAFF CONTROL PANEL</h3>
+        <h3 style="color:var(--accent-color); margin-bottom:15px;">STAFF CONTROL PANEL</h3>
         <input type="text" id="admin-p-name" class="admin-input" placeholder="Product Name">
         <input type="number" id="admin-p-price" class="admin-input" placeholder="Price (NLE)">
         <input type="text" id="admin-p-color" class="admin-input" placeholder="Color (e.g. Gold, Black, Clear)">
         
-        <p style="font-size:11px; color:#d4af37; margin-top:10px;">PRODUCT STATUS:</p>
+        <p style="font-size:11px; color:var(--accent-color); margin-top:10px;">PRODUCT STATUS:</p>
         <select id="admin-p-status" class="admin-input">
             <option value="available">Available</option>
             <option value="sold-out">Sold Out</option>
@@ -143,7 +210,7 @@
         <button class="btn" style="max-width: 200px; margin-top: 10px;" onclick="adminUpload()">ADD PRODUCT</button>
         
         <div id="admin-suggestions" style="margin-top:20px; border-top:1px solid #333; padding-top:10px;">
-            <h4 style="color:#d4af37; font-size:12px;">CUSTOMER SUGGESTIONS</h4>
+            <h4 style="color:var(--accent-color); font-size:12px;">CUSTOMER SUGGESTIONS</h4>
             <div id="suggestion-display-list" style="font-size:11px; color:#ccc; margin-top:10px;"></div>
         </div>
 
@@ -151,29 +218,29 @@
     </div>
 
     <div id="cart-sidebar" class="cart-overlay">
-        <h3 style="color:#d4af37; margin-bottom:20px;">YOUR CART</h3>
+        <h3 style="color:var(--accent-color); margin-bottom:20px;">YOUR CART</h3>
         <div id="cart-items-list"></div>
         
         <div id="saved-items-container" style="display:none; margin-top:20px;">
-            <h4 style="color:#d4af37; font-size:12px; margin-bottom:10px;">SAVED FOR LATER</h4>
+            <h4 style="color:var(--accent-color); font-size:12px; margin-bottom:10px;">SAVED FOR LATER</h4>
             <div id="saved-items-list"></div>
         </div>
 
         <hr style="border:0; border-top:1px solid #333; margin:15px 0;">
         <div style="font-size:14px;">
             <p>Subtotal: <span id="cart-subtotal">0</span> NLE</p>
-            <p id="discount-row" style="color:#d4af37; display:none; font-weight: bold;">Multi-buy Discount: -<span id="cart-discount">0</span> NLE</p>
+            <p id="discount-row" style="color:var(--accent-color); display:none; font-weight: bold;">Multi-buy Discount: -<span id="cart-discount">0</span> NLE</p>
             <p style="font-size:18px; font-weight:bold; margin-top:10px;">Total: <span id="cart-grand-total">0</span> NLE</p>
         </div>
 
         <div style="margin-top:20px;">
-            <p style="font-size:11px; color:#d4af37; margin-bottom:5px;">SERVICE TYPE (SELECT OPTION):</p>
+            <p style="font-size:11px; color:var(--accent-color); margin-bottom:5px;">SERVICE TYPE (SELECT OPTION):</p>
             <select id="service-type" class="cart-input">
                 <option value="Delivery">Delivery (Fee based on location)</option>
                 <option value="Pickup">Pickup at Store</option>
             </select>
 
-            <p style="font-size:11px; color:#d4af37; margin-bottom:5px;">PAYMENT METHOD (SELECT OPTION):</p>
+            <p style="font-size:11px; color:var(--accent-color); margin-bottom:5px;">PAYMENT METHOD (SELECT OPTION):</p>
             <select id="payment-method" class="cart-input">
                 <option value="After Delivery">Pay After Delivery</option>
                 <option value="Orange Money (074170733)">Pay Now (Orange Money: 074170733)</option>
@@ -186,13 +253,24 @@
         <button class="btn" style="background:#222; color:white; margin-top:10px;" onclick="toggleCart()">CLOSE</button>
     </div>
 
+    <div id="receipt-modal" class="receipt-overlay">
+        <div class="receipt-box">
+            <div class="receipt-header">
+                <h2 class="receipt-title">Order Received!</h2>
+                <p style="font-size: 12px; margin-top: 5px; color: #aaa;">Thank you for shopping with ARISA</p>
+            </div>
+            <div id="receipt-details"></div>
+            <button class="btn" style="margin-top:20px;" onclick="closeReceipt()">CONTINUE SHOPPING</button>
+        </div>
+    </div>
+
     <div id="floating-cart-btn">
         <button class="btn" style="height: 50px; font-size: 14px; border: 2px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.5);" onclick="toggleCart()">View Cart & Checkout →</button>
     </div>
 
     <div id="home-content">
         <div class="container">
-            <h2 style="color:#d4af37; text-align:center; margin-bottom:15px; font-size:14px; letter-spacing:2px;">SHOP COLLECTIONS</h2>
+            <h2 style="color:var(--accent-color); text-align:center; margin-bottom:15px; font-size:14px; letter-spacing:2px;">SHOP COLLECTIONS</h2>
             <div class="product-grid" id="product-grid"></div>
         </div>
 
@@ -222,7 +300,7 @@
     </div>
 
     <div class="suggestion-section" id="user-suggestion-box">
-        <h3 style="color:#d4af37; margin-bottom:10px; font-size: 13px;">SUGGESTIONS</h3>
+        <h3 style="color:var(--accent-color); margin-bottom:10px; font-size: 13px;">SUGGESTIONS</h3>
         <textarea id="user-suggestion" class="suggest-input" placeholder="What scent should we add next?"></textarea><br>
         <button class="btn" style="max-width: 200px;" onclick="sendSuggestion()">SEND TO STAFF</button>
     </div>
@@ -251,6 +329,15 @@
         let cart = [];
         let savedItems = [];
         let perfumes = [];
+
+        // THEME CONFIGURATION PICKER FUNCTION
+        window.setTheme = (themeName) => {
+            if(themeName === 'gold') {
+                document.documentElement.removeAttribute('data-theme');
+            } else {
+                document.documentElement.setAttribute('data-theme', themeName);
+            }
+        };
 
         db.ref('perfumes').on('value', (snapshot) => {
             const data = snapshot.val();
@@ -343,7 +430,7 @@
                 return `<div style="display:flex; flex-direction:column; margin-bottom:10px; border-bottom:1px solid #222; padding-bottom:5px;">
                             <div style="display:flex; justify-content:space-between;">
                                 <span style="font-size:12px;">${i.name} ${i.color ? `(${i.color})` : ''}</span>
-                                <span style="color:#d4af37;">${i.price} NLE</span>
+                                <span style="color:var(--accent-color);">${i.price} NLE</span>
                             </div>
                             <div style="display:flex; gap:10px; margin-top:5px;">
                                 <button class="btn remove-btn" onclick="removeFromCart(${i.cartId})">REMOVE</button>
@@ -386,7 +473,7 @@
             document.getElementById('home-content').style.display = 'none';
             document.getElementById('page-content').style.display = 'block';
             document.getElementById('page-inner-content').innerHTML = `
-                <h2 style="color:#d4af37; margin-bottom:20px; font-size:18px; letter-spacing: 2px;">THE ARISA STORY</h2>
+                <h2 style="color:var(--accent-color); margin-bottom:20px; font-size:18px; letter-spacing: 2px;">THE ARISA STORY</h2>
                 <p style="margin-bottom:15px; font-size:13px; color: #eee;">Founded in 2026 by Aroun Thomas Turay, <strong>ARISA PERFUME STORE</strong> was born from a passion for timeless elegance and the art of fine fragrance. We believe that a scent is more than just a smell—it is a signature, a memory, and a statement of luxury.</p>
                 <p style="margin-bottom:15px; font-size:13px; color: #eee;">Located in the heart of Freetown, Sierra Leone, we bridge the gap between global luxury brands and local connoisseurs. Every bottle in our collection is hand-selected to ensure authenticity, longevity, and a scent profile that commands respect.</p>
             `;
@@ -396,18 +483,18 @@
             document.getElementById('home-content').style.display = 'none';
             document.getElementById('page-content').style.display = 'block';
             document.getElementById('page-inner-content').innerHTML = `
-                <h2 style="color:#d4af37; margin-bottom:20px; font-size:18px; letter-spacing: 2px;">STORE POLICIES</h2>
+                <h2 style="color:var(--accent-color); margin-bottom:20px; font-size:18px; letter-spacing: 2px;">STORE POLICIES</h2>
                 
-                <h4 style="color:#d4af37; font-size:14px; margin-bottom: 8px;">1. Authenticity Guarantee</h4>
+                <h4 style="color:var(--accent-color); font-size:14px; margin-bottom: 8px;">1. Authenticity Guarantee</h4>
                 <p style="margin-bottom:15px; font-size:13px; color: #eee;">We guarantee that all perfumes sold at ARISA are 100% genuine. We do not deal in imitations or "grade" copies.</p>
 
-                <h4 style="color:#d4af37; font-size:14px; margin-bottom: 8px;">2. Delivery & Returns</h4>
+                <h4 style="color:var(--accent-color); font-size:14px; margin-bottom: 8px;">2. Delivery & Returns</h4>
                 <p style="margin-bottom:15px; font-size:13px; color: #eee;">Deliveries are processed within 24 hours in Freetown. Due to the nature of beauty products, we cannot accept returns once the seal or packaging has been opened. Please verify your scent choice before purchase.</p>
 
-                <h4 style="color:#d4af37; font-size:14px; margin-bottom: 8px;">3. Multi-Buy Discounts</h4>
+                <h4 style="color:var(--accent-color); font-size:14px; margin-bottom: 8px;">3. Multi-Buy Discounts</h4>
                 <p style="margin-bottom:15px; font-size:13px; color: #eee;">Get <strong>5% OFF</strong> when you buy 2 perfumes, and <strong>10% OFF</strong> when you buy 3 or more. Discounts are automatically calculated in your cart.</p>
 
-                <h4 style="color:#d4af37; font-size:14px; margin-bottom: 8px;">4. Payment</h4>
+                <h4 style="color:var(--accent-color); font-size:14px; margin-bottom: 8px;">4. Payment</h4>
                 <p style="margin-bottom:15px; font-size:13px; color: #eee;">We accept payment upon delivery (Cash/Orange Money) or advance payment via Orange Money (074170733).</p>
             `;
         };
@@ -468,15 +555,55 @@
             const serviceType = document.getElementById('service-type').value;
             if(!name || !addr) return alert("Please enter your name and address.");
             const total = document.getElementById('cart-grand-total').innerText;
+            const subtotal = document.getElementById('cart-subtotal').innerText;
+            const discount = document.getElementById('cart-discount').innerText;
             const itemMsg = cart.map(i => `${i.name}${i.color ? ` (${i.color})` : ''}`).join(', ');
+            
             const msg = `*NEW ARISA ORDER*\nCustomer: ${name}\nService: ${serviceType}\nAddress: ${addr}\nPayment: ${payMethod}\nItems: ${itemMsg}\nTotal: ${total} NLE`;
             
+            // Generate content layout for the on-screen receipt box
+            const receiptItemsHTML = cart.map(i => `
+                <div class="receipt-row">
+                    <span>• ${i.name} ${i.color ? `(${i.color})` : ''}</span>
+                    <span>${i.price} NLE</span>
+                </div>
+            `).join('');
+
+            document.getElementById('receipt-details').innerHTML = `
+                <div style="margin-bottom:15px; font-size:12px; border-bottom:1px solid var(--border-color); padding-bottom:10px;">
+                    <p><strong>Customer:</strong> ${name}</p>
+                    <p><strong>Service:</strong> ${serviceType}</p>
+                    <p><strong>Address:</strong> ${addr}</p>
+                    <p><strong>Payment:</strong> ${payMethod}</p>
+                </div>
+                <h4 style="font-size:12px; color:var(--accent-color); margin-bottom:10px; text-transform:uppercase;">Items Summary</h4>
+                ${receiptItemsHTML}
+                <hr style="border:0; border-top:1px dashed var(--border-color); margin:10px 0;">
+                <div class="receipt-row"><span>Subtotal:</span><span>${subtotal} NLE</span></div>
+                ${parseFloat(discount) > 0 ? `<div class="receipt-row" style="color:var(--accent-color);"><span>Discount:</span><span>-${discount} NLE</span></div>` : ''}
+                <div class="receipt-row" style="font-size:16px; font-weight:bold; margin-top:10px; border-top:1px solid var(--accent-color); padding-top:5px;">
+                    <span>Total Amount:</span>
+                    <span>${total} NLE</span>
+                </div>
+            `;
+
+            // Open up WhatsApp window 
             window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`);
-            alert("Order sent to WhatsApp!");
+            
+            // Clean side cart array and switch off inputs, trigger digital receipt modal layout
             cart = [];
             updateCartUI();
             toggleCart();
             document.getElementById('floating-cart-btn').style.display = 'none';
+            document.getElementById('cust-name').value = '';
+            document.getElementById('cust-address').value = '';
+            
+            // Bring receipt onto screen view
+            document.getElementById('receipt-modal').style.display = 'flex';
+        };
+
+        window.closeReceipt = () => {
+            document.getElementById('receipt-modal').style.display = 'none';
         };
 
         if(sessionStorage.getItem('isArisaAdmin') === 'true') document.getElementById('admin-panel').style.display = 'block';
