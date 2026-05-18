@@ -140,7 +140,6 @@
 
         /* Info Boxes Section - Mobile Optimized Grid */
         .info-section { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; padding: 15px 4%; background: #050505; }
-        .info-section { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; padding: 15px 4%; background: #050505; }
         .info-box { border: 1px solid var(--accent-color); padding: 10px 5px; text-align: center; background: var(--surface-color); }
         .info-box h4 { color: var(--accent-color); text-transform: uppercase; margin-bottom: 3px; letter-spacing: 1px; font-size: 9px; }
         .info-box p { font-size: 8px; color: #ccc; }
@@ -201,6 +200,11 @@
         .receipt-title { font-size: 20px; color: var(--accent-color); font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }
         .receipt-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; }
 
+        /* Order Dashboard Sub-Elements */
+        .admin-order-card { background: var(--bg-color); border: 1px solid var(--accent-color); padding: 15px; margin-bottom: 15px; text-align: left; border-radius: 2px; }
+        .admin-order-meta { font-size: 11px; color: #888; margin-bottom: 5px; }
+        .admin-order-items { font-size: 12px; border-top: 1px dashed #333; border-bottom: 1px dashed #333; padding: 8px 0; margin: 8px 0; }
+
         footer { background: var(--bg-color); color: #444; text-align: center; padding: 20px; border-top: 1px solid #111; font-size: 10px; }
 
         /* Desktop refinements */
@@ -258,6 +262,13 @@
         <br>
         <button class="btn" style="max-width: 200px; margin-top: 10px;" onclick="adminUpload()">ADD PRODUCT</button>
         
+        <div id="admin-orders-section" style="margin-top:30px; border-top:2px dashed var(--accent-color); padding-top:20px;">
+            <h4 style="color:var(--accent-color); font-size:14px; letter-spacing:1px; margin-bottom:15px;">LIVE CUSTOMER ORDERS</h4>
+            <div id="admin-orders-list" style="color:#fff; font-size:12px;">
+                <p style="color:#666; font-style:italic;">No active incoming orders.</p>
+            </div>
+        </div>
+
         <div id="admin-suggestions" style="margin-top:20px; border-top:1px solid #333; padding-top:10px;">
             <h4 style="color:var(--accent-color); font-size:12px;">CUSTOMER SUGGESTIONS</h4>
             <div id="suggestion-display-list" style="font-size:11px; color:#ccc; margin-top:10px;"></div>
@@ -423,6 +434,55 @@
                 display.innerHTML = Object.values(data).map(s => `<p style="margin-bottom:5px;">• ${s}</p>`).join('');
             }
         });
+
+        // REAL-TIME ADMIN FEED MONITORING FOR SYSTEM ORDERS
+        db.ref('orders').on('value', (snapshot) => {
+            const data = snapshot.val();
+            const ordersDisplayList = document.getElementById('admin-orders-list');
+            if (!ordersDisplayList) return;
+            
+            if (!data) {
+                ordersDisplayList.innerHTML = `<p style="color:#666; font-style:italic;">No active incoming orders.</p>`;
+                return;
+            }
+
+            let ordersHTML = '';
+            Object.keys(data).forEach(orderId => {
+                const order = data[orderId];
+                
+                let itemLines = '';
+                order.items.forEach(itm => {
+                    itemLines += `<div>• <strong>${itm.name}</strong> ${itm.color ? `(${itm.color})` : ''} - ${itm.price} NLE</div>`;
+                });
+
+                ordersHTML += `
+                    <div class="admin-order-card" id="card-${orderId}">
+                        <div class="admin-order-meta"><strong>Date:</strong> ${order.timestamp}</div>
+                        <div style="font-size:13px; margin-bottom:5px;"><strong>Customer:</strong> ${order.customerName}</div>
+                        <div><strong>Phone:</strong> <a href="tel:${order.customerPhone}" style="color:var(--accent-color); text-decoration:none;">${order.customerPhone}</a> | <a href="https://wa.me/${order.customerPhone.replace(/[^0-9]/g, '')}" target="_blank" style="color:#25D366; text-decoration:none; margin-left:5px;">WhatsApp</a></div>
+                        <div><strong>Address:</strong> ${order.customerAddress}</div>
+                        <div style="margin-top:5px;"><strong>Logistics:</strong> ${order.serviceType} | <strong>Payment:</strong> ${order.paymentMethod}</div>
+                        
+                        <div class="admin-order-items">
+                            <span style="color:var(--accent-color); font-weight:bold; display:block; margin-bottom:4px;">ITEMS IN RECEIPT:</span>
+                            ${itemLines}
+                        </div>
+
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span>Total Due: <strong style="color:var(--accent-color); font-size:14px;">${order.grandTotal} NLE</strong></span>
+                            <button class="btn" style="width:auto; margin:0; padding:6px 12px; background:#444; color:#fff;" onclick="archiveOrder('${orderId}')">Archive Order</button>
+                        </div>
+                    </div>
+                `;
+            });
+            ordersDisplayList.innerHTML = ordersHTML;
+        });
+
+        window.archiveOrder = (orderId) => {
+            if(confirm("Mark order as completed and remove from panel?")) {
+                db.ref('orders/' + orderId).remove();
+            }
+        };
 
         function renderProducts() {
             const grid = document.getElementById('product-grid');
@@ -596,123 +656,23 @@
             renderProducts();
         };
 
-        window.checkoutWhatsApp = () => {
-            const name = document.getElementById('cust-name').value.trim();
-            const phone = document.getElementById('cust-phone').value.trim();
-            const addr = document.getElementById('cust-address').value.trim();
-            const service = document.getElementById('service-type').value;
-            const payment = document.getElementById('payment-method').value;
-
-            if (!name || !phone || !addr) {
-                alert("Please fill in your Name, Phone Number, and Address fields.");
-                return;
-            }
-            if (cart.length === 0) {
-                alert("Your cart panel is empty.");
-                return;
-            }
-
-            const timestamp = new Date().toLocaleString();
-            const orderId = "ARS-" + Date.now().toString().slice(-6);
-
-            // Generate clean inner rows for canvas capture and screen view
-            let itemsHTML = cart.map(i => `
-                <div class="receipt-row">
-                    <span>${i.name} ${i.color ? `(${i.color})` : ''}</span>
-                    <span>${i.price} NLE</span>
-                </div>
-            `).join('');
-
-            const grandTotal = document.getElementById('cart-grand-total').innerText;
-            const subtotal = document.getElementById('cart-subtotal').innerText;
-            const discount = document.getElementById('cart-discount').innerText;
-
-            let finalReceiptHTML = `
-                <div style="margin-bottom:15px; font-size:12px; line-height:1.5; border-bottom:1px solid #333; padding-bottom:10px;">
-                    <p><strong>Order ID:</strong> ${orderId}</p>
-                    <p><strong>Date:</strong> ${timestamp}</p>
-                    <p><strong>Customer:</strong> ${name}</p>
-                    <p><strong>Phone:</strong> ${phone}</p>
-                    <p><strong>Service:</strong> ${service}</p>
-                    <p><strong>Payment:</strong> ${payment}</p>
-                    <p style="margin-top:5px;"><strong>Address:</strong> ${addr}</p>
-                </div>
-                <div style="margin-bottom:15px;">
-                    <p style="font-weight:bold; font-size:13px; border-bottom:1px solid #222; margin-bottom:8px; padding-bottom:3px; color:var(--accent-color);">ITEMS ORDERED:</p>
-                    ${itemsHTML}
-                </div>
-                <div style="border-top:1px dashed #444; padding-top:10px; font-size:13px;">
-                    <div class="receipt-row"><span>Subtotal:</span><span>${subtotal} NLE</span></div>
-                    ${parseFloat(discount) > 0 ? `<div class="receipt-row" style="color:var(--accent-color);"><span>Discount:</span><span>-${discount} NLE</span></div>` : ''}
-                    <div class="receipt-row" style="font-size:16px; font-weight:bold; margin-top:5px; color:var(--accent-color);">
-                        <span>Total Amount:</span><span>${grandTotal} NLE</span>
-                    </div>
-                </div>
-            `;
-
-            // Display contents to matching canvas & view frames
-            document.getElementById('canvas-receipt-details').innerHTML = finalReceiptHTML;
-            document.getElementById('receipt-details').innerHTML = finalReceiptHTML;
-
-            // Target the canvas template wrapper
-            const captureArea = document.getElementById('receipt-capture-canvas');
-
-            html2canvas(captureArea, { useCORS: true, allowTaint: true, scale: 2 }).then(canvas => {
-                const imgData = canvas.toDataURL('image/png');
-
-                // 1. Write structured log securely to Firebase tracking database node for your admin panel
-                db.ref('orders').push({
-                    orderId: orderId,
-                    customerName: name,
-                    customerPhone: phone,
-                    customerAddress: addr,
-                    serviceType: service,
-                    paymentMethod: payment,
-                    totalAmount: grandTotal,
-                    items: cart,
-                    timestamp: timestamp,
-                    receiptImageBase64: imgData
-                });
-
-                // 2. Trigger instant download of generated PNG receipt to client device album path
-                const downloadLink = document.createElement('a');
-                downloadLink.href = imgData;
-                downloadLink.download = `ARISA-RECEIPT-${orderId}.png`;
-                document.body.appendChild(downloadLink);
-                downloadLink.click();
-                document.body.removeChild(downloadLink);
-
-                // 3. Close the cart slider overlay drawer panel
-                toggleCart();
-
-                // 4. Fire clear instructions popup so client adds image directly inside active line channel
-                alert("✨ Receipt Image Downloaded to your Phone Gallery! ✨\n\nWhatsApp will now open. Please select and attach the recent receipt image from your gallery to send your order.");
-
-                // 5. Open WhatsApp redirect route matching target text criteria structures
-                const whatsAppMsg = `Hello ARISA, I have placed an order!\n\nOrder ID: ${orderId}\nName: ${name}\nPhone: ${phone}\nTotal: ${grandTotal} NLE\n\nI am attaching my downloaded official receipt image below...`;
-                window.open(`https://api.whatsapp.com/send?phone=${myWhatsAppNumber}&text=${encodeURIComponent(whatsAppMsg)}`, '_blank');
-
-                // 6. Reveal modal pop up display interface tracking
-                document.getElementById('receipt-modal').style.display = 'flex';
-                
-                // Clear cart array values completely
-                cart = [];
-                updateCartUI();
-                document.getElementById('floating-cart-btn').style.display = 'none';
-            });
+        window.toggleStatus = (id, currentStatus) => {
+            const nextStatus = currentStatus === 'available' ? 'sold-out' : 'available';
+            db.ref('perfumes/' + id).update({ status: nextStatus });
         };
 
-        window.closeReceipt = () => {
-            document.getElementById('receipt-modal').style.display = 'none';
+        window.deleteProduct = (id) => {
+            if(confirm("Permanently delete product item?")) {
+                db.ref('perfumes/' + id).remove();
+            }
         };
 
         window.sendSuggestion = () => {
-            const text = document.getElementById('user-suggestion').value.trim();
-            if(text) {
-                db.ref('suggestions').push(text);
-                alert("Your suggestion has been logged. Thank you!");
-                document.getElementById('user-suggestion').value = '';
-            }
+            const val = document.getElementById('user-suggestion').value.trim();
+            if(!val) return;
+            db.ref('suggestions').push(val);
+            document.getElementById('user-suggestion').value = '';
+            alert("Scent suggestion delivered successfully. Thank you!");
         };
 
         window.adminUpload = () => {
@@ -723,37 +683,147 @@
             const fileInput = document.getElementById('admin-p-file');
 
             if(!name || !price || !fileInput.files[0]) {
-                alert("Name, Price and Product Image are mandatory inputs!");
+                alert("Complete required inputs (Name, Price & Image File)!");
                 return;
             }
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
+            const r = new FileReader();
+            r.onload = function(e) {
+                const imgData = e.target.result;
                 db.ref('perfumes').push({
                     name: name,
                     price: price,
                     color: color,
                     status: status,
-                    image: e.target.result
+                    image: imgData
+                }, () => {
+                    alert("Fragrance registered successfully!");
+                    document.getElementById('admin-p-name').value = '';
+                    document.getElementById('admin-p-price').value = '';
+                    document.getElementById('admin-p-color').value = '';
+                    fileInput.value = '';
                 });
-                alert("Product published successfully!");
-                document.getElementById('admin-p-name').value = '';
-                document.getElementById('admin-p-price').value = '';
-                document.getElementById('admin-p-color').value = '';
-                fileInput.value = '';
             };
-            reader.readAsDataURL(fileInput.files[0]);
+            r.readAsDataURL(fileInput.files[0]);
         };
 
-        window.toggleStatus = (id, currentStatus) => {
-            const nextStatus = currentStatus === 'available' ? 'sold-out' : 'available';
-            db.ref(`perfumes/${id}`).update({ status: nextStatus });
-        };
+        window.checkoutWhatsApp = () => {
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const addr = document.getElementById('cust-address').value.trim();
+            const service = document.getElementById('service-type').value;
+            const payment = document.getElementById('payment-method').value;
 
-        window.deleteProduct = (id) => {
-            if(confirm("Permanently delete this product from database?")) {
-                db.ref(`perfumes/${id}`).remove();
+            if (!name || !phone || !addr) {
+                alert("Please provide your name, phone number, and address/pickup details!");
+                return;
             }
+            if (cart.length === 0) {
+                alert("Your shopping cart is currently empty!");
+                return;
+            }
+
+            const subtotal = parseFloat(document.getElementById('cart-subtotal').innerText);
+            const discount = parseFloat(document.getElementById('cart-discount').innerText);
+            const grandTotal = parseFloat(document.getElementById('cart-grand-total').innerText);
+
+            // COMPILING INTERNAL DATABASE PAYLOAD ENTRY FOR LIVE TRACKING FEED
+            const orderPayload = {
+                customerName: name,
+                customerPhone: phone,
+                customerAddress: addr,
+                serviceType: service,
+                paymentMethod: payment,
+                subtotal: subtotal.toFixed(2),
+                discount: discount.toFixed(2),
+                grandTotal: grandTotal.toFixed(2),
+                timestamp: new Date().toLocaleString(),
+                items: cart.map(i => ({ name: i.name, color: i.color || '', price: i.price }))
+            };
+
+            // Write transactional structure into DB nodes
+            db.ref('orders').push(orderPayload);
+
+            // GENERATING SYSTEM RECEIPT DISPLAY BLOCK FOR CUSTOMER VIEW
+            let itemsRowsHTML = `
+                <table style="width:100%; border-collapse:collapse; margin:15px 0; font-size:13px; color:#fff;">
+                    <thead>
+                        <tr style="border-bottom:1px solid var(--accent-color); text-align:left; color:var(--accent-color);">
+                            <th style="padding-bottom:5px;">Item Description</th>
+                            <th style="padding-bottom:5px; text-align:right;">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            cart.forEach(i => {
+                itemsRowsHTML += `
+                    <tr style="border-bottom:1px solid #222;">
+                        <td style="padding:8px 0;">${i.name} ${i.color ? `<br><small style="color:#888;">Variant: ${i.color}</small>` : ''}</td>
+                        <td style="padding:8px 0; text-align:right; color:var(--accent-color);">${i.price} NLE</td>
+                    </tr>
+                `;
+            });
+            itemsRowsHTML += `</tbody></table>`;
+
+            const finalReceiptHTML = `
+                <div style="font-size:13px; line-height:1.6;">
+                    <p style="margin-bottom:4px;"><strong>Customer:</strong> ${name}</p>
+                    <p style="margin-bottom:4px;"><strong>Phone:</strong> ${phone}</p>
+                    <p style="margin-bottom:4px;"><strong>Address:</strong> ${addr}</p>
+                    <p style="margin-bottom:4px;"><strong>Logistics:</strong> ${service}</p>
+                    <p style="margin-bottom:12px;"><strong>Payment Option:</strong> ${payment}</p>
+                    
+                    ${itemsRowsHTML}
+
+                    <div style="border-top:1px solid #333; padding-top:10px; margin-top:10px; font-size:13px;">
+                        <div class="receipt-row"><span>Subtotal:</span><span>${subtotal.toFixed(2)} NLE</span></div>
+                        ${discount > 0 ? `<div class="receipt-row" style="color:var(--accent-color);"><span>Discount Applied:</span><span>-${discount.toFixed(2)} NLE</span></div>` : ''}
+                        <div class="receipt-row" style="font-size:16px; font-weight:bold; color:var(--accent-color); margin-top:5px; border-top:1px dashed #444; padding-top:5px;">
+                            <span>GRAND TOTAL:</span><span>${grandTotal.toFixed(2)} NLE</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('receipt-details').innerHTML = finalReceiptHTML;
+            document.getElementById('canvas-receipt-details').innerHTML = finalReceiptHTML;
+
+            // ENHANCED WHATSAPP INBOUND TEXT RE-ROUTING ASSEMBLY
+            let textMessage = `✨ *ARISA PERFUME STORE ORDER* ✨\n\n`;
+            textMessage += `👤 *Customer Details:*\n`;
+            textMessage += `• *Name:* ${name}\n`;
+            textMessage += `• *Phone:* ${phone}\n`;
+            textMessage += `• *Address:* ${addr}\n\n`;
+            textMessage += `📦 *Order Summary:*\n`;
+            cart.forEach((i, idx) => {
+                textMessage += `${idx + 1}. ${i.name} ${i.color ? `(${i.color})` : ''} - *${i.price} NLE*\n`;
+            });
+            textMessage += `\n⚙️ *Logistics:* ${service}\n`;
+            textMessage += `💳 *Payment:* ${payment}\n\n`;
+            textMessage += `-------------------------\n`;
+            textMessage += `💰 *Subtotal:* ${subtotal.toFixed(2)} NLE\n`;
+            if(discount > 0) textMessage += `🔥 *Discount:* -${discount.toFixed(2)} NLE\n`;
+            textMessage += `⭐ *Grand Total:* *${grandTotal.toFixed(2)} NLE*\n\n`;
+            textMessage += `Thank you for your order! Please verify our automated invoice image below.`;
+
+            const whatsappUrl = `https://api.whatsapp.com/send?phone=${myWhatsAppNumber}&text=${encodeURIComponent(textMessage)}`;
+            
+            // Clean interface views
+            toggleCart();
+            document.getElementById('receipt-modal').style.display = 'flex';
+
+            // Auto trigger external link out routing targets
+            window.open(whatsappUrl, '_blank');
+        };
+
+        window.closeReceipt = () => {
+            cart = [];
+            updateCartUI();
+            document.getElementById('floating-cart-btn').style.display = 'none';
+            document.getElementById('cust-name').value = '';
+            document.getElementById('cust-phone').value = '';
+            document.getElementById('cust-address').value = '';
+            document.getElementById('receipt-modal').style.display = 'none';
         };
     </script>
 </body>
