@@ -46,6 +46,47 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
+        /* LUXURY PRELOADER SCREEN */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .loader-logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #d4af37;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            animation: pulse-title 2s infinite ease-in-out;
+        }
+        .loader-spinner {
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(212, 175, 55, 0.1);
+            border-top: 2px solid #d4af37;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes pulse-title {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
         /* Navigation - Adjusted for Mobile */
         nav { 
             display: flex; 
@@ -170,6 +211,11 @@
     </style>
 </head>
 <body>
+
+    <div id="preloader">
+        <div class="loader-logo">ARISA PERFUME</div>
+        <div class="loader-spinner"></div>
+    </div>
 
     <nav>
         <div class="logo" onclick="showHome()">ARISA</div>
@@ -315,6 +361,15 @@
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
 
     <script>
+        // WINDOW EVENT LISTENER FOR PRELOADER TERMINATION
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                preloader.style.visibility = 'hidden';
+            }, 1200); // Luxury holding frame display delay
+        });
+
         const firebaseConfig = {
             apiKey: "AIzaSyD6VOairMfPk1fM9VApccmNEPAdMIb3HO4",
             authDomain: "arisa-perfume-store.firebaseapp.com",
@@ -593,53 +648,49 @@
                     <p><strong>Address:</strong> ${addr}</p>
                     <p><strong>Payment:</strong> ${payMethod}</p>
                 </div>
-                <h4 style="font-size:12px; color:var(--accent-color); margin-bottom:10px; text-transform:uppercase;">Items Summary</h4>
-                ${receiptItemsHTML}
-                <hr style="border:0; border-top:1px dashed var(--border-color); margin:10px 0;">
-                <div class="receipt-row"><span>Subtotal:</span><span>${subtotal} NLE</span></div>
-                ${parseFloat(discount) > 0 ? `<div class="receipt-row" style="color:var(--accent-color);"><span>Discount:</span><span>-${discount} NLE</span></div>` : ''}
-                <div class="receipt-row" style="font-size:16px; font-weight:bold; margin-top:10px; border-top:1px solid var(--accent-color); padding-top:5px;">
-                    <span>Total Amount:</span>
-                    <span>${total} NLE</span>
+                <div style="margin-bottom:15px;">
+                    <p style="font-weight:bold; font-size:11px; text-transform:uppercase; color:var(--accent-color); margin-bottom:5px;">Order Details</p>
+                    ${receiptItemsHTML}
+                </div>
+                <div style="border-top:1px dashed var(--accent-color); padding-top:10px; font-size:13px;">
+                    <div class="receipt-row"><span>Subtotal:</span><span>${subtotal} NLE</span></div>
+                    ${parseFloat(discount) > 0 ? `<div class="receipt-row" style="color:var(--accent-color);"><span>Discount:</span><span>-${discount} NLE</span></div>` : ''}
+                    <div class="receipt-row" style="font-size:16px; font-weight:bold; margin-top:5px; color:var(--accent-color);"><span>Total Amount:</span><span>${total} NLE</span></div>
                 </div>
             `;
 
-            // Display Receipt Modal Overlay
+            // Display invoice container frame block
             document.getElementById('receipt-modal').style.display = 'flex';
+            toggleCart();
 
-            // GENERATE SECURE PDF COMPONENT
-            const targetElement = document.getElementById('pdf-invoice-area');
-            const actionButton = document.getElementById('hide-pdf-btn');
+            // GENERATE AND AUTO-DOWNLOAD PDF INVOICE
+            const invoiceTarget = document.getElementById('pdf-invoice-area');
+            const hideBtn = document.getElementById('hide-pdf-btn');
             
-            // Temporarily conceal button to keep PDF document un-compromised
-            actionButton.style.display = 'none';
+            // Hide the UI button visually from processing script scope
+            hideBtn.style.display = 'none';
 
-            const configurationOptions = {
-                margin:       10,
-                filename:     'Arisa_Order_Receipt_' + Date.now() + '.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, backgroundColor: "#111111" },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            const pdfOptions = {
+                margin: 10,
+                filename: `ARISA_INVOICE_${Date.now()}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, backgroundColor: '#111111' },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
-            // Download PDF Invoice and execute redirection link configuration setup
-            html2pdf().set(configurationOptions).from(targetElement).save().then(() => {
-                actionButton.style.display = 'block'; // Restore visibility control button
+            html2pdf().set(pdfOptions).from(invoiceTarget).save().then(() => {
+                // Restore UI visibility once execution finishes safely
+                hideBtn.style.display = 'block';
+                // Fire off secure API window redirection directly to WhatsApp portal
                 window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`);
-                
-                // Clear active arrays variables
+                // Flush memory buffers 
                 cart = [];
                 updateCartUI();
-                toggleCart();
                 document.getElementById('floating-cart-btn').style.display = 'none';
-                document.getElementById('cust-name').value = '';
-                document.getElementById('cust-address').value = '';
+            }).catch(err => {
+                hideBtn.style.display = 'block';
+                console.error("PDF Processing Exception: ", err);
             });
-        };
-
-        // ENFORCE LOAD ON HOME VIEW INITIALIZATION
-        window.onload = () => {
-            showHome();
         };
     </script>
 </body>
