@@ -140,6 +140,7 @@
 
         /* Info Boxes Section - Mobile Optimized Grid */
         .info-section { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; padding: 15px 4%; background: #050505; }
+        .info-section { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; padding: 15px 4%; background: #050505; }
         .info-box { border: 1px solid var(--accent-color); padding: 10px 5px; text-align: center; background: var(--surface-color); }
         .info-box h4 { color: var(--accent-color); text-transform: uppercase; margin-bottom: 3px; letter-spacing: 1px; font-size: 9px; }
         .info-box p { font-size: 8px; color: #ccc; }
@@ -296,6 +297,7 @@
         </div>
 
         <input type="text" id="cust-name" class="cart-input" placeholder="Full Name">
+        <input type="tel" id="cust-phone" class="cart-input" placeholder="Phone Number (WhatsApp / Payment No.)">
         <input type="text" id="cust-address" class="cart-input" placeholder="Address / Pickup Note">
         <button class="btn" style="background:#25D366; color:white;" onclick="checkoutWhatsApp()">ORDER ON WHATSAPP</button>
         <button class="btn" style="background:#222; color:white; margin-top:10px;" onclick="toggleCart()">CLOSE</button>
@@ -393,7 +395,7 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-        const myWhatsAppNumber = "232074170733";
+        const myWhatsAppNumber = "23274170733";
         let cart = [];
         let savedItems = [];
         let perfumes = [];
@@ -596,12 +598,13 @@
 
         window.checkoutWhatsApp = () => {
             const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
             const addr = document.getElementById('cust-address').value.trim();
             const service = document.getElementById('service-type').value;
             const payment = document.getElementById('payment-method').value;
 
-            if (!name || !addr) {
-                alert("Please fill in your Name and Address fields.");
+            if (!name || !phone || !addr) {
+                alert("Please fill in your Name, Phone Number, and Address fields.");
                 return;
             }
             if (cart.length === 0) {
@@ -610,104 +613,136 @@
             }
 
             const timestamp = new Date().toLocaleString();
-            let itemsText = cart.map(i => `${i.name} (${i.color || 'Clear'}) - ${i.price} NLE`).join('\n');
-            let subtotal = document.getElementById('cart-subtotal').innerText;
-            let discount = document.getElementById('cart-discount').innerText;
-            let grandTotal = document.getElementById('cart-grand-total').innerText;
+            const orderId = "ARS-" + Date.now().toString().slice(-6);
 
-            let canvasHTML = `
-                <p style="font-size: 13px; margin-bottom: 15px;"><strong>Date:</strong> ${timestamp}</p>
-                <p style="font-size: 14px; color: #d4af37; text-transform: uppercase; font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #222; padding-bottom: 3px;">Customer Details</p>
-                <p style="font-size: 13px; margin-bottom: 5px;"><strong>Name:</strong> ${name}</p>
-                <p style="font-size: 13px; margin-bottom: 5px;"><strong>Address:</strong> ${addr}</p>
-                <p style="font-size: 13px; margin-bottom: 5px;"><strong>Service:</strong> ${service}</p>
-                <p style="font-size: 13px; margin-bottom: 15px;"><strong>Payment:</strong> ${payment}</p>
-                
-                <p style="font-size: 14px; color: #d4af37; text-transform: uppercase; font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #222; padding-bottom: 3px;">Items Ordered</p>
-            `;
+            // Generate clean inner rows for canvas capture and screen view
+            let itemsHTML = cart.map(i => `
+                <div class="receipt-row">
+                    <span>${i.name} ${i.color ? `(${i.color})` : ''}</span>
+                    <span>${i.price} NLE</span>
+                </div>
+            `).join('');
 
-            cart.forEach(i => {
-                canvasHTML += `
-                    <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px;">
-                        <span>${i.name} (${i.color || 'Clear'})</span>
-                        <span>${i.price} NLE</span>
-                    </div>
-                `;
-            });
+            const grandTotal = document.getElementById('cart-grand-total').innerText;
+            const subtotal = document.getElementById('cart-subtotal').innerText;
+            const discount = document.getElementById('cart-discount').innerText;
 
-            canvasHTML += `
-                <div style="margin-top: 15px; border-top: 1px dashed #d4af37; padding-top: 10px;">
-                    <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px;">
-                        <span>Subtotal:</span><span>${subtotal} NLE</span>
-                    </div>
-                    ${parseFloat(discount) > 0 ? `
-                    <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; color: #ff4d6d;">
-                        <span>Discount:</span><span>-${discount} NLE</span>
-                    </div>` : ''}
-                    <div style="display: flex; justify-content: space-between; font-size: 16px; font-weight: bold; margin-top: 8px; color: #d4af37;">
-                        <span>Total:</span><span>${grandTotal} NLE</span>
+            let finalReceiptHTML = `
+                <div style="margin-bottom:15px; font-size:12px; line-height:1.5; border-bottom:1px solid #333; padding-bottom:10px;">
+                    <p><strong>Order ID:</strong> ${orderId}</p>
+                    <p><strong>Date:</strong> ${timestamp}</p>
+                    <p><strong>Customer:</strong> ${name}</p>
+                    <p><strong>Phone:</strong> ${phone}</p>
+                    <p><strong>Service:</strong> ${service}</p>
+                    <p><strong>Payment:</strong> ${payment}</p>
+                    <p style="margin-top:5px;"><strong>Address:</strong> ${addr}</p>
+                </div>
+                <div style="margin-bottom:15px;">
+                    <p style="font-weight:bold; font-size:13px; border-bottom:1px solid #222; margin-bottom:8px; padding-bottom:3px; color:var(--accent-color);">ITEMS ORDERED:</p>
+                    ${itemsHTML}
+                </div>
+                <div style="border-top:1px dashed #444; padding-top:10px; font-size:13px;">
+                    <div class="receipt-row"><span>Subtotal:</span><span>${subtotal} NLE</span></div>
+                    ${parseFloat(discount) > 0 ? `<div class="receipt-row" style="color:var(--accent-color);"><span>Discount:</span><span>-${discount} NLE</span></div>` : ''}
+                    <div class="receipt-row" style="font-size:16px; font-weight:bold; margin-top:5px; color:var(--accent-color);">
+                        <span>Total Amount:</span><span>${grandTotal} NLE</span>
                     </div>
                 </div>
             `;
 
-            document.getElementById('canvas-receipt-details').innerHTML = canvasHTML;
-            document.getElementById('receipt-details').innerHTML = canvasHTML;
+            // Display contents to matching canvas & view frames
+            document.getElementById('canvas-receipt-details').innerHTML = finalReceiptHTML;
+            document.getElementById('receipt-details').innerHTML = finalReceiptHTML;
 
-            const captureContainer = document.getElementById('receipt-capture-canvas');
-            
-            html2canvas(captureContainer, {
-                useCORS: true,
-                allowTaint: true,
-                backgroundColor: "#111111",
-                scale: 2
-            }).then(canvas => {
-                canvas.toBlob(blob => {
-                    const file = new File([blob], "Arisa_Order_Invoice.png", { type: "image/png" });
-                    
-                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                        navigator.share({
-                            files: [file],
-                            title: 'ARISA PERFUME ORDER',
-                            text: `New Order from ${name} via ARISA Web Platform Portal.`
-                        }).then(() => {
-                            completeCheckoutProcess();
-                        }).catch(err => {
-                            fallbackWhatsAppTextCheckout(name, addr, service, payment, itemsText, subtotal, discount, grandTotal);
-                        });
-                    } else {
-                        fallbackWhatsAppTextCheckout(name, addr, service, payment, itemsText, subtotal, discount, grandTotal);
-                    }
-                }, 'image/png');
+            // Target the canvas template wrapper
+            const captureArea = document.getElementById('receipt-capture-canvas');
+
+            html2canvas(captureArea, { useCORS: true, allowTaint: true, scale: 2 }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+
+                // 1. Write structured log securely to Firebase tracking database node for your admin panel
+                db.ref('orders').push({
+                    orderId: orderId,
+                    customerName: name,
+                    customerPhone: phone,
+                    customerAddress: addr,
+                    serviceType: service,
+                    paymentMethod: payment,
+                    totalAmount: grandTotal,
+                    items: cart,
+                    timestamp: timestamp,
+                    receiptImageBase64: imgData
+                });
+
+                // 2. Trigger instant download of generated PNG receipt to client device album path
+                const downloadLink = document.createElement('a');
+                downloadLink.href = imgData;
+                downloadLink.download = `ARISA-RECEIPT-${orderId}.png`;
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+
+                // 3. Close the cart slider overlay drawer panel
+                toggleCart();
+
+                // 4. Fire clear instructions popup so client adds image directly inside active line channel
+                alert("✨ Receipt Image Downloaded to your Phone Gallery! ✨\n\nWhatsApp will now open. Please select and attach the recent receipt image from your gallery to send your order.");
+
+                // 5. Open WhatsApp redirect route matching target text criteria structures
+                const whatsAppMsg = `Hello ARISA, I have placed an order!\n\nOrder ID: ${orderId}\nName: ${name}\nPhone: ${phone}\nTotal: ${grandTotal} NLE\n\nI am attaching my downloaded official receipt image below...`;
+                window.open(`https://api.whatsapp.com/send?phone=${myWhatsAppNumber}&text=${encodeURIComponent(whatsAppMsg)}`, '_blank');
+
+                // 6. Reveal modal pop up display interface tracking
+                document.getElementById('receipt-modal').style.display = 'flex';
+                
+                // Clear cart array values completely
+                cart = [];
+                updateCartUI();
+                document.getElementById('floating-cart-btn').style.display = 'none';
             });
         };
 
-        function fallbackWhatsAppTextCheckout(name, addr, service, payment, itemsText, subtotal, discount, grandTotal) {
-            alert("Image auto-share matching parameters failed or unsupported. Redirecting to WhatsApp Text Mode invoice transfer configuration.");
-            let wpMsg = `*ARISA PERFUME STORE - NEW ORDER*\n\n` +
-                        `*Customer Name:* ${name}\n` +
-                        `*Delivery Address:* ${addr}\n` +
-                        `*Service Frame:* ${service}\n` +
-                        `*Payment Preference:* ${payment}\n\n` +
-                        `*Products ordered:*\n${itemsText}\n\n` +
-                        `*Subtotal:* ${subtotal} NLE\n` +
-                        `*Discount Breakdown:* -${discount} NLE\n` +
-                        `*Total Invoice Amount:* ${grandTotal} NLE`;
-
-            window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(wpMsg)}`, '_blank');
-            completeCheckoutProcess();
-        }
-
-        function completeCheckoutProcess() {
-            document.getElementById('receipt-modal').style.display = 'flex';
-            cart = [];
-            updateCartUI();
-            document.getElementById('floating-cart-btn').style.display = 'none';
-            toggleCart();
-        }
-
         window.closeReceipt = () => {
             document.getElementById('receipt-modal').style.display = 'none';
-            showHome();
+        };
+
+        window.sendSuggestion = () => {
+            const text = document.getElementById('user-suggestion').value.trim();
+            if(text) {
+                db.ref('suggestions').push(text);
+                alert("Your suggestion has been logged. Thank you!");
+                document.getElementById('user-suggestion').value = '';
+            }
+        };
+
+        window.adminUpload = () => {
+            const name = document.getElementById('admin-p-name').value.trim();
+            const price = document.getElementById('admin-p-price').value.trim();
+            const color = document.getElementById('admin-p-color').value.trim();
+            const status = document.getElementById('admin-p-status').value;
+            const fileInput = document.getElementById('admin-p-file');
+
+            if(!name || !price || !fileInput.files[0]) {
+                alert("Name, Price and Product Image are mandatory inputs!");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                db.ref('perfumes').push({
+                    name: name,
+                    price: price,
+                    color: color,
+                    status: status,
+                    image: e.target.result
+                });
+                alert("Product published successfully!");
+                document.getElementById('admin-p-name').value = '';
+                document.getElementById('admin-p-price').value = '';
+                document.getElementById('admin-p-color').value = '';
+                fileInput.value = '';
+            };
+            reader.readAsDataURL(fileInput.files[0]);
         };
 
         window.toggleStatus = (id, currentStatus) => {
@@ -716,40 +751,8 @@
         };
 
         window.deleteProduct = (id) => {
-            if(confirm("Confirm permanent removal of this product entry profile?")) {
+            if(confirm("Permanently delete this product from database?")) {
                 db.ref(`perfumes/${id}`).remove();
-            }
-        };
-
-        window.sendSuggestion = () => {
-            const sug = document.getElementById('user-suggestion').value.trim();
-            if(sug) {
-                db.ref('suggestions').push(sug);
-                alert("Your suggestion has been logged. Thank you!");
-                document.getElementById('user-suggestion').value = '';
-            }
-        };
-
-        window.adminUpload = () => {
-            if(sessionStorage.getItem('isArisaAdmin') !== 'true') return;
-            const name = document.getElementById('admin-p-name').value;
-            const price = document.getElementById('admin-p-price').value;
-            const color = document.getElementById('admin-p-color').value;
-            const status = document.getElementById('admin-p-status').value;
-            const file = document.getElementById('admin-p-file').files[0];
-            if(name && price && file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    db.ref('perfumes').push({ name, price, color, status, image: e.target.result });
-                    document.getElementById('admin-p-name').value = '';
-                    document.getElementById('admin-p-price').value = '';
-                    document.getElementById('admin-p-color').value = '';
-                    document.getElementById('admin-p-file').value = '';
-                    alert("Product base entry profile appended successfully!");
-                };
-                reader.readAsDataURL(file);
-            } else {
-                alert("Verify mandatory inputs profile name, price, and matching target file components are attached.");
             }
         };
     </script>
