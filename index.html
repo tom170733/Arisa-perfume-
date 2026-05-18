@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ARISA PERFUME STORE | Luxury Scents</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         /* LUXURY THEME VARIABLES */
         :root {
@@ -298,6 +299,17 @@
         <input type="text" id="cust-address" class="cart-input" placeholder="Address / Pickup Note">
         <button class="btn" style="background:#25D366; color:white;" onclick="checkoutWhatsApp()">ORDER ON WHATSAPP</button>
         <button class="btn" style="background:#222; color:white; margin-top:10px;" onclick="toggleCart()">CLOSE</button>
+    </div>
+
+    <div id="receipt-capture-canvas" style="position: absolute; left: -9999px; top: -9999px; width: 400px; background: #111111; color: #ffffff; padding: 25px; border: 2px solid #d4af37; font-family: 'Georgia', serif;">
+        <div style="text-align: center; border-bottom: 1px dashed #d4af37; padding-bottom: 15px; margin-bottom: 15px;">
+            <h2 style="font-size: 22px; color: #d4af37; letter-spacing: 2px; text-transform: uppercase;">ARISA PERFUME</h2>
+            <p style="font-size: 11px; color: #aaa; margin-top: 3px;">Official Order Invoice</p>
+        </div>
+        <div id="canvas-receipt-details"></div>
+        <div style="text-align: center; margin-top: 25px; border-top: 1px solid #222; padding-top: 10px; font-size: 10px; color: #666;">
+            &copy; 2026 ARISA PERFUME STORE. All Rights Reserved.
+        </div>
     </div>
 
     <div id="receipt-modal" class="receipt-overlay">
@@ -612,85 +624,123 @@
             const text = document.getElementById('user-suggestion').value;
             if(!text) return;
             db.ref('suggestions').push(text);
-            window.open(`https://wa.me/${myWhatsAppNumber}?text=Suggestion: ${encodeURIComponent(text)}`);
             document.getElementById('user-suggestion').value = '';
-        };
-
-        window.closeReceipt = () => {
-            document.getElementById('receipt-modal').style.display = 'none';
-            showHome();
+            alert("Suggestion sent safely to staff!");
         };
 
         window.checkoutWhatsApp = () => {
-            const name = document.getElementById('cust-name').value;
-            const addr = document.getElementById('cust-address').value;
-            const payMethod = document.getElementById('payment-method').value;
+            const name = document.getElementById('cust-name').value.trim();
+            const address = document.getElementById('cust-address').value.trim();
             const serviceType = document.getElementById('service-type').value;
-            if(!name || !addr) return alert("Please enter your name and address.");
-            const total = document.getElementById('cart-grand-total').innerText;
+            const paymentMethod = document.getElementById('payment-method').value;
+
+            if (!name || !address) {
+                alert("Please fill in your Full Name and Address before checking out.");
+                return;
+            }
+            if (cart.length === 0) {
+                alert("Your cart is empty!");
+                return;
+            }
+
             const subtotal = document.getElementById('cart-subtotal').innerText;
             const discount = document.getElementById('cart-discount').innerText;
-            const itemMsg = cart.map(i => `${i.name}${i.color ? ` (${i.color})` : ''}`).join(', ');
-            
-            const msg = `*NEW ARISA ORDER*\nCustomer: ${name}\nService: ${serviceType}\nAddress: ${addr}\nPayment: ${payMethod}\nItems: ${itemMsg}\nTotal: ${total} NLE`;
-            
-            const receiptItemsHTML = cart.map(i => `
-                <div class="receipt-row">
-                    <span>• ${i.name} ${i.color ? `(${i.color})` : ''}</span>
-                    <span>${i.price} NLE</span>
-                </div>
-            `).join('');
+            const grandTotal = document.getElementById('cart-grand-total').innerText;
+            const orderId = "ARS-" + Date.now().toString().slice(-6);
 
-            document.getElementById('receipt-details').innerHTML = `
-                <div style="margin-bottom:15px; font-size:12px; border-bottom:1px solid var(--border-color); padding-bottom:10px;">
-                    <p><strong>Customer:</strong> ${name}</p>
-                    <p><strong>Service:</strong> ${serviceType}</p>
-                    <p><strong>Address:</strong> ${addr}</p>
-                    <p><strong>Payment:</strong> ${payMethod}</p>
-                </div>
-                <div style="margin-bottom:15px;">
-                    <p style="font-weight:bold; font-size:11px; text-transform:uppercase; color:var(--accent-color); margin-bottom:5px;">Order Details</p>
-                    ${receiptItemsHTML}
-                </div>
-                <div style="border-top:1px dashed var(--accent-color); padding-top:10px; font-size:13px;">
-                    <div class="receipt-row"><span>Subtotal:</span><span>${subtotal} NLE</span></div>
-                    ${parseFloat(discount) > 0 ? `<div class="receipt-row" style="color:var(--accent-color);"><span>Discount:</span><span>-${discount} NLE</span></div>` : ''}
-                    <div class="receipt-row" style="font-size:16px; font-weight:bold; margin-top:5px; color:var(--accent-color);"><span>Total Amount:</span><span>${total} NLE</span></div>
-                </div>
+            // Construct clean HTML layout inside the popups
+            let receiptHTML = `
+                <div class="receipt-row"><strong>Order ID:</strong> <span>#${orderId}</span></div>
+                <div class="receipt-row"><strong>Customer:</strong> <span>${name}</span></div>
+                <div class="receipt-row"><strong>Address:</strong> <span>${address}</span></div>
+                <div class="receipt-row"><strong>Service:</strong> <span>${serviceType}</span></div>
+                <div class="receipt-row"><strong>Payment:</strong> <span>${paymentMethod}</span></div>
+                <hr style="border:0; border-top:1px dashed var(--accent-color); margin:10px 0;">
+                <h4 style="font-size:12px; margin-bottom:5px; color:var(--accent-color);">ITEMS ORDERED:</h4>
             `;
 
-            // Display invoice container frame block
-            document.getElementById('receipt-modal').style.display = 'flex';
-            toggleCart();
+            let canvasHTML = `
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px;"><strong>Order ID:</strong> <span>#${orderId}</span></div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px;"><strong>Customer:</strong> <span>${name}</span></div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px;"><strong>Address:</strong> <span>${address}</span></div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px;"><strong>Service:</strong> <span>${serviceType}</span></div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px;"><strong>Payment:</strong> <span>${paymentMethod}</span></div>
+                <hr style="border:0; border-top:1px dashed #d4af37; margin:10px 0;">
+                <h4 style="font-size:12px; margin-bottom:5px; color:#d4af37;">ITEMS ORDERED:</h4>
+            `;
 
-            // GENERATE AND AUTO-DOWNLOAD PDF INVOICE
-            const invoiceTarget = document.getElementById('pdf-invoice-area');
-            const hideBtn = document.getElementById('hide-pdf-btn');
-            
-            // Hide the UI button visually from processing script scope
-            hideBtn.style.display = 'none';
-
-            const pdfOptions = {
-                margin: 10,
-                filename: `ARISA_INVOICE_${Date.now()}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, backgroundColor: '#111111' },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            html2pdf().set(pdfOptions).from(invoiceTarget).save().then(() => {
-                // Restore UI visibility once execution finishes safely
-                hideBtn.style.display = 'block';
-                // Fire off secure API window redirection directly to WhatsApp portal
-                window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`);
-                // Flush memory buffers 
-                cart = [];
-                updateCartUI();
-                document.getElementById('floating-cart-btn').style.display = 'none';
-            }).catch(err => {
-                hideBtn.style.display = 'block';
-                console.error("PDF Processing Exception: ", err);
+            cart.forEach(item => {
+                const rowText = `<div class="receipt-row"><span>• ${item.name} ${item.color ? `(${item.color})` : ''}</span> <span>${item.price} NLE</span></div>`;
+                const canvasRowText = `<div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px;"><span>• ${item.name} ${item.color ? `(${item.color})` : ''}</span> <span>${item.price} NLE</span></div>`;
+                receiptHTML += rowText;
+                canvasHTML += canvasRowText;
             });
+
+            const closingTotals = `
+                <hr style="border:0; border-top:1px dashed var(--accent-color); margin:10px 0;">
+                <div class="receipt-row"><span>Subtotal:</span> <span>${subtotal} NLE</span></div>
+                ${parseFloat(discount) > 0 ? `<div class="receipt-row" style="color:var(--accent-color);"><span>Discount:</span> <span>-${discount} NLE</span></div>` : ''}
+                <div class="receipt-row" style="font-size:16px; font-weight:bold; margin-top:5px;"><span>Total:</span> <span>${grandTotal} NLE</span></div>
+            `;
+
+            const canvasClosingTotals = `
+                <hr style="border:0; border-top:1px dashed #d4af37; margin:10px 0;">
+                <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px;"><span>Subtotal:</span> <span>${subtotal} NLE</span></div>
+                ${parseFloat(discount) > 0 ? `<div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; color:#d4af37;"><span>Discount:</span> <span>-${discount} NLE</span></div>` : ''}
+                <div style="display: flex; justify-content: space-between; font-size: 16px; font-weight:bold; margin-top:5px;"><span>Total:</span> <span>${grandTotal} NLE</span></div>
+            `;
+
+            receiptHTML += closingTotals;
+            canvasHTML += canvasClosingTotals;
+
+            document.getElementById('receipt-details').innerHTML = receiptHTML;
+            document.getElementById('canvas-receipt-details').innerHTML = canvasHTML;
+
+            // Trigger Image Conversion via html2canvas securely
+            const captureArea = document.getElementById('receipt-capture-canvas');
+            
+            html2canvas(captureArea, { backgroundColor: '#111111', scale: 2 }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                
+                // Save base64 snapshot string to Firebase Realtime Database
+                const orderRef = db.ref('submitted_orders').push();
+                orderRef.set({
+                    orderId: orderId,
+                    customer: name,
+                    total: grandTotal,
+                    timestamp: Date.now(),
+                    receiptImage: imgData
+                }, (error) => {
+                    if (!error) {
+                        // Generate a secure lookup web address link for verification
+                        const secureVerificationLink = `https://arisa-perfume-store.firebaseapp.com/?viewOrder=${orderRef.key}`;
+                        
+                        // Construct the WhatsApp message parameters
+                        const whatsappMsg = `✨ *ARISA PERFUME STORE ORDER* ✨\n\n` +
+                                            `👤 *Customer:* ${name}\n` +
+                                            `🧾 *Order ID:* #${orderId}\n` +
+                                            `💰 *Total Amount:* ${grandTotal} NLE\n\n` +
+                                            `🔒 *Official Receipt Image Link:* ${secureVerificationLink}\n\n` +
+                                            `_Please click send to finalize your order verification._`;
+
+                        // Launch chat transfer seamlessly
+                        window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
+                        
+                        // Display internal web invoice modal display
+                        document.getElementById('cart-sidebar').style.display = 'none';
+                        document.getElementById('receipt-modal').style.display = 'flex';
+                    } else {
+                        alert("Database processing failed. Please check your connectivity configuration.");
+                    }
+                });
+            });
+        };
+
+        window.closeReceipt = () => {
+            cart = [];
+            updateCartUI();
+            document.getElementById('floating-cart-btn').style.display = 'none';
+            document.getElementById('receipt-modal').style.display = 'none';
         };
     </script>
 </body>
