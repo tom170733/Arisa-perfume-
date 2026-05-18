@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ARISA PERFUME STORE | Luxury Scents</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         /* LUXURY THEME VARIABLES */
         :root {
@@ -254,13 +255,13 @@
     </div>
 
     <div id="receipt-modal" class="receipt-overlay">
-        <div class="receipt-box">
+        <div class="receipt-box" id="pdf-invoice-area">
             <div class="receipt-header">
                 <h2 class="receipt-title">Order Received!</h2>
                 <p style="font-size: 12px; margin-top: 5px; color: #aaa;">Thank you for shopping with ARISA</p>
             </div>
             <div id="receipt-details"></div>
-            <button class="btn" style="margin-top:20px;" onclick="closeReceipt()">CONTINUE SHOPPING</button>
+            <button class="btn" id="hide-pdf-btn" style="margin-top:20px;" onclick="closeReceipt()">CONTINUE SHOPPING</button>
         </div>
     </div>
 
@@ -392,7 +393,13 @@
             }
         };
 
+        // PREVENT SAME ITEM BEING ADDED AS EXTRA ROW IN CART ARRAY
         window.addToCart = (id) => {
+            const existingItem = cart.find(i => i.firebaseId === id);
+            if (existingItem) {
+                alert("This item is already added to your cart!");
+                return;
+            }
             const item = perfumes.find(p => p.firebaseId === id);
             cart.push({...item, cartId: Date.now() + Math.random()}); 
             updateCartUI();
@@ -414,6 +421,12 @@
 
         window.moveToCart = (cartId) => {
             const item = savedItems.find(i => i.cartId === cartId);
+            // Verify item doesn't exist in cart prior to transfer
+            const duplicateCheck = cart.find(i => i.firebaseId === item.firebaseId);
+            if(duplicateCheck) {
+                alert("This item is already in your active cart panel.");
+                return;
+            }
             cart.push(item);
             savedItems = savedItems.filter(i => i.cartId !== cartId);
             updateCartUI();
@@ -548,6 +561,11 @@
             document.getElementById('user-suggestion').value = '';
         };
 
+        window.closeReceipt = () => {
+            document.getElementById('receipt-modal').style.display = 'none';
+            showHome();
+        };
+
         window.checkoutWhatsApp = () => {
             const name = document.getElementById('cust-name').value;
             const addr = document.getElementById('cust-address').value;
@@ -561,7 +579,6 @@
             
             const msg = `*NEW ARISA ORDER*\nCustomer: ${name}\nService: ${serviceType}\nAddress: ${addr}\nPayment: ${payMethod}\nItems: ${itemMsg}\nTotal: ${total} NLE`;
             
-            // Generate content layout for the on-screen receipt box
             const receiptItemsHTML = cart.map(i => `
                 <div class="receipt-row">
                     <span>• ${i.name} ${i.color ? `(${i.color})` : ''}</span>
@@ -587,26 +604,43 @@
                 </div>
             `;
 
-            // Open up WhatsApp window 
-            window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`);
-            
-            // Clean side cart array and switch off inputs, trigger digital receipt modal layout
-            cart = [];
-            updateCartUI();
-            toggleCart();
-            document.getElementById('floating-cart-btn').style.display = 'none';
-            document.getElementById('cust-name').value = '';
-            document.getElementById('cust-address').value = '';
-            
-            // Bring receipt onto screen view
+            // Display Receipt Modal Overlay
             document.getElementById('receipt-modal').style.display = 'flex';
+
+            // GENERATE SECURE PDF COMPONENT
+            const targetElement = document.getElementById('pdf-invoice-area');
+            const actionButton = document.getElementById('hide-pdf-btn');
+            
+            // Temporarily conceal button to keep PDF document un-compromised
+            actionButton.style.display = 'none';
+
+            const configurationOptions = {
+                margin:       10,
+                filename:     'Arisa_Order_Receipt_' + Date.now() + '.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, backgroundColor: "#111111" },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Download PDF Invoice and execute redirection link configuration setup
+            html2pdf().set(configurationOptions).from(targetElement).save().then(() => {
+                actionButton.style.display = 'block'; // Restore visibility control button
+                window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`);
+                
+                // Clear active arrays variables
+                cart = [];
+                updateCartUI();
+                toggleCart();
+                document.getElementById('floating-cart-btn').style.display = 'none';
+                document.getElementById('cust-name').value = '';
+                document.getElementById('cust-address').value = '';
+            });
         };
 
-        window.closeReceipt = () => {
-            document.getElementById('receipt-modal').style.display = 'none';
+        // ENFORCE LOAD ON HOME VIEW INITIALIZATION
+        window.onload = () => {
+            showHome();
         };
-
-        if(sessionStorage.getItem('isArisaAdmin') === 'true') document.getElementById('admin-panel').style.display = 'block';
     </script>
 </body>
 </html>
