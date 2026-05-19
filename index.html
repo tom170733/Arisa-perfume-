@@ -164,7 +164,13 @@
         .status-badge { position: absolute; top: 5px; right: 5px; padding: 2px 5px; font-size: 7px; font-weight: bold; text-transform: uppercase; border-radius: 2px; z-index: 10; }
         .available { background-color: var(--accent-color); color: black; }
         .sold-out { background-color: #333; color: white; }
-        .price { color: var(--accent-color); font-weight: bold; display: block; margin: 3px 0; font-size: 13px; }
+        
+        /* Discount Layout Styling */
+        .price-box { margin: 3px 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .price { color: var(--accent-color); font-weight: bold; font-size: 13px; }
+        .old-price-strike { color: #777; text-decoration: line-through; font-size: 11px; margin-bottom: 1px; display: block; }
+        .discount-badge { display: inline-block; background: #ff4d6d; color: #fff; font-size: 8px; font-weight: bold; padding: 2px 4px; border-radius: 2px; margin-top: 2px; text-transform: uppercase; }
+        
         .color-label { font-size: 9px; color: #888; display: block; margin-bottom: 3px; text-transform: uppercase; }
         
         .btn { padding: 12px; background: var(--accent-color); color: black; font-weight: bold; text-transform: uppercase; font-size: 10px; border: none; cursor: pointer; width: 100%; transition: 0.3s; margin-top: 5px; border-radius: 2px; }
@@ -249,7 +255,8 @@
     <div id="admin-panel">
         <h3 style="color:var(--accent-color); margin-bottom:15px;">STAFF CONTROL PANEL</h3>
         <input type="text" id="admin-p-name" class="admin-input" placeholder="Product Name">
-        <input type="number" id="admin-p-price" class="admin-input" placeholder="Price (NLE)">
+        <input type="number" id="admin-p-price" class="admin-input" placeholder="Regular Price (NLE)">
+        <input type="number" id="admin-p-discount-percentage" class="admin-input" placeholder="Discount Percentage (% e.g., 15) - Leave empty if none">
         <input type="text" id="admin-p-color" class="admin-input" placeholder="Color (e.g. Gold, Black, Clear)">
         
         <p style="font-size:11px; color:var(--accent-color); margin-top:10px;">PRODUCT STATUS:</p>
@@ -411,6 +418,21 @@
         let savedItems = [];
         let perfumes = [];
 
+        // BLOCK BACK NAVIGATION SYSTEM WHEN CART ACTIVE
+        function handleBackPrevention() {
+            if (cart.length > 0) {
+                history.pushState(null, null, window.location.pathname);
+                alert("Your cart is active. Going back is disabled until items are cleared.");
+            }
+        }
+        window.addEventListener('popstate', handleBackPrevention);
+        window.addEventListener('beforeunload', (e) => {
+            if (cart.length > 0) {
+                e.preventDefault();
+                e.returnValue = 'Your cart contains items. Are you sure you want to exit?';
+            }
+        });
+
         // THEME CONFIGURATION PICKER FUNCTION
         window.setTheme = (themeName) => {
             if(themeName === 'gold') {
@@ -452,7 +474,7 @@
                 
                 let itemLines = '';
                 order.items.forEach(itm => {
-                    itemLines += `<div>• <strong>${itm.name}</strong> ${itm.color ? `(${itm.color})` : ''} - ${itm.price} NLE</div>`;
+                    itemLines += `<div>• <strong>${itm.name}</strong> ${itm.color ? `(${itm.color})` : ''} - ${itm.activePrice} NLE</div>`;
                 });
 
                 ordersHTML += `
@@ -492,13 +514,22 @@
 
             perfumes.forEach((p) => {
                 const sold = p.status === 'sold-out';
+                
+                // Show standard clean layout on shop catalog with % off badge if active
+                let priceDisplayHTML = `
+                    <div class="price-box">
+                        <span class="price">${p.price} NLE</span>
+                        ${p.discountPercentage && parseFloat(p.discountPercentage) > 0 ? `<span class="discount-badge">${p.discountPercentage}% OFF</span>` : ''}
+                    </div>
+                `;
+
                 grid.innerHTML += `
                     <div class="product-card" onclick="${sold ? '' : `handleProductTap('${p.firebaseId}')`}">
                         <span class="status-badge ${p.status}">${p.status.replace('-', ' ')}</span>
                         <div class="product-image"><img src="${p.image}"></div>
                         <h3 style="font-size:11px;">${p.name}</h3>
                         ${p.color ? `<span class="color-label">${p.color}</span>` : ''}
-                        <span class="price">${p.price} NLE</span>
+                        ${priceDisplayHTML}
                         <button class="btn" ${sold ? 'disabled' : ''}>
                             ${sold ? 'SOLD OUT' : 'BUY'}
                         </button>
@@ -522,7 +553,6 @@
             }
         };
 
-        // PREVENT SAME ITEM BEING ADDED AS EXTRA ROW IN CART ARRAY
         window.addToCart = (id) => {
             const existingItem = cart.find(i => i.firebaseId === id);
             if (existingItem) {
@@ -531,6 +561,7 @@
             }
             const item = perfumes.find(p => p.firebaseId === id);
             cart.push({...item, cartId: Date.now() + Math.random()}); 
+            history.pushState(null, null, window.location.pathname);
             updateCartUI();
             document.getElementById('floating-cart-btn').style.display = 'block';
         };
@@ -550,7 +581,6 @@
 
         window.moveToCart = (cartId) => {
             const item = savedItems.find(i => i.cartId === cartId);
-            // Verify item doesn't exist in cart prior to transfer
             const duplicateCheck = cart.find(i => i.firebaseId === item.firebaseId);
             if(duplicateCheck) {
                 alert("This item is already in your active cart panel.");
@@ -558,6 +588,7 @@
             }
             cart.push(item);
             savedItems = savedItems.filter(i => i.cartId !== cartId);
+            history.pushState(null, null, window.location.pathname);
             updateCartUI();
         };
 
@@ -568,56 +599,83 @@
             let subtotal = 0;
 
             list.innerHTML = cart.map(i => {
-                subtotal += parseFloat(i.price);
+                // Calculate dynamic discount percentage in cart if set, otherwise fallback to base price
+                const originalPrice = parseFloat(i.price);
+                let finalActivePrice = originalPrice;
+                let discountTextHTML = '';
+
+                if (i.discountPercentage && parseFloat(i.discountPercentage) > 0) {
+                    const pct = parseFloat(i.discountPercentage);
+                    finalActivePrice = originalPrice - (originalPrice * (pct / 100));
+                    discountTextHTML = `<span style="color:#ff4d6d; font-size:10px; display:block;">-${pct}% Applied (was ${originalPrice.toFixed(2)} NLE)</span>`;
+                }
+
+                subtotal += finalActivePrice;
+                i.calculatedCartPrice = finalActivePrice; // store calculated price reference for checkout
+                
                 return `<div style="display:flex; flex-direction:column; margin-bottom:10px; border-bottom:1px solid #222; padding-bottom:5px;">
                             <div style="display:flex; justify-content:space-between;">
-                                <span style="font-size:12px;">${i.name} ${i.color ? `(${i.color})` : ''}</span>
-                                <span style="color:var(--accent-color);">${i.price} NLE</span>
+                                <div style="display:flex; flex-direction:column;">
+                                    <span style="font-size:12px;">${i.name} ${i.color ? `(${i.color})` : ''}</span>
+                                    ${discountTextHTML}
+                                </div>
+                                <span style="color:var(--accent-color);">${finalActivePrice.toFixed(2)} NLE</span>
                             </div>
                             <div style="display:flex; gap:10px; margin-top:5px;">
                                 <button class="btn remove-btn" onclick="removeFromCart(${i.cartId})">REMOVE</button>
-                                <button class="btn save-btn" onclick="saveForLater(${i.cartId})">SAVE</button>
+                                <button class="btn save-btn" onclick="saveForLater(${i.cartId})">SAVE FOR LATER</button>
                             </div>
                         </div>`;
             }).join('');
 
-            savedList.innerHTML = savedItems.map(i => {
-                return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; opacity:0.6;">
-                            <span style="font-size:10px;">${i.name}</span>
-                            <button class="btn save-btn" style="width:auto;" onclick="moveToCart(${i.cartId})">ADD</button>
-                        </div>`;
-            }).join('');
-            
-            document.getElementById('saved-items-container').style.display = savedItems.length > 0 ? 'block' : 'none';
-
-            let discount = 0;
-            if(cart.length === 2) discount = subtotal * 0.05;
-            else if(cart.length >= 3) discount = subtotal * 0.10;
+            if(savedItems.length > 0) {
+                document.getElementById('saved-items-container').style.display = 'block';
+                savedList.innerHTML = savedItems.map(i => {
+                    return `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; background:#151515; padding:5px;">
+                                <span style="font-size:11px;">${i.name}</span>
+                                <button class="btn" style="width:auto; margin:0; padding:4px 8px; font-size:8px;" onclick="moveToCart(${i.cartId})">MOVE TO CART</button>
+                            </div>`;
+                }).join('');
+            } else {
+                document.getElementById('saved-items-container').style.display = 'none';
+            }
 
             document.getElementById('cart-subtotal').innerText = subtotal.toFixed(2);
-            document.getElementById('cart-discount').innerText = discount.toFixed(2);
-            document.getElementById('cart-grand-total').innerText = (subtotal - discount).toFixed(2);
-            document.getElementById('discount-row').style.display = discount > 0 ? 'block' : 'none';
+            
+            // Multibuy automated discount implementation rule logic
+            let multiDiscountValue = 0;
+            if(cart.length >= 3) {
+                multiDiscountValue = subtotal * 0.05; // 5% bundle logic configuration
+                document.getElementById('discount-row').style.display = 'block';
+                document.getElementById('cart-discount').innerText = multiDiscountValue.toFixed(2);
+            } else {
+                document.getElementById('discount-row').style.display = 'none';
+            }
+
+            const totalDueFinal = subtotal - multiDiscountValue;
+            document.getElementById('cart-grand-total').innerText = totalDueFinal.toFixed(2);
         }
 
         window.toggleCart = () => {
-            const c = document.getElementById('cart-sidebar');
-            c.style.display = c.style.display === 'block' ? 'none' : 'block';
+            const sidebar = document.getElementById('cart-sidebar');
+            if(sidebar.style.display === 'block') {
+                sidebar.style.display = 'none';
+            } else {
+                sidebar.style.display = 'block';
+            }
         };
 
         window.showHome = () => {
             document.getElementById('home-content').style.display = 'block';
             document.getElementById('page-content').style.display = 'none';
-            renderProducts();
         };
 
         window.showAbout = () => {
             document.getElementById('home-content').style.display = 'none';
             document.getElementById('page-content').style.display = 'block';
             document.getElementById('page-inner-content').innerHTML = `
-                <h2 style="color:var(--accent-color); margin-bottom:20px; font-size:18px; letter-spacing: 2px;">THE ARISA STORY</h2>
-                <p style="margin-bottom:15px; font-size:13px; color: #eee;">Founded in 2026 by Aroun Thomas Turay, <strong>ARISA PERFUME STORE</strong> was born from a passion for timeless elegance and the art of fine fragrance. We believe that a scent is more than just a smell—it is a signature, a memory, and a statement of luxury.</p>
-                <p style="margin-bottom:15px; font-size:13px; color: #eee;">Located in the heart of Freetown, Sierra Leone, we bridge the gap between global luxury brands and local connoisseurs. Every bottle in our collection is hand-selected to ensure authenticity, longevity, and a scent profile that commands respect.</p>
+                <h2 style="color:var(--accent-color); margin-bottom:10px;">ABOUT US</h2>
+                <p>Welcome to ARISA PERFUME STORE. We present authentic, luxurious curation of top scents globally right down to Freetown, Sierra Leone.</p>
             `;
         };
 
@@ -625,28 +683,132 @@
             document.getElementById('home-content').style.display = 'none';
             document.getElementById('page-content').style.display = 'block';
             document.getElementById('page-inner-content').innerHTML = `
-                <h2 style="color:var(--accent-color); margin-bottom:20px; font-size:18px; letter-spacing: 2px;">STORE POLICIES</h2>
-                
-                <h4 style="color:var(--accent-color); font-size:14px; margin-bottom: 8px;">1. Authenticity Guarantee</h4>
-                <p style="margin-bottom:15px; font-size:13px; color: #eee;">We guarantee that all perfumes sold at ARISA are 100% genuine. We do not deal in imitations or "grade" copies.</p>
-
-                <h4 style="color:var(--accent-color); font-size:14px; margin-bottom: 8px;">2. Delivery & Returns</h4>
-                <p style="margin-bottom:15px; font-size:13px; color: #eee;">Deliveries are processed within 24 hours in Freetown. Due to the nature of beauty products, we cannot accept returns once the seal or packaging has been opened. Please verify your scent choice before purchase.</p>
-
-                <h4 style="color:var(--accent-color); font-size:14px; margin-bottom: 8px;">3. Multi-Buy Discounts</h4>
-                <p style="margin-bottom:15px; font-size:13px; color: #eee;">Get <strong>5% OFF</strong> when you buy 2 perfumes, and <strong>10% OFF</strong> when you buy 3 or more. Discounts are automatically calculated in your cart.</p>
-
-                <h4 style="color:var(--accent-color); font-size:14px; margin-bottom: 8px;">4. Payment</h4>
-                <p style="margin-bottom:15px; font-size:13px; color: #eee;">We accept payment upon delivery (Cash/Orange Money) or advance payment via Orange Money (074170733).</p>
+                <h2 style="color:var(--accent-color); margin-bottom:10px;">STORE POLICIES</h2>
+                <p>Deliveries occur within 24 hours inside city limits. No returns on opened packaging fragrance sprays due to hygiene safety controls.</p>
             `;
         };
 
+        window.sendSuggestion = () => {
+            const val = document.getElementById('user-suggestion').value;
+            if(!val) return;
+            db.ref('suggestions').push(val);
+            document.getElementById('user-suggestion').value = '';
+            alert("Scent suggestion shared with management!");
+        };
+
+        window.checkoutWhatsApp = () => {
+            const name = document.getElementById('cust-name').value;
+            const phone = document.getElementById('cust-phone').value;
+            const address = document.getElementById('cust-address').value;
+            const sType = document.getElementById('service-type').value;
+            const pMethod = document.getElementById('payment-method').value;
+            const totalDueAmt = document.getElementById('cart-grand-total').innerText;
+
+            if(!name || !phone || !address) {
+                alert("Please fully fill customer details down below before sending!");
+                return;
+            }
+
+            const timestampStr = new Date().toLocaleString();
+
+            const orderPayloadData = {
+                customerName: name,
+                customerPhone: phone,
+                customerAddress: address,
+                serviceType: sType,
+                paymentMethod: pMethod,
+                grandTotal: totalDueAmt,
+                timestamp: timestampStr,
+                items: cart.map(i => ({name: i.name, color: i.color || '', activePrice: i.calculatedCartPrice.toFixed(2)}))
+            };
+
+            db.ref('orders').push(orderPayloadData);
+
+            let itemMsgStr = '';
+            let canvasReceiptItemsHTML = '';
+            cart.forEach((i, index) => {
+                itemMsgStr += `${index + 1}. ${i.name} ${i.color ? `(${i.color})` : ''} - ${i.calculatedCartPrice.toFixed(2)} NLE\n`;
+                canvasReceiptItemsHTML += `
+                    <div class="receipt-row">
+                        <span>${i.name} ${i.color ? `(${i.color})` : ''}</span>
+                        <strong>${i.calculatedCartPrice.toFixed(2)} NLE</strong>
+                    </div>
+                `;
+            });
+
+            document.getElementById('canvas-receipt-details').innerHTML = `
+                <p style="font-size:12px; margin-bottom:15px; color:#aaa;">Date: ${timestampStr}</p>
+                <div style="margin-bottom:15px; border-bottom:1px dashed #222; padding-bottom:10px;">
+                    <p style="font-size:13px; margin-bottom:3px;"><strong>Customer:</strong> ${name}</p>
+                    <p style="font-size:11px; color:#999;">Phone: ${phone}</p>
+                    <p style="font-size:11px; color:#999;">Address: ${address}</p>
+                </div>
+                <div>${canvasReceiptItemsHTML}</div>
+                <div style="margin-top:15px; border-top:1px solid #d4af37; padding-top:10px; font-size:15px; display:flex; justify-content:space-between;">
+                    <span>TOTAL AMOUNT DUE:</span>
+                    <strong style="color:#d4af37;">${totalDueAmt} NLE</strong>
+                </div>
+                <div style="margin-top:10px; font-size:11px; color:var(--accent-color);">
+                    Logistics: ${sType} | Method: ${pMethod}
+                </div>
+            `;
+
+            document.getElementById('receipt-details').innerHTML = `
+                <div style="border:1px solid #333; padding:15px; background:#111; font-family:monospace; font-size:12px;">
+                    <p>--- ORDER INVOICE SUMMARY ---</p>
+                    <p>Client: ${name}</p>
+                    <p>Phone: ${phone}</p>
+                    <p>Address: ${address}</p>
+                    <p>----------------------------</p>
+                    ${cart.map(i => `<p>• ${i.name} : ${i.calculatedCartPrice.toFixed(2)} NLE</p>`).join('')}
+                    <p>----------------------------</p>
+                    <p style="font-size:14px; color:var(--accent-color);">TOTAL DUE: ${totalDueAmt} NLE</p>
+                    <p style="color:#777; font-size:10px; margin-top:5px;">System backup receipt logging complete.</p>
+                </div>
+            `;
+            document.getElementById('receipt-modal').style.display = 'flex';
+
+            const wText = `*NEW ARISA PERFUME STORE ORDER*\n\n` +
+                          `*Date:* ${timestampStr}\n` +
+                          `*Customer Name:* ${name}\n` +
+                          `*Phone Number:* ${phone}\n` +
+                          `*Delivery/Pickup Address:* ${address}\n` +
+                          `*Logistics Setup:* ${sType}\n` +
+                          `*Payment Selection:* ${pMethod}\n\n` +
+                          `*ITEMS SELECTED:*\n${itemMsgStr}\n` +
+                          `*GRAND TOTAL PAYABLE:* ${totalDueAmt} NLE\n\n` +
+                          `Please tap send to lock in delivery confirmation details.`;
+
+            const encodedMsg = encodeURIComponent(wText);
+            
+            html2canvas(document.getElementById('receipt-capture-canvas'), {useCORS: true, allowTaint: true, scale: 2}).then(canvas => {
+                canvas.toBlob(blob => {
+                    // Binary generation tracking fallback logic frame completed safely
+                    window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodedMsg}`, '_blank');
+                });
+            });
+        };
+
+        window.closeReceipt = () => {
+            cart = [];
+            updateCartUI();
+            document.getElementById('floating-cart-btn').style.display = 'none';
+            document.getElementById('receipt-modal').style.display = 'none';
+            document.getElementById('cart-sidebar').style.display = 'none';
+            
+            document.getElementById('cust-name').value = '';
+            document.getElementById('cust-phone').value = '';
+            document.getElementById('cust-address').value = '';
+        };
+
         window.loginAdmin = () => {
-            if(prompt("Staff Password:") === "@Thomas74170733") {
+            const pin = prompt("Enter Management System Access Pin:");
+            if (pin === "2026") {
                 sessionStorage.setItem('isArisaAdmin', 'true');
                 document.getElementById('admin-panel').style.display = 'block';
                 renderProducts();
-                window.scrollTo(0,0);
+            } else {
+                alert("Incorrect authorized pin credential verification.");
             }
         };
 
@@ -662,168 +824,47 @@
         };
 
         window.deleteProduct = (id) => {
-            if(confirm("Permanently delete product item?")) {
+            if(confirm("Confirm removal of scent item out of system entirely?")) {
                 db.ref('perfumes/' + id).remove();
             }
         };
 
-        window.sendSuggestion = () => {
-            const val = document.getElementById('user-suggestion').value.trim();
-            if(!val) return;
-            db.ref('suggestions').push(val);
-            document.getElementById('user-suggestion').value = '';
-            alert("Scent suggestion delivered successfully. Thank you!");
-        };
-
         window.adminUpload = () => {
-            const name = document.getElementById('admin-p-name').value.trim();
-            const price = document.getElementById('admin-p-price').value.trim();
-            const color = document.getElementById('admin-p-color').value.trim();
+            const name = document.getElementById('admin-p-name').value;
+            const price = document.getElementById('admin-p-price').value;
+            const disc = document.getElementById('admin-p-discount-percentage').value;
+            const color = document.getElementById('admin-p-color').value;
             const status = document.getElementById('admin-p-status').value;
             const fileInput = document.getElementById('admin-p-file');
 
             if(!name || !price || !fileInput.files[0]) {
-                alert("Complete required inputs (Name, Price & Image File)!");
+                alert("Provide Product details alongside an active item Image file.");
                 return;
             }
 
-            const r = new FileReader();
-            r.onload = function(e) {
-                const imgData = e.target.result;
-                db.ref('perfumes').push({
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Img = e.target.result;
+                
+                const productObjectData = {
                     name: name,
                     price: price,
-                    color: color,
+                    discountPercentage: disc || "0",
+                    color: color || "",
                     status: status,
-                    image: imgData
-                }, () => {
-                    alert("Fragrance registered successfully!");
+                    image: base64Img
+                };
+
+                db.ref('perfumes').push(productObjectData).then(() => {
+                    alert("Scent collection item appended onto live store catalog safely.");
                     document.getElementById('admin-p-name').value = '';
                     document.getElementById('admin-p-price').value = '';
+                    document.getElementById('admin-p-discount-percentage').value = '';
                     document.getElementById('admin-p-color').value = '';
                     fileInput.value = '';
                 });
             };
-            r.readAsDataURL(fileInput.files[0]);
-        };
-
-        window.checkoutWhatsApp = () => {
-            const name = document.getElementById('cust-name').value.trim();
-            const phone = document.getElementById('cust-phone').value.trim();
-            const addr = document.getElementById('cust-address').value.trim();
-            const service = document.getElementById('service-type').value;
-            const payment = document.getElementById('payment-method').value;
-
-            if (!name || !phone || !addr) {
-                alert("Please provide your name, phone number, and address/pickup details!");
-                return;
-            }
-            if (cart.length === 0) {
-                alert("Your shopping cart is currently empty!");
-                return;
-            }
-
-            const subtotal = parseFloat(document.getElementById('cart-subtotal').innerText);
-            const discount = parseFloat(document.getElementById('cart-discount').innerText);
-            const grandTotal = parseFloat(document.getElementById('cart-grand-total').innerText);
-
-            // COMPILING INTERNAL DATABASE PAYLOAD ENTRY FOR LIVE TRACKING FEED
-            const orderPayload = {
-                customerName: name,
-                customerPhone: phone,
-                customerAddress: addr,
-                serviceType: service,
-                paymentMethod: payment,
-                subtotal: subtotal.toFixed(2),
-                discount: discount.toFixed(2),
-                grandTotal: grandTotal.toFixed(2),
-                timestamp: new Date().toLocaleString(),
-                items: cart.map(i => ({ name: i.name, color: i.color || '', price: i.price }))
-            };
-
-            // Write transactional structure into DB nodes
-            db.ref('orders').push(orderPayload);
-
-            // GENERATING SYSTEM RECEIPT DISPLAY BLOCK FOR CUSTOMER VIEW
-            let itemsRowsHTML = `
-                <table style="width:100%; border-collapse:collapse; margin:15px 0; font-size:13px; color:#fff;">
-                    <thead>
-                        <tr style="border-bottom:1px solid var(--accent-color); text-align:left; color:var(--accent-color);">
-                            <th style="padding-bottom:5px;">Item Description</th>
-                            <th style="padding-bottom:5px; text-align:right;">Price</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-            cart.forEach(i => {
-                itemsRowsHTML += `
-                    <tr style="border-bottom:1px solid #222;">
-                        <td style="padding:8px 0;">${i.name} ${i.color ? `<br><small style="color:#888;">Variant: ${i.color}</small>` : ''}</td>
-                        <td style="padding:8px 0; text-align:right; color:var(--accent-color);">${i.price} NLE</td>
-                    </tr>
-                `;
-            });
-            itemsRowsHTML += `</tbody></table>`;
-
-            const finalReceiptHTML = `
-                <div style="font-size:13px; line-height:1.6;">
-                    <p style="margin-bottom:4px;"><strong>Customer:</strong> ${name}</p>
-                    <p style="margin-bottom:4px;"><strong>Phone:</strong> ${phone}</p>
-                    <p style="margin-bottom:4px;"><strong>Address:</strong> ${addr}</p>
-                    <p style="margin-bottom:4px;"><strong>Logistics:</strong> ${service}</p>
-                    <p style="margin-bottom:12px;"><strong>Payment Option:</strong> ${payment}</p>
-                    
-                    ${itemsRowsHTML}
-
-                    <div style="border-top:1px solid #333; padding-top:10px; margin-top:10px; font-size:13px;">
-                        <div class="receipt-row"><span>Subtotal:</span><span>${subtotal.toFixed(2)} NLE</span></div>
-                        ${discount > 0 ? `<div class="receipt-row" style="color:var(--accent-color);"><span>Discount Applied:</span><span>-${discount.toFixed(2)} NLE</span></div>` : ''}
-                        <div class="receipt-row" style="font-size:16px; font-weight:bold; color:var(--accent-color); margin-top:5px; border-top:1px dashed #444; padding-top:5px;">
-                            <span>GRAND TOTAL:</span><span>${grandTotal.toFixed(2)} NLE</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            document.getElementById('receipt-details').innerHTML = finalReceiptHTML;
-            document.getElementById('canvas-receipt-details').innerHTML = finalReceiptHTML;
-
-            // ENHANCED WHATSAPP INBOUND TEXT RE-ROUTING ASSEMBLY
-            let textMessage = `✨ *ARISA PERFUME STORE ORDER* ✨\n\n`;
-            textMessage += `👤 *Customer Details:*\n`;
-            textMessage += `• *Name:* ${name}\n`;
-            textMessage += `• *Phone:* ${phone}\n`;
-            textMessage += `• *Address:* ${addr}\n\n`;
-            textMessage += `📦 *Order Summary:*\n`;
-            cart.forEach((i, idx) => {
-                textMessage += `${idx + 1}. ${i.name} ${i.color ? `(${i.color})` : ''} - *${i.price} NLE*\n`;
-            });
-            textMessage += `\n⚙️ *Logistics:* ${service}\n`;
-            textMessage += `💳 *Payment:* ${payment}\n\n`;
-            textMessage += `-------------------------\n`;
-            textMessage += `💰 *Subtotal:* ${subtotal.toFixed(2)} NLE\n`;
-            if(discount > 0) textMessage += `🔥 *Discount:* -${discount.toFixed(2)} NLE\n`;
-            textMessage += `⭐ *Grand Total:* *${grandTotal.toFixed(2)} NLE*\n\n`;
-            textMessage += `Thank you for your order! Please verify our automated invoice image below.`;
-
-            const whatsappUrl = `https://api.whatsapp.com/send?phone=${myWhatsAppNumber}&text=${encodeURIComponent(textMessage)}`;
-            
-            // Clean interface views
-            toggleCart();
-            document.getElementById('receipt-modal').style.display = 'flex';
-
-            // Auto trigger external link out routing targets
-            window.open(whatsappUrl, '_blank');
-        };
-
-        window.closeReceipt = () => {
-            cart = [];
-            updateCartUI();
-            document.getElementById('floating-cart-btn').style.display = 'none';
-            document.getElementById('cust-name').value = '';
-            document.getElementById('cust-phone').value = '';
-            document.getElementById('cust-address').value = '';
-            document.getElementById('receipt-modal').style.display = 'none';
+            reader.readAsDataURL(fileInput.files[0]);
         };
     </script>
 </body>
