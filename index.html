@@ -36,7 +36,6 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Georgia', serif; }
         
-        /* Mobile Fix: Prevent side-scrolling and ensure full-width fit */
         html, body { 
             background-color: var(--bg-color); 
             color: var(--text-color); 
@@ -47,33 +46,22 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        /* LUXURY PRELOADER SCREEN */
+        /* PRELOADER SCREEN */
         #preloader {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background-color: #000000;
             z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
             transition: opacity 0.5s ease, visibility 0.5s ease;
         }
         .loader-logo {
-            font-size: 28px;
-            font-weight: bold;
-            color: #d4af37;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
+            font-size: 28px; font-weight: bold; color: #d4af37; letter-spacing: 6px;
+            text-transform: uppercase; margin-bottom: 20px;
             animation: pulse-title 2s infinite ease-in-out;
         }
         .loader-spinner {
-            width: 40px;
-            height: 40px;
+            width: 40px; height: 40px;
             border: 2px solid rgba(212, 175, 55, 0.1);
             border-top: 2px solid #d4af37;
             border-radius: 50%;
@@ -88,74 +76,40 @@
             50% { opacity: 1; }
         }
 
-        /* Navigation - Adjusted for Mobile */
         nav { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 15px 4%; 
-            background: var(--surface-color); 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 15px 4%; background: var(--surface-color); 
             border-bottom: 2px solid var(--accent-color); 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000; 
+            position: sticky; top: 0; z-index: 1000; 
         }
         .logo { font-size: 18px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); cursor: pointer; }
-        .nav-links { display: flex; gap: 8px; list-style: none; }
-        .nav-links a { text-decoration: none; color: var(--text-color); font-size: 10px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
+        .nav-links { display: flex; gap: 15px; list-style: none; }
+        .nav-links a { text-decoration: none; color: var(--text-color); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
 
-        /* Theme Selector Container */
         .theme-container {
-            text-align: center;
-            padding: 10px;
-            background: var(--surface-color);
+            text-align: center; padding: 10px; background: var(--surface-color);
             border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
         }
-        .theme-label {
-            font-size: 11px;
-            color: var(--accent-color);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .theme-btn {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: 2px solid #fff;
-            cursor: pointer;
-            outline: none;
-        }
+        .theme-label { font-size: 11px; color: var(--accent-color); text-transform: uppercase; letter-spacing: 1px; }
+        .theme-btn { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #fff; cursor: pointer; outline: none; }
 
-        /* Top Text Branding */
         .branding-header { background: var(--bg-color); text-align: center; padding: 25px 0; border-bottom: 1px solid var(--border-color); }
-        .main-brand-title { font-size: 24px; font-weight: bold; color: var(--accent-color); letter-spacing: 4px; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .main-brand-title { font-size: 24px; font-weight: bold; color: var(--accent-color); letter-spacing: 4px; text-transform: uppercase; }
 
-        /* Admin Panel Styling */
         #admin-panel { display: none; background: var(--surface-color); padding: 20px 5%; border-bottom: 2px solid var(--accent-color); text-align: center; }
-        .admin-input { padding: 12px; margin: 5px 0; border: 1px solid var(--accent-color); background: var(--bg-color); color: var(--text-color); width: 100%; max-width: 100%; }
+        .admin-input { padding: 12px; margin: 5px 0; border: 1px solid var(--accent-color); background: var(--bg-color); color: var(--text-color); width: 100%; }
 
-        /* Info Boxes Section - Mobile Optimized Grid */
         .info-section { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; padding: 15px 4%; background: #050505; }
-        .info-section { border: 1px solid var(--accent-color); padding: 10px 5px; text-align: center; background: var(--surface-color); }
+        .info-box { border: 1px solid var(--accent-color); padding: 10px 5px; text-align: center; background: var(--surface-color); }
         .info-box h4 { color: var(--accent-color); text-transform: uppercase; margin-bottom: 3px; letter-spacing: 1px; font-size: 9px; }
         .info-box p { font-size: 8px; color: #ccc; }
 
-        /* Hero & Logo Area */
         .hero { height: 20vh; background: var(--bg-color); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border-top: 3px solid var(--accent-color); margin-top: 15px; }
         .hero h2 { font-size: 18px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent-color); }
 
         .container { padding: 15px 4%; background: var(--bg-color); }
-        
-        /* Product Grid - Forced 2 columns on mobile for better fit */
-        .product-grid { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 10px; 
-        }
+        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
         
         .product-card { background: var(--surface-color); padding: 10px; text-align: center; border: 1px solid var(--border-color); position: relative; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; }
         .product-image { width: 100%; height: 120px; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; background: #050505; pointer-events: none; }
@@ -165,7 +119,6 @@
         .available { background-color: var(--accent-color); color: black; }
         .sold-out { background-color: #333; color: white; }
         
-        /* Discount Layout Styling */
         .price-box { margin: 3px 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .price { color: var(--accent-color); font-weight: bold; font-size: 13px; }
         .old-price-strike { color: #777; text-decoration: line-through; font-size: 11px; margin-bottom: 1px; display: block; }
@@ -174,46 +127,38 @@
         .color-label { font-size: 9px; color: #888; display: block; margin-bottom: 3px; text-transform: uppercase; }
         
         .btn { padding: 12px; background: var(--accent-color); color: black; font-weight: bold; text-transform: uppercase; font-size: 10px; border: none; cursor: pointer; width: 100%; transition: 0.3s; margin-top: 5px; border-radius: 2px; }
-        .remove-btn { background: #550000; color: white; font-size: 9px; padding: 8px; width: auto; }
-        .save-btn { background: #333; color: var(--accent-color); font-size: 9px; padding: 8px; width: auto; border: 1px solid var(--accent-color); }
+        .remove-btn { background: #550000; color: white; font-size: 9px; padding: 6px; border: none; width: 100%; margin-top: 5px; cursor: pointer; }
+        .save-btn { background: #333; color: var(--accent-color); font-size: 9px; padding: 6px; width: 100%; margin-top: 5px; border: 1px solid var(--accent-color); cursor: pointer; }
 
         #page-content { display: none; padding: 30px 5%; background: var(--bg-color); min-height: 70vh; }
         .content-box { border: 1px solid var(--accent-color); padding: 20px; background: #0a0a0a; }
 
-        /* Cart Overlay - Mobile Full Width */
         .cart-overlay { position: fixed; top: 0; right: 0; width: 100%; height: 100%; background: var(--surface-color); z-index: 2000; padding: 20px; display: none; border-left: 4px solid var(--accent-color); overflow-y: auto; }
-
         .cart-input { width: 100%; padding: 12px; border: 1px solid var(--accent-color); background: var(--bg-color); color: white; margin-bottom: 10px; font-size: 14px; border-radius: 2px; }
 
-        /* Added arrow indicators for options boxes */
         select.cart-input {
             appearance: none;
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 10px center;
-            background-size: 15px;
+            background-repeat: no-repeat; background-position: right 10px center; background-size: 15px;
         }
 
         #floating-cart-btn { display: none; position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 92%; z-index: 1500; }
 
         .suggestion-section { padding: 25px 5%; background: #0a0a0a; text-align: center; border-top: 1px solid var(--border-color); }
-        .suggest-input { width: 100%; height: 80px; background: var(--bg-color); border: 1px solid var(--accent-color); color: #fff; padding: 10px; margin-bottom: 10px; border-radius: 2px; }
+        .suggest-input { width: 100%; height: 80px; background: var(--bg-color); border: 1px solid var(--accent-color); color: #fff; padding: 10px; margin-bottom: 10px; border-radius: 2px; resize: none; }
 
-        /* Receipt Modal Pop-up Layout */
         .receipt-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; display: none; justify-content: center; align-items: center; padding: 20px; }
-        .receipt-box { background: var(--surface-color); border: 2px solid var(--accent-color); width: 100%; max-width: 450px; padding: 25px; border-radius: 4px; box-shadow: 0 4px 25px rgba(0,0,0,0.7); max-height: 90vh; overflow-y: auto; }
+        .receipt-box { background: var(--surface-color); border: 2px solid var(--accent-color); width: 100%; max-width: 450px; padding: 25px; border-radius: 4px; max-height: 90vh; overflow-y: auto; }
         .receipt-header { text-align: center; border-bottom: 1px dashed var(--accent-color); padding-bottom: 15px; margin-bottom: 15px; }
         .receipt-title { font-size: 20px; color: var(--accent-color); font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }
         .receipt-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; }
 
-        /* Order Dashboard Sub-Elements */
         .admin-order-card { background: var(--bg-color); border: 1px solid var(--accent-color); padding: 15px; margin-bottom: 15px; text-align: left; border-radius: 2px; }
         .admin-order-meta { font-size: 11px; color: #888; margin-bottom: 5px; }
         .admin-order-items { font-size: 12px; border-top: 1px dashed #333; border-bottom: 1px dashed #333; padding: 8px 0; margin: 8px 0; }
 
         footer { background: var(--bg-color); color: #444; text-align: center; padding: 20px; border-top: 1px solid #111; font-size: 10px; }
 
-        /* Desktop refinements */
         @media (min-width: 768px) { 
             .product-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; } 
             .main-brand-title { font-size: 50px; } 
@@ -315,21 +260,10 @@
         </div>
 
         <input type="text" id="cust-name" class="cart-input" placeholder="Full Name">
-        <input type="tel" id="cust-phone" class="cart-input" placeholder="Phone Number (WhatsApp / Payment No.)">
+        <input type="tel" id="cust-phone" class="cart-input" placeholder="Phone Number (WhatsApp)">
         <input type="text" id="cust-address" class="cart-input" placeholder="Address / Pickup Note">
         <button class="btn" style="background:#25D366; color:white;" onclick="checkoutWhatsApp()">ORDER ON WHATSAPP</button>
         <button class="btn" style="background:#222; color:white; margin-top:10px;" onclick="toggleCart()">CLOSE</button>
-    </div>
-
-    <div id="receipt-capture-canvas" style="position: absolute; left: -9999px; top: -9999px; width: 400px; background: #111111; color: #ffffff; padding: 25px; border: 2px solid #d4af37; font-family: 'Georgia', serif;">
-        <div style="text-align: center; border-bottom: 1px dashed #d4af37; padding-bottom: 15px; margin-bottom: 15px;">
-            <h2 style="font-size: 22px; color: #d4af37; letter-spacing: 2px; text-transform: uppercase;">ARISA PERFUME</h2>
-            <p style="font-size: 11px; color: #aaa; margin-top: 3px;">Official Order Invoice</p>
-        </div>
-        <div id="canvas-receipt-details"></div>
-        <div style="text-align: center; margin-top: 25px; border-top: 1px solid #222; padding-top: 10px; font-size: 10px; color: #666;">
-            &copy; 2026 ARISA PERFUME STORE. All Rights Reserved.
-        </div>
     </div>
 
     <div id="receipt-modal" class="receipt-overlay">
@@ -339,12 +273,12 @@
                 <p style="font-size: 12px; margin-top: 5px; color: #aaa;">Thank you for shopping with ARISA</p>
             </div>
             <div id="receipt-details"></div>
-            <button class="btn" id="hide-pdf-btn" style="margin-top:20px;" onclick="closeReceipt()">CONTINUE SHOPPING</button>
+            <button class="btn" style="margin-top:20px;" onclick="closeReceipt()">CONTINUE SHOPPING</button>
         </div>
     </div>
 
     <div id="floating-cart-btn">
-        <button class="btn" style="height: 50px; font-size: 14px; border: 2px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.5);" onclick="toggleCart()">View Cart & Checkout →</button>
+        <button class="btn" style="height: 50px; font-size: 14px; border: 2px solid white;" onclick="toggleCart()">View Cart & Checkout →</button>
     </div>
 
     <div id="home-content">
@@ -375,7 +309,10 @@
     </div>
 
     <div id="page-content">
-        <div class="content-box" id="page-inner-content"></div>
+        <div class="content-box">
+            <button class="btn" style="max-width:100px; margin-bottom:15px; background:#222; color:#fff;" onclick="showHome()">← Back</button>
+            <div id="page-inner-content"></div>
+        </div>
     </div>
 
     <div class="suggestion-section" id="user-suggestion-box">
@@ -386,22 +323,23 @@
 
     <footer>
         <p>&copy; 2026 ARISA PERFUME STORE.</p>
-        <button onclick="loginAdmin()" style="background:none; border:none; color:#111; cursor:pointer; margin-top: 10px;">Staff Login</button>
+        <button onclick="loginAdmin()" style="background:none; border:none; color:#222; cursor:pointer; margin-top: 10px;">Staff Login</button>
     </footer>
 
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
 
     <script>
-        // WINDOW EVENT LISTENER FOR PRELOADER TERMINATION
+        // PRELOADER DISMISSAL ENGINE
         window.addEventListener('load', () => {
             const preloader = document.getElementById('preloader');
             setTimeout(() => {
                 preloader.style.opacity = '0';
                 preloader.style.visibility = 'hidden';
-            }, 1200); // Luxury holding frame display delay
+            }, 1200);
         });
 
+        // RE-INITIALIZED APP ROUTINES
         const firebaseConfig = {
             apiKey: "AIzaSyD6VOairMfPk1fM9VApccmNEPAdMIb3HO4",
             authDomain: "arisa-perfume-store.firebaseapp.com",
@@ -414,26 +352,44 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
         const myWhatsAppNumber = "23274170733";
+        
         let cart = [];
         let savedItems = [];
         let perfumes = [];
 
-        // BLOCK BACK NAVIGATION SYSTEM WHEN CART ACTIVE
-        function handleBackPrevention() {
-            if (cart.length > 0) {
-                history.pushState(null, null, window.location.pathname);
-                alert("Your cart is active. Going back is disabled until items are cleared.");
-            }
+        // ROUTING SYSTEM CONFIGURATIONS
+        function showHome() {
+            document.getElementById('home-content').style.display = 'block';
+            document.getElementById('page-content').style.display = 'none';
         }
-        window.addEventListener('popstate', handleBackPrevention);
-        window.addEventListener('beforeunload', (e) => {
-            if (cart.length > 0) {
-                e.preventDefault();
-                e.returnValue = 'Your cart contains items. Are you sure you want to exit?';
-            }
-        });
 
-        // THEME CONFIGURATION PICKER FUNCTION
+        function showAbout() {
+            document.getElementById('home-content').style.display = 'none';
+            document.getElementById('page-content').style.display = 'block';
+            document.getElementById('page-inner-content').innerHTML = `
+                <h2 style="color:var(--accent-color); margin-bottom:10px;">About ARISA</h2>
+                <p>Welcome to ARISA PERFUME STORE, Freetown's premium destination for elite luxury fragrances. We curate exclusive, long-lasting genuine scents meticulously crafted for individuals who prioritize sophistication and distinct aromatic experiences.</p>
+            `;
+        }
+
+        function showPolicy() {
+            document.getElementById('home-content').style.display = 'none';
+            document.getElementById('page-content').style.display = 'block';
+            document.getElementById('page-inner-content').innerHTML = `
+                <h2 style="color:var(--accent-color); margin-bottom:10px;">Store Policies</h2>
+                <h3 style="color:var(--accent-color); margin-top:10px; font-size:14px;">Delivery & Pickups</h3>
+                <p>Orders within Freetown are processed daily from 9:00 AM to 6:00 PM. Rates vary based on your specific neighborhood zone.</p>
+                <h3 style="color:var(--accent-color); margin-top:10px; font-size:14px;">Returns</h3>
+                <p>Due to safety and cosmetic sanitation standards, perfume sales are final unless error in deployment or verified structural damage occurs during courier transit.</p>
+            `;
+        }
+
+        // CART DISPLAY ANIMATION HANDLERS
+        function toggleCart() {
+            const sidebar = document.getElementById('cart-sidebar');
+            sidebar.style.display = (sidebar.style.display === 'block') ? 'none' : 'block';
+        }
+
         window.setTheme = (themeName) => {
             if(themeName === 'gold') {
                 document.documentElement.removeAttribute('data-theme');
@@ -442,6 +398,7 @@
             }
         };
 
+        // FIREBASE TRACKING READS
         db.ref('perfumes').on('value', (snapshot) => {
             const data = snapshot.val();
             perfumes = [];
@@ -449,159 +406,49 @@
             renderProducts();
         });
 
-        db.ref('suggestions').on('value', (snapshot) => {
-            const data = snapshot.val();
-            const display = document.getElementById('suggestion-display-list');
-            if (display && data) {
-                display.innerHTML = Object.values(data).map(s => `<p style="margin-bottom:5px;">• ${s}</p>`).join('');
-            }
-        });
-
-        // REAL-TIME ADMIN FEED MONITORING FOR SYSTEM ORDERS
-        db.ref('orders').on('value', (snapshot) => {
-            const data = snapshot.val();
-            const ordersDisplayList = document.getElementById('admin-orders-list');
-            if (!ordersDisplayList) return;
-            
-            if (!data) {
-                ordersDisplayList.innerHTML = `<p style="color:#666; font-style:italic;">No active incoming orders.</p>`;
-                return;
-            }
-
-            let ordersHTML = '';
-            Object.keys(data).forEach(orderId => {
-                const order = data[orderId];
-                
-                let itemLines = '';
-                order.items.forEach(itm => {
-                    itemLines += `<div>• <strong>${itm.name}</strong> ${itm.color ? `(${itm.color})` : ''} - ${itm.activePrice} NLE</div>`;
-                });
-
-                ordersHTML += `
-                    <div class="admin-order-card" id="card-${orderId}">
-                        <div class="admin-order-meta"><strong>Date:</strong> ${order.timestamp}</div>
-                        <div style="font-size:13px; margin-bottom:5px;"><strong>Customer:</strong> ${order.customerName}</div>
-                        <div><strong>Phone:</strong> <a href="tel:${order.customerPhone}" style="color:var(--accent-color); text-decoration:none;">${order.customerPhone}</a> | <a href="https://wa.me/${order.customerPhone.replace(/[^0-9]/g, '')}" target="_blank" style="color:#25D366; text-decoration:none; margin-left:5px;">WhatsApp</a></div>
-                        <div><strong>Address:</strong> ${order.customerAddress}</div>
-                        <div style="margin-top:5px;"><strong>Logistics:</strong> ${order.serviceType} | <strong>Payment:</strong> ${order.paymentMethod}</div>
-                        
-                        <div class="admin-order-items">
-                            <span style="color:var(--accent-color); font-weight:bold; display:block; margin-bottom:4px;">ITEMS IN RECEIPT:</span>
-                            ${itemLines}
-                        </div>
-
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <span>Total Due: <strong style="color:var(--accent-color); font-size:14px;">${order.grandTotal} NLE</strong></span>
-                            <button class="btn" style="width:auto; margin:0; padding:6px 12px; background:#444; color:#fff;" onclick="archiveOrder('${orderId}')">Archive Order</button>
-                        </div>
-                    </div>
-                `;
-            });
-            ordersDisplayList.innerHTML = ordersHTML;
-        });
-
-        window.archiveOrder = (orderId) => {
-            if(confirm("Mark order as completed and remove from panel?")) {
-                db.ref('orders/' + orderId).remove();
-            }
-        };
-
-        window.toggleStatus = (id, currentStatus) => {
-            const nextStatus = currentStatus === 'available' ? 'sold-out' : 'available';
-            db.ref('perfumes/' + id).update({ status: nextStatus });
-        };
-
-        window.deleteProduct = (id) => {
-            if(confirm("Are you sure you want to delete this product?")) {
-                db.ref('perfumes/' + id).remove();
-            }
-        };
-
-        window.editDiscount = (id, currentDiscount) => {
-            const newDiscount = prompt("Enter new discount percentage (0 for none):", currentDiscount || 0);
-            if (newDiscount !== null) {
-                const discountNum = parseFloat(newDiscount);
-                if (!isNaN(discountNum) && discountNum >= 0 && discountNum <= 100) {
-                    db.ref('perfumes/' + id).update({ discountPercentage: discountNum });
-                } else {
-                    alert("Please enter a valid percentage between 0 and 100.");
-                }
-            }
-        };
-
         function renderProducts() {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = '';
-            const isAdmin = sessionStorage.getItem('isArisaAdmin') === 'true';
-            document.getElementById('user-suggestion-box').style.display = isAdmin ? 'none' : 'block';
-
             perfumes.forEach((p) => {
                 const sold = p.status === 'sold-out';
-                
-                // Show standard clean layout on shop catalog with % off badge if active
-                let priceDisplayHTML = '';
-                const originalPrice = parseFloat(p.price);
+                let orig = parseFloat(p.price);
+                let displayHTML = '';
+
                 if (p.discountPercentage && parseFloat(p.discountPercentage) > 0) {
-                    const pct = parseFloat(p.discountPercentage);
-                    const salePrice = originalPrice - (originalPrice * (pct / 100));
-                    priceDisplayHTML = `
+                    let pct = parseFloat(p.discountPercentage);
+                    let finalPrice = orig - (orig * (pct / 100));
+                    displayHTML = `
                         <div class="price-box">
-                            <span class="old-price-strike">${originalPrice.toFixed(2)} NLE</span>
-                            <span class="price">${salePrice.toFixed(2)} NLE</span>
+                            <span class="old-price-strike">${orig} NLE</span>
+                            <span class="price">${finalPrice.toFixed(2)} NLE</span>
                             <span class="discount-badge">${pct}% OFF</span>
-                        </div>
-                    `;
+                        </div>`;
                 } else {
-                    priceDisplayHTML = `
+                    displayHTML = `
                         <div class="price-box">
-                            <span class="price">${originalPrice.toFixed(2)} NLE</span>
-                        </div>
-                    `;
+                            <span class="price">${orig} NLE</span>
+                        </div>`;
                 }
 
                 grid.innerHTML += `
-                    <div class="product-card" onclick="${sold ? '' : `handleProductTap('${p.firebaseId}')`}">
+                    <div class="product-card" onclick="${sold ? '' : `addToCart('${p.firebaseId}')`}">
                         <span class="status-badge ${p.status}">${p.status.replace('-', ' ')}</span>
-                        <div class="product-image"><img src="${p.image}"></div>
+                        <div class="product-image"><img src="${p.image || ''}" alt="${p.name}"></div>
                         <h3 style="font-size:11px;">${p.name}</h3>
                         ${p.color ? `<span class="color-label">${p.color}</span>` : ''}
-                        ${priceDisplayHTML}
-                        <button class="btn" ${sold ? 'disabled' : ''}>
-                            ${sold ? 'SOLD OUT' : 'BUY'}
-                        </button>
-                        ${isAdmin ? `
-                            <div style="display: flex; gap: 2px; flex-wrap: wrap;">
-                                <button class="btn" style="background:#444; margin-top:5px; font-size:8px; flex: 1;" onclick="event.stopPropagation(); toggleStatus('${p.firebaseId}','${p.status}')">Status</button>
-                                <button class="btn" style="background:var(--accent-color); color: black; margin-top:5px; font-size:8px; flex: 1;" onclick="event.stopPropagation(); editDiscount('${p.firebaseId}', ${p.discountPercentage || 0})">Discount</button>
-                                <button class="btn" style="background:red; margin-top:5px; font-size:8px; flex: 1;" onclick="event.stopPropagation(); deleteProduct('${p.firebaseId}')">Del</button>
-                            </div>` : ''}
+                        ${displayHTML}
+                        <button class="btn" ${sold ? 'disabled' : ''}>${sold ? 'SOLD OUT' : 'BUY'}</button>
                     </div>`;
             });
         }
 
-        let tapTimer = null;
-        window.handleProductTap = (id) => {
-            if (tapTimer === null) {
-                tapTimer = setTimeout(() => {
-                    addToCart(id);
-                    tapTimer = null;
-                }, 300);
-            } else {
-                clearTimeout(tapTimer);
-                tapTimer = null;
-                addToCart(id);
-            }
-        };
-
         window.addToCart = (id) => {
-            const existingItem = cart.find(i => i.firebaseId === id);
-            if (existingItem) {
-                alert("This item is already added to your cart!");
+            if(cart.find(item => item.firebaseId === id)) {
+                alert("Item already inside your active cart drawer.");
                 return;
             }
-            const item = perfumes.find(p => p.firebaseId === id);
-            cart.push({...item, cartId: Date.now() + Math.random()}); 
-            history.pushState(null, null, window.location.pathname);
+            const match = perfumes.find(p => p.firebaseId === id);
+            cart.push({...match, cartId: Date.now()});
             updateCartUI();
             document.getElementById('floating-cart-btn').style.display = 'block';
         };
@@ -609,280 +456,148 @@
         window.removeFromCart = (cartId) => {
             cart = cart.filter(item => item.cartId !== cartId);
             updateCartUI();
-            if(cart.length === 0) document.getElementById('floating-cart-btn').style.display = 'none';
+            if(!cart.length) document.getElementById('floating-cart-btn').style.display = 'none';
         };
 
         window.saveForLater = (cartId) => {
-            const item = cart.find(i => i.cartId === cartId);
-            savedItems.push(item);
+            const target = cart.find(i => i.cartId === cartId);
+            savedItems.push(target);
             cart = cart.filter(i => i.cartId !== cartId);
             updateCartUI();
         };
 
         window.moveToCart = (cartId) => {
-            const item = savedItems.find(i => i.cartId === cartId);
-            const duplicateCheck = cart.find(i => i.firebaseId === item.firebaseId);
-            if(duplicateCheck) {
-                alert("This item is already in your active cart panel.");
+            const target = savedItems.find(i => i.cartId === cartId);
+            if(cart.find(i => i.firebaseId === target.firebaseId)) {
+                alert("Already in active cart panel.");
                 return;
             }
-            cart.push(item);
+            cart.push(target);
             savedItems = savedItems.filter(i => i.cartId !== cartId);
-            history.pushState(null, null, window.location.pathname);
             updateCartUI();
         };
 
+        // FIXED AND COMPLETELY COMPARED CART UI PARSING RUNTIME
         function updateCartUI() {
             document.getElementById('cart-counter').innerText = cart.length;
             const list = document.getElementById('cart-items-list');
             const savedList = document.getElementById('saved-items-list');
-            let subtotal = 0;
+            const savedContainer = document.getElementById('saved-items-container');
+            
+            let total = 0;
+            list.innerHTML = '';
 
-            list.innerHTML = cart.map(i => {
-                const originalPrice = parseFloat(i.price);
-                let finalActivePrice = originalPrice;
-                let discountTextHTML = '';
-
-                if (i.discountPercentage && parseFloat(i.discountPercentage) > 0) {
-                    const pct = parseFloat(i.discountPercentage);
-                    finalActivePrice = originalPrice - (originalPrice * (pct / 100));
-                    discountTextHTML = `<span style="color:#ff4d6d; font-size:10px;">(${pct}% Off Applied)</span>`;
+            cart.forEach(item => {
+                let pPrice = parseFloat(item.price);
+                if(item.discountPercentage) {
+                    pPrice = pPrice - (pPrice * (parseFloat(item.discountPercentage)/100));
                 }
-                subtotal += finalActivePrice;
+                total += pPrice;
 
-                return `
-                    <div style="background:var(--bg-color); padding:10px; border:1px solid var(--border-color); margin-bottom:10px; position:relative;">
-                        <h4 style="font-size:12px; color:var(--accent-color); max-width:80%;">${i.name}</h4>
-                        <p style="font-size:11px;">Price: ${finalActivePrice.toFixed(2)} NLE ${discountTextHTML}</p>
-                        ${i.color ? `<p style="font-size:10px; color:#aaa;">Color Option: ${i.color}</p>` : ''}
-                        <div style="margin-top:5px; display:flex; gap:5px;">
-                            <button class="remove-btn" onclick="removeFromCart(${i.cartId})">Remove</button>
-                            <button class="save-btn" onclick="saveForLater(${i.cartId})">Save Later</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+                list.innerHTML += `
+                    <div style="margin-bottom:12px; border-bottom:1px dashed #222; padding-bottom:8px;">
+                        <p style="font-size:12px; font-weight:bold;">${item.name} (${pPrice.toFixed(2)} NLE)</p>
+                        <button class="remove-btn" onclick="removeFromCart(${item.cartId})">Remove</button>
+                        <button class="save-btn" onclick="saveForLater(${item.cartId})">Save Later</button>
+                    </div>`;
+            });
 
             if(savedItems.length > 0) {
-                document.getElementById('saved-items-container').style.display = 'block';
-                savedList.innerHTML = savedItems.map(i => `
-                    <div style="background:#0c0c0c; padding:8px; border:1px dashed #333; margin-bottom:5px;">
-                        <h5 style="font-size:11px; color:#aaa;">${i.name}</h5>
-                        <button class="btn" style="padding:4px; font-size:8px; width:auto; background:#222; color:var(--accent-color);" onclick="moveToCart(${i.cartId})">Move to Active Cart</button>
+                savedContainer.style.display = 'block';
+                savedList.innerHTML = savedItems.map(item => `
+                    <div style="margin-bottom:8px; font-size:11px;">
+                        <span>${item.name}</span>
+                        <button class="btn" style="padding:4px; font-size:8px; width:auto; display:inline-block;" onclick="moveToCart(${item.cartId})">Move to Cart</button>
                     </div>
                 `).join('');
             } else {
-                document.getElementById('saved-items-container').style.display = 'none';
+                savedContainer.style.display = 'none';
             }
 
-            document.getElementById('cart-subtotal').innerText = subtotal.toFixed(2);
-            
-            let multiBuyDiscount = 0;
-            if(cart.length >= 3) {
-                multiBuyDiscount = subtotal * 0.05;
-                document.getElementById('discount-row').style.display = 'block';
-                document.getElementById('cart-discount').innerText = multiBuyDiscount.toFixed(2);
-            } else {
-                document.getElementById('discount-row').style.display = 'none';
-            }
-
-            const grandTotal = subtotal - multiBuyDiscount;
-            document.getElementById('cart-grand-total').innerText = grandTotal.toFixed(2);
+            document.getElementById('cart-subtotal').innerText = total.toFixed(2);
+            document.getElementById('cart-grand-total').innerText = total.toFixed(2);
         }
 
-        window.toggleCart = () => {
-            const sidebar = document.getElementById('cart-sidebar');
-            sidebar.style.display = sidebar.style.display === 'block' ? 'none' : 'block';
-        };
-
-        window.showHome = () => {
-            document.getElementById('home-content').style.display = 'block';
-            document.getElementById('page-content').style.display = 'none';
-        };
-
-        window.showAbout = () => {
-            document.getElementById('home-content').style.display = 'none';
-            document.getElementById('page-content').style.display = 'block';
-            document.getElementById('page-inner-content').innerHTML = `
-                <h3 style="color:var(--accent-color); margin-bottom:10px;">ABOUT ARISA PERFUME</h3>
-                <p style="font-size:13px;">Welcome to ARISA PERFUME STORE, the premier destination for luxury scents and designer fragrances in Freetown, Sierra Leone. We deal exclusively in 100% authentic international brands, offering long-lasting olfactory masterpieces designed to make a statement.</p>
-            `;
-        };
-
-        window.showPolicy = () => {
-            document.getElementById('home-content').style.display = 'none';
-            document.getElementById('page-content').style.display = 'block';
-            document.getElementById('page-inner-content').innerHTML = `
-                <h3 style="color:var(--accent-color); margin-bottom:10px;">STORE POLICY</h3>
-                <p style="font-size:13px;">• <strong>Deliveries:</strong> Standard dispatcher terms apply. Timings map daily across 9:00 AM to 6:00 PM.<br>• <strong>Returns:</strong> Due to sanitation parameters, items cannot be returned or replaced once unboxed from commercial protective shrink wraps.</p>
-            `;
-        };
-
-        window.sendSuggestion = () => {
-            const txt = document.getElementById('user-suggestion').value.trim();
-            if(!txt) return alert("Please type your suggestion input first.");
-            db.ref('suggestions').push(txt).then(() => {
-                alert("Thank you! Your scent request has been sent securely to our curation desk.");
+        // SUGGESTIONS HANDLERS
+        function sendSuggestion() {
+            const val = document.getElementById('user-suggestion').value.trim();
+            if(val) {
+                db.ref('suggestions').push(val);
+                alert("Suggestion delivered successfully to staff dashboard.");
                 document.getElementById('user-suggestion').value = '';
-            });
-        };
+            }
+        }
 
-        window.adminUpload = () => {
-            const name = document.getElementById('admin-p-name').value.trim();
-            const price = document.getElementById('admin-p-price').value;
-            const discountPct = document.getElementById('admin-p-discount-percentage').value || 0;
-            const color = document.getElementById('admin-p-color').value.trim();
-            const status = document.getElementById('admin-p-status').value;
-            const fileInput = document.getElementById('admin-p-file');
-
-            if (!name || !price || !fileInput.files[0]) {
-                alert("Please satisfy all primary data parameters (Name, Price, and File Asset Binary) to proceed.");
+        // WHATSAPP INVOICE TRANSFERS
+        function checkoutWhatsApp() {
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const addr = document.getElementById('cust-address').value.trim();
+            
+            if(!name || !phone || !addr) {
+                alert("Please provide name, phone number, and delivery address before checkout.");
                 return;
             }
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const imgBase64 = e.target.result;
-                const payload = {
-                    name: name,
-                    price: parseFloat(price).toFixed(2),
-                    discountPercentage: parseFloat(discountPct) || 0,
-                    color: color || null,
-                    status: status,
-                    image: imgBase64
-                };
-                db.ref('perfumes').push(payload).then(() => {
-                    alert("Luxury item catalog metadata safely initialized into Firebase Node.");
-                    document.getElementById('admin-p-name').value = '';
-                    document.getElementById('admin-p-price').value = '';
-                    document.getElementById('admin-p-discount-percentage').value = '';
-                    document.getElementById('admin-p-color').value = '';
-                    fileInput.value = '';
-                });
-            };
-            reader.readAsDataURL(fileInput.files[0]);
-        };
-
-        window.loginAdmin = () => {
-            const accessKey = prompt("Provide staff terminal validation token key:");
-            if (accessKey === "ARISA2026") {
-                sessionStorage.setItem('isArisaAdmin', 'true');
-                document.getElementById('admin-panel').style.display = 'block';
-                renderProducts();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } else {
-                alert("Authorization parameters invalid.");
-            }
-        };
-
-        window.logoutAdmin = () => {
-            sessionStorage.removeItem('isArisaAdmin');
-            document.getElementById('admin-panel').style.display = 'none';
-            renderProducts();
-        };
-
-        window.checkoutWhatsApp = () => {
-            const name = document.getElementById('cust-name').value.trim();
-            const phone = document.getElementById('cust-phone').value.trim();
-            const address = document.getElementById('cust-address').value.trim();
-            const serviceType = document.getElementById('service-type').value;
-            const paymentMethod = document.getElementById('payment-method').value;
-
-            if (cart.length === 0) return alert("Your inventory container is empty.");
-            if (!name || !phone || !address) return alert("Please supply shipping metrics.");
-
-            const rightNow = new Date().toLocaleString();
-            const finalComputedGrandTotal = document.getElementById('cart-grand-total').innerText;
+            let text = `*NEW ORDER - ARISA PERFUME STORE*\n\n`;
+            text += `*Customer:* ${name}\n*Phone:* ${phone}\n*Address:* ${addr}\n`;
+            text += `*Service:* ${document.getElementById('service-type').value}\n`;
+            text += `*Payment:* ${document.getElementById('payment-method').value}\n\n*Items Purchased:*\n`;
             
-            let orderSummaryText = `👑 *NEW ARISA PERFUME ORDER* 👑\n_${rightNow}_\n\n`;
-            orderSummaryText += `👤 *Customer Details:*\n• Name: ${name}\n• Phone: ${phone}\n• Address: ${address}\n\n`;
-            orderSummaryText += `📦 *Logistics & Payment:*\n• Service: ${serviceType}\n• Payment Via: ${paymentMethod}\n\n`;
-            orderSummaryText += `🛍️ *Items Selected:*\n`;
-
-            const orderItemsPayload = [];
-            cart.forEach((itm, idx) => {
-                const basePr = parseFloat(itm.price);
-                let currentPr = basePr;
-                if(itm.discountPercentage && parseFloat(itm.discountPercentage) > 0) {
-                    currentPr = basePr - (basePr * (parseFloat(itm.discountPercentage) / 100));
-                }
-                
-                orderSummaryText += `${idx+1}. ${itm.name} ${itm.color ? `(${itm.color})` : ''} - ${currentPr.toFixed(2)} NLE\n`;
-                
-                orderItemsPayload.push({
-                    name: itm.name,
-                    color: itm.color || null,
-                    activePrice: currentPr.toFixed(2)
-                });
+            cart.forEach((i, dynamicIndex) => {
+                text += `${dynamicIndex+1}. ${i.name} - ${i.price} NLE\n`;
             });
-
-            orderSummaryText += `\n💰 *Total Value Due:* ${finalComputedGrandTotal} NLE\n\n_Thank you for choosing luxury._`;
-
-            const firebaseOrderPayload = {
-                timestamp: rightNow,
+            
+            text += `\n*Grand Total:* ${document.getElementById('cart-grand-total').innerText} NLE`;
+            
+            // Log to Firebase Order Dashboard before redirecting
+            db.ref('orders').push({
                 customerName: name,
                 customerPhone: phone,
-                customerAddress: address,
-                serviceType: serviceType,
-                paymentMethod: paymentMethod,
-                items: orderItemsPayload,
-                grandTotal: finalComputedGrandTotal
-            };
-
-            db.ref('orders').push(firebaseOrderPayload);
-
-            let receiptRowsHTML = `
-                <div class="receipt-row"><span>Date/Time:</span><strong>${rightNow}</strong></div>
-                <div class="receipt-row"><span>Customer Name:</span><strong>${name}</strong></div>
-                <div class="receipt-row"><span>Phone Line:</span><strong>${phone}</strong></div>
-                <div class="receipt-row"><span>Shipping Dest:</span><strong>${address}</strong></div>
-                <div class="receipt-row"><span>Service Path:</span><strong>${serviceType}</strong></div>
-                <div class="receipt-row"><span>Payment Matrix:</span><strong>${paymentMethod}</strong></div>
-                <hr style="border:0; border-top:1px dashed var(--accent-color); margin:10px 0;">
-                <p style="font-size:11px; font-weight:bold; color:var(--accent-color); margin-bottom:5px;">ITEMS METADATA STACK:</p>
-            `;
-            
-            cart.forEach(itm => {
-                const basePr = parseFloat(itm.price);
-                let currentPr = basePr;
-                if(itm.discountPercentage && parseFloat(itm.discountPercentage) > 0) {
-                    currentPr = basePr - (basePr * (parseFloat(itm.discountPercentage) / 100));
-                }
-                receiptRowsHTML += `<div class="receipt-row"><span>• ${itm.name} ${itm.color ? `(${itm.color})` : ''}</span><strong>${currentPr.toFixed(2)} NLE</strong></div>`;
+                customerAddress: addr,
+                serviceType: document.getElementById('service-type').value,
+                paymentMethod: document.getElementById('payment-method').value,
+                items: cart,
+                grandTotal: document.getElementById('cart-grand-total').innerText,
+                timestamp: new Date().toLocaleString()
             });
 
-            receiptRowsHTML += `
-                <hr style="border:0; border-top:1px dashed var(--accent-color); margin:10px 0;">
-                <div class="receipt-row" style="font-size:16px; color:var(--accent-color); font-weight:bold;"><span>GRAND TOTAL:</span><span>${finalComputedGrandTotal} NLE</span></div>
+            // Launch invoice display modal interface
+            document.getElementById('receipt-details').innerHTML = `
+                <div class="receipt-row"><span>Customer:</span><span>${name}</span></div>
+                <div class="receipt-row"><span>Total Owed:</span><span>${document.getElementById('cart-grand-total').innerText} NLE</span></div>
+                <p style="font-size:11px; text-align:center; margin-top:10px; color:var(--accent-color);">Redirecting to WhatsApp to coordinate logistics...</p>
             `;
-
-            document.getElementById('receipt-details').innerHTML = receiptRowsHTML;
-            document.getElementById('canvas-receipt-details').innerHTML = receiptRowsHTML.replace(/var\(--accent-color\)/g, '#d4af37');
             document.getElementById('receipt-modal').style.display = 'flex';
 
             setTimeout(() => {
-                const canvasTarget = document.getElementById('receipt-capture-canvas');
-                html2canvas(canvasTarget, { scale: 2, useCORS: true }).then(canvas => {
-                    canvas.toBlob(blob => {
-                        console.log("Invoice system snapshot captured cleanly.");
-                        const waUrl = `https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(orderSummaryText)}`;
-                        window.open(waUrl, '_blank');
-                        cart = [];
-                        updateCartUI();
-                        document.getElementById('floating-cart-btn').style.display = 'none';
-                        toggleCart();
-                    }, 'image/jpeg', 0.95);
-                });
-            }, 800);
-        };
+                window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(text)}`, '_blank');
+            }, 2000);
+        }
 
-        window.closeReceipt = () => {
+        function closeReceipt() {
             document.getElementById('receipt-modal').style.display = 'none';
-        };
+            cart = [];
+            updateCartUI();
+            toggleCart();
+        }
 
-        // RENDER CHECKPOINT PRE-FLIGHT LOOP
-        if(sessionStorage.getItem('isArisaAdmin') === 'true') {
-            document.getElementById('admin-panel').style.display = 'block';
+        // PLACEHOLDER AUTH CALLS FOR DASHBOARD PANEL ACCESS
+        function loginAdmin() {
+            const pass = prompt("Provide administrative authorization passphrase code:");
+            if(pass === "Arisa2026") {
+                sessionStorage.setItem('isArisaAdmin', 'true');
+                document.getElementById('admin-panel').style.display = 'block';
+                renderProducts();
+            } else {
+                alert("Invalid access token code.");
+            }
+        }
+
+        function logoutAdmin() {
+            sessionStorage.removeItem('isArisaAdmin');
+            document.getElementById('admin-panel').style.display = 'none';
+            renderProducts();
         }
     </script>
 </body>
