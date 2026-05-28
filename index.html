@@ -9,44 +9,44 @@
     <style>
         /* LUXURY THEME VARIABLES */
         :root {
-            --bg-color: #000000;
-            --surface-color: #111111;
-            --accent-color: #d4af37;
-            --text-color: #ffffff;
-            --border-color: #1a1a1a;
+           --bg-color: #000000;
+           --surface-color: #111111;
+           --accent-color: #d4af37;
+           --text-color: #ffffff;
+           --border-color: #1a1a1a;
         }
-
+ 
         /* MIDNIGHT ROSE THEME */
         [data-theme="rose"] {
-            --bg-color: #0d0608;
-            --surface-color: #1c1013;
-            --accent-color: #ff4d6d;
-            --text-color: #ffffff;
-            --border-color: #2b181d;
+           --bg-color: #0d0608;
+           --surface-color: #1c1013;
+           --accent-color: #ff4d6d;
+           --text-color: #ffffff;
+           --border-color: #2b181d;
         }
-
+ 
         /* EMERALD DIAMOND THEME */
         [data-theme="emerald"] {
-            --bg-color: #020f0a;
-            --surface-color: #072217;
-            --accent-color: #00e676;
-            --text-color: #ffffff;
-            --border-color: #0c3a27;
+           --bg-color: #020f0a;
+           --surface-color: #072217;
+           --accent-color: #00e676;
+           --text-color: #ffffff;
+           --border-color: #0c3a27;
         }
-
+ 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Georgia', serif; }
         
         /* Mobile Fix: Prevent side-scrolling and ensure full-width fit */
         html, body { 
-            background-color: var(--bg-color); 
+           background-color: var(--bg-color); 
             color: var(--text-color); 
-            line-height: 1.6; 
-            overflow-x: hidden; 
+           line-height: 1.6; 
+           overflow-x: hidden; 
             width: 100%; 
             position: relative; 
-            transition: background-color 0.3s, color 0.3s;
+           transition: background-color 0.3s, color 0.3s;
         }
-
+ 
         /* LUXURY PRELOADER SCREEN */
         #preloader {
             position: fixed;
@@ -54,29 +54,29 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #000000;
+           background-color: #000000;
             z-index: 9999;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+           flex-direction: column;
+           justify-content: center;
+           align-items: center;
+           transition: opacity 0.5s ease, visibility 0.5s ease;
         }
         .loader-logo {
             font-size: 28px;
-            font-weight: bold;
+           font-weight: bold;
             color: #d4af37;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
+           letter-spacing: 6px;
+           text-transform: uppercase;
+           margin-bottom: 20px;
             animation: pulse-title 2s infinite ease-in-out;
         }
-        .loader-spinner {
+       .loader-spinner {
             width: 40px;
             height: 40px;
             border: 2px solid rgba(212, 175, 55, 0.1);
-            border-top: 2px solid #d4af37;
-            border-radius: 50%;
+           border-top: 2px solid #d4af37;
+           border-radius: 50%;
             animation: spin 1s linear infinite;
         }
         @keyframes spin {
@@ -87,15 +87,15 @@
             0%, 100% { opacity: 0.6; }
             50% { opacity: 1; }
         }
-
+ 
         /* Navigation - Adjusted for Mobile */
         nav { 
             display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
+           justify-content: space-between; 
+           align-items: center; 
             padding: 15px 4%; 
-            background: var(--surface-color); 
-            border-bottom: 2px solid var(--accent-color); 
+           background: var(--surface-color); 
+           border-bottom: 2px solid var(--accent-color); 
             position: sticky; 
             top: 0; 
             z-index: 1000; 
@@ -103,58 +103,58 @@
         .logo { font-size: 18px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-color); cursor: pointer; }
         .nav-links { display: flex; gap: 8px; list-style: none; }
         .nav-links a { text-decoration: none; color: var(--text-color); font-size: 10px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
-
+ 
         /* Theme Selector Container */
-        .theme-container {
-            text-align: center;
+       .theme-container {
+           text-align: center;
             padding: 10px;
-            background: var(--surface-color);
-            border-bottom: 1px solid var(--border-color);
+           background: var(--surface-color);
+           border-bottom: 1px solid var(--border-color);
             display: flex;
-            justify-content: center;
-            align-items: center;
+           justify-content: center;
+           align-items: center;
             gap: 10px;
         }
         .theme-label {
             font-size: 11px;
             color: var(--accent-color);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+           text-transform: uppercase;
+           letter-spacing: 1px;
         }
         .theme-btn {
             width: 20px;
             height: 20px;
-            border-radius: 50%;
+           border-radius: 50%;
             border: 2px solid #fff;
             cursor: pointer;
             outline: none;
         }
-
+ 
         /* Top Text Branding */
-        .branding-header { background: var(--bg-color); text-align: center; padding: 25px 0; border-bottom: 1px solid var(--border-color); }
-        .main-brand-title { font-size: 24px; font-weight: bold; color: var(--accent-color); letter-spacing: 4px; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-
+       .branding-header { background: var(--bg-color); text-align: center; padding: 25px 0; border-bottom: 1px solid var(--border-color); }
+       .main-brand-title { font-size: 24px; font-weight: bold; color: var(--accent-color); letter-spacing: 4px; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+ 
         /* Admin Panel Styling */
-        #admin-panel { display: none; background: var(--surface-color); padding: 20px 5%; border-bottom: 2px solid var(--accent-color); text-align: center; }
+         #admin-panel { display: none; background: var(--surface-color); padding: 20px 5%; border-bottom: 2px solid var(--accent-color); text-align: center; }
         .admin-input { padding: 12px; margin: 5px 0; border: 1px solid var(--accent-color); background: var(--bg-color); color: var(--text-color); width: 100%; max-width: 100%; }
-
+ 
         /* Info Boxes Section - Mobile Optimized Grid */
         .info-section { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; padding: 15px 4%; background: #050505; }
         .info-box { border: 1px solid var(--accent-color); padding: 10px 5px; text-align: center; background: var(--surface-color); }
         .info-box h4 { color: var(--accent-color); text-transform: uppercase; margin-bottom: 3px; letter-spacing: 1px; font-size: 9px; }
         .info-box p { font-size: 8px; color: #ccc; }
-
+ 
         /* Hero & Logo Area */
         .hero { height: 20vh; background: var(--bg-color); display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border-top: 3px solid var(--accent-color); margin-top: 15px; }
         .hero h2 { font-size: 18px; letter-spacing: 3px; text-transform: uppercase; color: var(--accent-color); }
-
+ 
         .container { padding: 15px 4%; background: var(--bg-color); }
         
         /* Product Grid - Forced 2 columns on mobile for better fit */
         .product-grid { 
             display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 10px; 
+           grid-template-columns: repeat(2, 1fr); 
+            gap: 10px;
         }
         
         .product-card { background: var(--surface-color); padding: 10px; text-align: center; border: 1px solid var(--border-color); position: relative; cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; }
@@ -168,93 +168,92 @@
         /* Discount Layout Styling */
         .price-box { margin: 3px 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .price { color: var(--accent-color); font-weight: bold; font-size: 13px; }
-        .old-price-strike { color: #777; text-decoration: line-through; font-size: 11px; margin-bottom: 1px; display: block; }
-        .discount-badge { display: inline-block; background: #ff4d6d; color: #fff; font-size: 8px; font-weight: bold; padding: 2px 4px; border-radius: 2px; margin-top: 2px; text-transform: uppercase; }
+       .old-price-strike { color: #777; text-decoration: line-through; font-size: 11px; margin-bottom: 1px; display: block; }
+       .discount-badge { display: inline-block; background: #ff4d6d; color: #fff; font-size: 8px; font-weight: bold; padding: 2px 4px; border-radius: 2px; margin-top: 2px; text-transform: uppercase; }
         
         .color-label { font-size: 9px; color: #888; display: block; margin-bottom: 3px; text-transform: uppercase; }
         
         .btn { padding: 12px; background: var(--accent-color); color: black; font-weight: bold; text-transform: uppercase; font-size: 10px; border: none; cursor: pointer; width: 100%; transition: 0.3s; margin-top: 5px; border-radius: 2px; }
         .remove-btn { background: #550000; color: white; font-size: 9px; padding: 8px; width: auto; }
         .save-btn { background: #333; color: var(--accent-color); font-size: 9px; padding: 8px; width: auto; border: 1px solid var(--accent-color); }
-
+ 
         #page-content { display: none; padding: 30px 5%; background: var(--bg-color); min-height: 70vh; }
         .content-box { border: 1px solid var(--accent-color); padding: 20px; background: #0a0a0a; }
-
+ 
         /* Cart Overlay - Mobile Full Width */
         .cart-overlay { position: fixed; top: 0; right: 0; width: 100%; height: 100%; background: var(--surface-color); z-index: 2000; padding: 20px; display: none; border-left: 4px solid var(--accent-color); overflow-y: auto; }
-
+ 
         .cart-input { width: 100%; padding: 12px; border: 1px solid var(--accent-color); background: var(--bg-color); color: white; margin-bottom: 10px; font-size: 14px; border-radius: 2px; }
-
+ 
         /* Added arrow indicators for options boxes */
-        select.cart-input {
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 10px center;
-            background-size: 15px;
+       select.cart-input {
+           appearance: none;
+           background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+           background-repeat: no-repeat;
+           background-position: right 10px center;
+           background-size: 15px;
         }
-
-        #floating-cart-btn { display: none; position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 92%; z-index: 1500; }
-
-        .suggestion-section { padding: 25px 5%; background: #0a0a0a; text-align: center; border-top: 1px solid var(--border-color); }
+ 
+       #floating-cart-btn { display: none; position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 92%; z-index: 1500; }
+ 
+       .suggestion-section { padding: 25px 5%; background: #0a0a0a; text-align: center; border-top: 1px solid var(--border-color); }
         .suggest-input { width: 100%; height: 80px; background: var(--bg-color); border: 1px solid var(--accent-color); color: #fff; padding: 10px; margin-bottom: 10px; border-radius: 2px; }
-
+ 
         /* Receipt Modal Pop-up Layout */
-        .receipt-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; display: none; justify-content: center; align-items: center; padding: 20px; }
+       .receipt-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; display: none; justify-content: center; align-items: center; padding: 20px; }
         .receipt-box { background: var(--surface-color); border: 2px solid var(--accent-color); width: 100%; max-width: 450px; padding: 25px; border-radius: 4px; box-shadow: 0 4px 25px rgba(0,0,0,0.7); max-height: 90vh; overflow-y: auto; }
-        .receipt-header { text-align: center; border-bottom: 1px dashed var(--accent-color); padding-bottom: 15px; margin-bottom: 15px; }
+       .receipt-header { text-align: center; border-bottom: 1px dashed var(--accent-color); padding-bottom: 15px; margin-bottom: 15px; }
         .receipt-title { font-size: 20px; color: var(--accent-color); font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }
         .receipt-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; }
-
+ 
         /* Order Dashboard Sub-Elements */
-        .admin-order-card { background: var(--bg-color); border: 1px solid var(--accent-color); padding: 15px; margin-bottom: 15px; text-align: left; border-radius: 2px; }
-        .admin-order-meta { font-size: 11px; color: #888; margin-bottom: 5px; }
-        .admin-order-items { font-size: 12px; border-top: 1px dashed #333; border-bottom: 1px dashed #333; padding: 8px 0; margin: 8px 0; }
-
+       .admin-order-card { background: var(--bg-color); border: 1px solid var(--accent-color); padding: 15px; margin-bottom: 15px; text-align: left; border-radius: 2px; }
+       .admin-order-meta { font-size: 11px; color: #888; margin-bottom: 5px; }
+       .admin-order-items { font-size: 12px; border-top: 1px dashed #333; border-bottom: 1px dashed #333; padding: 8px 0; margin: 8px 0; }
+ 
         footer { background: var(--bg-color); color: #444; text-align: center; padding: 20px; border-top: 1px solid #111; font-size: 10px; }
-
+ 
         /* Desktop refinements */
         @media (min-width: 768px) { 
-            .product-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; } 
-            .main-brand-title { font-size: 50px; } 
-            .cart-overlay { max-width: 380px; }
-            .info-section { grid-template-columns: repeat(3, 1fr); padding: 30px 10%; }
+           .product-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; } 
+           .main-brand-title { font-size: 50px; } 
+           .cart-overlay { max-width: 380px; }
+           .info-section { grid-template-columns: repeat(3, 1fr); padding: 30px 10%; }
         }
     </style>
 </head>
 <body>
-
+ 
     <div id="preloader">
         <div class="loader-logo">ARISA PERFUME</div>
         <div class="loader-spinner"></div>
     </div>
-
+ 
     <nav>
         <div class="logo" onclick="showHome()">ARISA</div>
         <ul class="nav-links">
-            <li><a onclick="showHome()">Home</a></li>
-            <li><a onclick="showAbout()">About</a></li>
-            <li><a onclick="showPolicy()">Policy</a></li>
+           <li><a onclick="showHome()">Home</a></li>
+           <li><a onclick="showAbout()">About</a></li>
+           <li><a onclick="showPolicy()">Policy</a></li>
         </ul>
         <div onclick="toggleCart()" style="cursor:pointer; color: var(--accent-color); font-weight: bold; font-size: 11px;">
             CART <span id="cart-counter" style="background:var(--accent-color); color:black; border-radius:50%; padding:2px 6px;">0</span>
         </div>
     </nav>
-
+ 
     <div class="theme-container">
         <span class="theme-label">Select Screen Theme:</span>
         <button class="theme-btn" style="background: #d4af37;" onclick="setTheme('gold')" title="Luxury Gold"></button>
         <button class="theme-btn" style="background: #ff4d6d;" onclick="setTheme('rose')" title="Midnight Rose"></button>
         <button class="theme-btn" style="background: #00e676;" onclick="setTheme('emerald')" title="Emerald Diamond"></button>
     </div>
-
+ 
     <header class="branding-header">
         <h1 class="main-brand-title">ARISA STORE</h1>
     </header>
-
+ 
     <div id="admin-panel">
-        <h3 style="color:var(--accent-color); margin-bottom:15px;" id="admin-panel-title">STAFF CONTROL PANEL</h3>
-        <input type="hidden" id="admin-p-id">
+        <h3 style="color:var(--accent-color); margin-bottom:15px;">STAFF CONTROL PANEL</h3>
         <input type="text" id="admin-p-name" class="admin-input" placeholder="Product Name">
         <input type="number" id="admin-p-price" class="admin-input" placeholder="Regular Price (NLE)">
         <input type="number" id="admin-p-discount-percentage" class="admin-input" placeholder="Discount Percentage (% e.g., 15) - Leave empty if none">
@@ -264,30 +263,27 @@
         <select id="admin-p-status" class="admin-input">
             <option value="available">Available</option>
             <option value="sold-out">Sold Out</option>
-        </select>
+       </select>
         
         <input type="file" id="admin-p-file" class="admin-input" accept="image/*">
         <br>
-        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 10px;">
-            <button class="btn" style="max-width: 200px;" id="admin-submit-btn" onclick="adminUpload()">ADD PRODUCT</button>
-            <button class="btn" style="max-width: 150px; background: #333; color: #fff; display: none;" id="admin-cancel-edit" onclick="clearAdminForm()">Cancel Edit</button>
-        </div>
+        <button class="btn" style="max-width: 200px; margin-top: 10px;" onclick="adminUpload()">ADD PRODUCT</button>
         
         <div id="admin-orders-section" style="margin-top:30px; border-top:2px dashed var(--accent-color); padding-top:20px;">
             <h4 style="color:var(--accent-color); font-size:14px; letter-spacing:1px; margin-bottom:15px;">LIVE CUSTOMER ORDERS</h4>
             <div id="admin-orders-list" style="color:#fff; font-size:12px;">
                 <p style="color:#666; font-style:italic;">No active incoming orders.</p>
-            </div>
+           </div>
         </div>
-
+ 
         <div id="admin-suggestions" style="margin-top:20px; border-top:1px solid #333; padding-top:10px;">
             <h4 style="color:var(--accent-color); font-size:12px;">CUSTOMER SUGGESTIONS</h4>
             <div id="suggestion-display-list" style="font-size:11px; color:#ccc; margin-top:10px;"></div>
         </div>
-
+ 
         <button class="btn" style="max-width: 200px; background:#333; color:white; margin-top:20px;" onclick="logoutAdmin()">LOGOUT</button>
     </div>
-
+ 
     <div id="cart-sidebar" class="cart-overlay">
         <h3 style="color:var(--accent-color); margin-bottom:20px;">YOUR CART</h3>
         <div id="cart-items-list"></div>
@@ -296,35 +292,35 @@
             <h4 style="color:var(--accent-color); font-size:12px; margin-bottom:10px;">SAVED FOR LATER</h4>
             <div id="saved-items-list"></div>
         </div>
-
+ 
         <hr style="border:0; border-top:1px solid #333; margin:15px 0;">
         <div style="font-size:14px;">
-            <p>Subtotal: <span id="cart-subtotal">0</span> NLE</p>
+           <p>Subtotal: <span id="cart-subtotal">0</span> NLE</p>
             <p id="discount-row" style="color:var(--accent-color); display:none; font-weight: bold;">Multi-buy Discount: -<span id="cart-discount">0</span> NLE</p>
             <p style="font-size:18px; font-weight:bold; margin-top:10px;">Total: <span id="cart-grand-total">0</span> NLE</p>
         </div>
-
+ 
         <div style="margin-top:20px;">
             <p style="font-size:11px; color:var(--accent-color); margin-bottom:5px;">SERVICE TYPE (SELECT OPTION):</p>
             <select id="service-type" class="cart-input">
-                <option value="Delivery">Delivery (Fee based on location)</option>
-                <option value="Pickup">Pickup at Store</option>
-            </select>
-
+               <option value="Delivery">Delivery (Fee based on location)</option>
+               <option value="Pickup">Pickup at Store</option>
+           </select>
+ 
             <p style="font-size:11px; color:var(--accent-color); margin-bottom:5px;">PAYMENT METHOD (SELECT OPTION):</p>
             <select id="payment-method" class="cart-input">
-                <option value="After Delivery">Pay After Delivery</option>
-                <option value="Orange Money (074170733)">Pay Now (Orange Money: 074170733)</option>
-            </select>
+               <option value="After Delivery">Pay After Delivery</option>
+               <option value="Orange Money (074170733)">Pay Now (Orange Money: 074170733)</option>
+           </select>
         </div>
-
+ 
         <input type="text" id="cust-name" class="cart-input" placeholder="Full Name">
         <input type="tel" id="cust-phone" class="cart-input" placeholder="Phone Number (WhatsApp / Payment No.)">
         <input type="text" id="cust-address" class="cart-input" placeholder="Address / Pickup Note">
         <button class="btn" style="background:#25D366; color:white;" onclick="checkoutWhatsApp()">ORDER ON WHATSAPP</button>
         <button class="btn" style="background:#222; color:white; margin-top:10px;" onclick="toggleCart()">CLOSE</button>
     </div>
-
+ 
     <div id="receipt-capture-canvas" style="position: absolute; left: -9999px; top: -9999px; width: 400px; background: #111111; color: #ffffff; padding: 25px; border: 2px solid #d4af37; font-family: 'Georgia', serif;">
         <div style="text-align: center; border-bottom: 1px dashed #d4af37; padding-bottom: 15px; margin-bottom: 15px;">
             <h2 style="font-size: 22px; color: #d4af37; letter-spacing: 2px; text-transform: uppercase;">ARISA PERFUME</h2>
@@ -335,84 +331,84 @@
             &copy; 2026 ARISA PERFUME STORE. All Rights Reserved.
         </div>
     </div>
-
+ 
     <div id="receipt-modal" class="receipt-overlay">
         <div class="receipt-box" id="pdf-invoice-area">
             <div class="receipt-header">
                 <h2 class="receipt-title">Order Received!</h2>
                 <p style="font-size: 12px; margin-top: 5px; color: #aaa;">Thank you for shopping with ARISA</p>
-            </div>
+           </div>
             <div id="receipt-details"></div>
             <button class="btn" id="hide-pdf-btn" style="margin-top:20px;" onclick="closeReceipt()">CONTINUE SHOPPING</button>
         </div>
     </div>
-
+ 
     <div id="floating-cart-btn">
         <button class="btn" style="height: 50px; font-size: 14px; border: 2px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.5);" onclick="toggleCart()">View Cart & Checkout →</button>
     </div>
-
+ 
     <div id="home-content">
         <div class="container">
             <h2 style="color:var(--accent-color); text-align:center; margin-bottom:15px; font-size:14px; letter-spacing:2px;">SHOP COLLECTIONS</h2>
             <div class="product-grid" id="product-grid"></div>
         </div>
-
+ 
         <section class="hero">
-            <h2>Luxury Fragrances</h2>
+           <h2>Luxury Fragrances</h2>
             <p style="font-size: 11px; color: #888;">9:00 AM - 6:00 PM Service in Freetown</p>
-        </section>
-
+       </section>
+ 
         <section class="info-section">
             <div class="info-box">
-                <h4>Quality</h4>
-                <p>100% Genuine</p>
-            </div>
+               <h4>Quality</h4>
+               <p>100% Genuine</p>
+           </div>
             <div class="info-box">
-                <h4>Delivery</h4>
-                <p>Within Freetown</p>
-            </div>
+               <h4>Delivery</h4>
+               <p>Within Freetown</p>
+           </div>
             <div class="info-box">
-                <h4>Support</h4>
-                <p>9AM - 6PM</p>
-            </div>
-        </section>
+               <h4>Support</h4>
+               <p>9AM - 6PM</p>
+           </div>
+       </section>
     </div>
-
+ 
     <div id="page-content">
         <div class="content-box" id="page-inner-content"></div>
     </div>
-
+ 
     <div class="suggestion-section" id="user-suggestion-box">
         <h3 style="color:var(--accent-color); margin-bottom:10px; font-size: 13px;">SUGGESTIONS</h3>
         <textarea id="user-suggestion" class="suggest-input" placeholder="What scent should we add next?"></textarea><br>
         <button class="btn" style="max-width: 200px;" onclick="sendSuggestion()">SEND TO STAFF</button>
     </div>
-
+ 
     <footer>
-        <p>&copy; 2026 ARISA PERFUME STORE.</p>
+       <p>&copy; 2026 ARISA PERFUME STORE.</p>
         <button onclick="loginAdmin()" style="background:none; border:none; color:#111; cursor:pointer; margin-top: 10px;">Staff Login</button>
     </footer>
-
+ 
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
-
+ 
     <script>
         // WINDOW EVENT LISTENER FOR PRELOADER TERMINATION
         window.addEventListener('load', () => {
-            const preloader = document.getElementById('preloader');
+             const preloader = document.getElementById('preloader');
             setTimeout(() => {
-                preloader.style.opacity = '0';
-                preloader.style.visibility = 'hidden';
+               preloader.style.opacity = '0';
+               preloader.style.visibility = 'hidden';
             }, 1200); // Luxury holding frame display delay
         });
-
+ 
         const firebaseConfig = {
             apiKey: "AIzaSyD6VOairMfPk1fM9VApccmNEPAdMIb3HO4",
-            authDomain: "arisa-perfume-store.firebaseapp.com",
-            databaseURL: "https://arisa-perfume-store-default-rtdb.firebaseio.com",
+           authDomain: "arisa-perfume-store.firebaseapp.com",
+           databaseURL: "https://arisa-perfume-store-default-rtdb.firebaseio.com",
             projectId: "arisa-perfume-store",
-            storageBucket: "arisa-perfume-store.firebasestorage.app",
-            messagingSenderId: "49919010733",
+           storageBucket: "arisa-perfume-store.firebasestorage.app",
+           messagingSenderId: "49919010733",
             appId: "1:49919010733:web:2087407e3f6bd41c1fe324"
         };
         firebase.initializeApp(firebaseConfig);
@@ -421,565 +417,408 @@
         let cart = [];
         let savedItems = [];
         let perfumes = [];
-
+ 
         // BLOCK BACK NAVIGATION SYSTEM WHEN CART ACTIVE
         function handleBackPrevention() {
-            if (cart.length > 0) {
-                history.pushState(null, null, window.location.pathname);
-                alert("Your cart is active. Going back is disabled until items are cleared.");
-            }
+             if (cart.length > 0) {
+               history.pushState(null, null, window.location.pathname);
+               alert("Your cart is active. Going back is disabled until items are cleared.");
+             }
         }
         window.addEventListener('popstate', handleBackPrevention);
         window.addEventListener('beforeunload', (e) => {
-            if (cart.length > 0) {
-                e.preventDefault();
-                e.returnValue = 'Your cart contains items. Are you sure you want to exit?';
-            }
+             if (cart.length > 0) {
+               e.preventDefault();
+               e.returnValue = 'Your cart contains items. Are you sure you want to exit?';
+             }
         });
-
+ 
         // THEME CONFIGURATION PICKER FUNCTION
         window.setTheme = (themeName) => {
-            if(themeName === 'gold') {
-                document.documentElement.removeAttribute('data-theme');
+           if(themeName === 'gold') {
+               document.documentElement.removeAttribute('data-theme');
             } else {
-                document.documentElement.setAttribute('data-theme', themeName);
+               document.documentElement.setAttribute('data-theme', themeName);
             }
         };
-
+ 
         db.ref('perfumes').on('value', (snapshot) => {
-            const data = snapshot.val();
-            perfumes = [];
-            if (data) Object.keys(data).forEach(key => perfumes.push({ firebaseId: key, ...data[key] }));
+             const data = snapshot.val();
+             perfumes = [];
+             if (data) Object.keys(data).forEach(key => perfumes.push({ firebaseId: key, ...data[key] }));
             renderProducts();
         });
-
+ 
         db.ref('suggestions').on('value', (snapshot) => {
-            const data = snapshot.val();
-            const display = document.getElementById('suggestion-display-list');
-            if (display && data) {
-                display.innerHTML = Object.values(data).map(s => `<p style="margin-bottom:5px;">• ${s}</p>`).join('');
-            }
+             const data = snapshot.val();
+             const display = document.getElementById('suggestion-display-list');
+             if (display && data) {
+               display.innerHTML = Object.values(data).map(s => `<p style="margin-bottom:5px;">• ${s}</p>`).join('');
+             }
         });
-
+ 
         // REAL-TIME ADMIN FEED MONITORING FOR SYSTEM ORDERS
         db.ref('orders').on('value', (snapshot) => {
-            const data = snapshot.val();
-            const ordersDisplayList = document.getElementById('admin-orders-list');
-            if (!ordersDisplayList) return;
-            
-            if (!data) {
-                ordersDisplayList.innerHTML = `<p style="color:#666; font-style:italic;">No active incoming orders.</p>`;
-                return;
-            }
-
-            let ordersHTML = '';
+             const data = snapshot.val();
+             const ordersDisplayList = document.getElementById('admin-orders-list');
+             if (!ordersDisplayList) return;
+             
+             if (!data) {
+               ordersDisplayList.innerHTML = `<p style="color:#666; font-style:italic;">No active incoming orders.</p>`;
+               return;
+             }
+ 
+             let ordersHTML = '';
             Object.keys(data).forEach(orderId => {
-                const order = data[orderId];
-                
-                let itemLines = '';
+                 const order = data[orderId];
+                 
+                 let itemLines = '';
                 order.items.forEach(itm => {
-                    itemLines += `<div>• <strong>${itm.name}</strong> ${itm.color ? `(${itm.color})` : ''} - ${itm.activePrice} NLE</div>`;
-                });
-
+                   itemLines += `<div>• <strong>${itm.name}</strong> ${itm.color ? `(${itm.color})` : ''} - ${itm.activePrice} NLE</div>`;
+                 });
+ 
                 ordersHTML += `
-                    <div class="admin-order-card" id="card-${orderId}">
-                        <div class="admin-order-meta"><strong>Date:</strong> ${order.timestamp}</div>
-                        <div style="font-size:13px; margin-bottom:5px;"><strong>Customer:</strong> ${order.customerName}</div>
-                        <div><strong>Phone:</strong> <a href="tel:${order.customerPhone}" style="color:var(--accent-color); text-decoration:none;">${order.customerPhone}</a> | <a href="https://wa.me/${order.customerPhone.replace(/[^0-9]/g, '')}" target="_blank" style="color:#25D366; text-decoration:none; margin-left:5px;">WhatsApp</a></div>
-                        <div><strong>Address:</strong> ${order.customerAddress}</div>
-                        <div style="margin-top:5px;"><strong>Logistics:</strong> ${order.serviceType} | <strong>Payment:</strong> ${order.paymentMethod}</div>
-                        
-                        <div class="admin-order-items">
-                            <span style="color:var(--accent-color); font-weight:bold; display:block; margin-bottom:4px;">ITEMS IN RECEIPT:</span>
-                            ${itemLines}
-                        </div>
-
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <span>Total Due: <strong style="color:var(--accent-color); font-size:14px;">${order.grandTotal} NLE</strong></span>
-                            <button class="btn" style="width:auto; margin:0; padding:6px 12px; background:#444; color:#fff;" onclick="archiveOrder('${orderId}')">Archive Order</button>
-                        </div>
-                    </div>
+                   <div class="admin-order-card" id="card-${orderId}">
+                       <div class="admin-order-meta"><strong>Date:</strong> ${order.timestamp}</div>
+                       <div style="font-size:13px; margin-bottom:5px;"><strong>Customer:</strong> ${order.customerName}</div>
+                       <div><strong>Phone:</strong> <a href="tel:${order.customerPhone}" style="color:var(--accent-color); text-decoration:none;">${order.customerPhone}</a> | <a href="https://wa.me/${order.customerPhone.replace(/[^0-9]/g, '')}" target="_blank" style="color:#25D366; text-decoration:none; margin-left:5px;">WhatsApp</a></div>
+                       <div><strong>Address:</strong> ${order.customerAddress}</div>
+                       <div style="margin-top:5px;"><strong>Logistics:</strong> ${order.serviceType} | <strong>Payment:</strong> ${order.paymentMethod}</div>
+                       
+                       <div class="admin-order-items">
+                           <span style="color:var(--accent-color); font-weight:bold; display:block; margin-bottom:4px;">ITEMS IN RECEIPT:</span>
+                           ${itemLines}
+                       </div>
+ 
+                       <div style="display:flex; justify-content:space-between; align-items:center;">
+                           <span>Total Due: <strong style="color:var(--accent-color); font-size:14px;">${order.grandTotal} NLE</strong></span>
+                           <button class="btn" style="width:auto; margin:0; padding:6px 12px; background:#444; color:#fff;" onclick="archiveOrder('${orderId}')">Archive Order</button>
+                       </div>
+                   </div>
                 `;
-            });
+             });
             ordersDisplayList.innerHTML = ordersHTML;
         });
-
+ 
         window.archiveOrder = (orderId) => {
-            if(confirm("Mark order as completed and remove from panel?")) {
-                db.ref('orders/' + orderId).remove();
+           if(confirm("Mark order as completed and remove from panel?")) {
+               db.ref('orders/' + orderId).remove();
             }
         };
-
+ 
         function renderProducts() {
-            const grid = document.getElementById('product-grid');
+             const grid = document.getElementById('product-grid');
             grid.innerHTML = '';
-            const isAdmin = sessionStorage.getItem('isArisaAdmin') === 'true';
+             const isAdmin = sessionStorage.getItem('isArisaAdmin') === 'true';
             document.getElementById('user-suggestion-box').style.display = isAdmin ? 'none' : 'block';
-
+ 
             perfumes.forEach((p) => {
-                const sold = p.status === 'sold-out';
-                
-                let originalPrice = parseFloat(p.price);
-                let priceDisplayHTML = '';
-
-                if (p.discountPercentage && parseFloat(p.discountPercentage) > 0) {
+                 const sold = p.status === 'sold-out';
+                 
+                 let originalPrice = parseFloat(p.price);
+                 let priceDisplayHTML = '';
+ 
+                 if (p.discountPercentage && parseFloat(p.discountPercentage) > 0) {
                     let pct = parseFloat(p.discountPercentage);
                     let finalPrice = originalPrice - (originalPrice * (pct / 100));
                     priceDisplayHTML = `
-                        <div class="price-box">
-                            <span class="old-price-strike">${originalPrice} NLE</span>
-                            <span class="price">${finalPrice.toFixed(2)} NLE</span>
-                            <span class="discount-badge">${pct}% OFF</span>
-                        </div>
-                    `;
-                } else {
+                       <div class="price-box">
+                           <span class="old-price-strike">${originalPrice} NLE</span>
+                           <span class="price">${finalPrice.toFixed(2)} NLE</span>
+                           <span class="discount-badge">${pct}% OFF</span>
+                       </div>
+                     `;
+                 } else {
                     priceDisplayHTML = `
-                        <div class="price-box">
-                            <span class="price">${originalPrice} NLE</span>
-                        </div>
-                    `;
-                }
-
+                       <div class="price-box">
+                           <span class="price">${originalPrice} NLE</span>
+                       </div>
+                     `;
+                 }
+ 
                 grid.innerHTML += `
-                    <div class="product-card" onclick="${sold ? '' : `handleProductTap('${p.firebaseId}')`}">
-                        <span class="status-badge ${p.status}">${p.status.replace('-', ' ')}</span>
-                        <div class="product-image"><img src="${p.image}"></div>
-                        <h3 style="font-size:11px;">${p.name}</h3>
-                        ${p.color ? `<span class="color-label">${p.color}</span>` : ''}
-                        ${priceDisplayHTML}
-                        <button class="btn" ${sold ? 'disabled' : ''}>
-                            ${sold ? 'SOLD OUT' : 'BUY'}
-                        </button>
-                        ${isAdmin ? `
-                            <button class="btn" style="background:var(--accent-color); color:black; margin-top:5px; font-size:8px;" onclick="event.stopPropagation(); loadProductToEdit('${p.firebaseId}')">Edit</button>
-                            <button class="btn" style="background:#444; margin-top:5px; font-size:8px;" onclick="event.stopPropagation(); toggleStatus('${p.firebaseId}','${p.status}')">Status</button>
-                            <button class="btn" style="background:red; margin-top:5px; font-size:8px;" onclick="event.stopPropagation(); deleteProduct('${p.firebaseId}')">Del</button>
-                        ` : ''}
-                    </div>`;
+                   <div class="product-card" onclick="${sold ? '' : `handleProductTap('${p.firebaseId}')`}">
+                       <span class="status-badge ${p.status}">${p.status.replace('-', ' ')}</span>
+                       <div class="product-image"><img src="${p.image}"></div>
+                       <h3 style="font-size:11px;">${p.name}</h3>
+                       ${p.color ? `<span class="color-label">${p.color}</span>` : ''}
+                       ${priceDisplayHTML}
+                       <button class="btn" ${sold ? 'disabled' : ''}>
+                           ${sold ? 'SOLD OUT' : 'BUY'}
+                       </button>
+                       ${isAdmin ? `<button class="btn" style="background:#444; margin-top:5px; font-size:8px;" onclick="event.stopPropagation(); toggleStatus('${p.firebaseId}','${p.status}')">Status</button>
+                                     <button class="btn" style="background:red; margin-top:5px; font-size:8px;" onclick="event.stopPropagation(); deleteProduct('${p.firebaseId}')">Del</button>` : ''}
+                   </div>`;
             });
-        }
-
+         }
+ 
         let tapTimer = null;
         window.handleProductTap = (id) => {
-            if (tapTimer === null) {
-                tapTimer = setTimeout(() => {
-                    addToCart(id);
-                    tapTimer = null;
+             if (tapTimer === null) {
+               tapTimer = setTimeout(() => {
+                   addToCart(id);
+                   tapTimer = null;
                 }, 300);
-            } else {
-                clearTimeout(tapTimer);
-                tapTimer = null;
-                addToCart(id);
-            }
+             } else {
+               clearTimeout(tapTimer);
+               tapTimer = null;
+               addToCart(id);
+             }
         };
-
+ 
         window.addToCart = (id) => {
-            const existingItem = cart.find(i => i.firebaseId === id);
-            if (existingItem) {
-                alert("This item is already added to your cart!");
-                return;
-            }
-            const item = perfumes.find(p => p.firebaseId === id);
-            
-            // Generate standard initial calculated active price 
-            let initialCalculatedPrice = parseFloat(item.price);
-            if (item.discountPercentage && parseFloat(item.discountPercentage) > 0) {
-                let pct = parseFloat(item.discountPercentage);
-                initialCalculatedPrice = initialCalculatedPrice - (initialCalculatedPrice * (pct / 100));
-            }
-
-            // Include a customBasketDiscount modifier field set to 0 initially
-            cart.push({
-                ...item, 
-                cartId: Date.now() + Math.random(), 
-                customBasketDiscount: 0,
-                baseCalculatedPrice: initialCalculatedPrice
-            }); 
+             const existingItem = cart.find(i => i.firebaseId === id);
+             if (existingItem) {
+               alert("This item is already added to your cart!");
+               return;
+             }
+             const item = perfumes.find(p => p.firebaseId === id);
+            cart.push({...item, cartId: Date.now() + Math.random()}); 
             history.pushState(null, null, window.location.pathname);
             updateCartUI();
             document.getElementById('floating-cart-btn').style.display = 'block';
         };
-
+ 
         window.removeFromCart = (cartId) => {
-            cart = cart.filter(item => item.cartId !== cartId);
+             cart = cart.filter(item => item.cartId !== cartId);
             updateCartUI();
             if(cart.length === 0) document.getElementById('floating-cart-btn').style.display = 'none';
         };
-
+ 
         window.saveForLater = (cartId) => {
-            const item = cart.find(i => i.cartId === cartId);
+             const item = cart.find(i => i.cartId === cartId);
             savedItems.push(item);
-            cart = cart.filter(i => i.cartId !== cartId);
+             cart = cart.filter(i => i.cartId !== cartId);
             updateCartUI();
         };
-
+ 
         window.moveToCart = (cartId) => {
-            const item = savedItems.find(i => i.cartId === cartId);
-            const duplicateCheck = cart.find(i => i.firebaseId === item.firebaseId);
+             const item = savedItems.find(i => i.cartId === cartId);
+             const duplicateCheck = cart.find(i => i.firebaseId === item.firebaseId);
             if(duplicateCheck) {
-                alert("This item is already in your active cart panel.");
-                return;
+               alert("This item is already in your active cart panel.");
+               return;
             }
             cart.push(item);
-            savedItems = savedItems.filter(i => i.cartId !== cartId);
+             savedItems = savedItems.filter(i => i.cartId !== cartId);
             history.pushState(null, null, window.location.pathname);
             updateCartUI();
         };
-
-        // NEW: Live inline modifier update function for inline product checkout adjustments
-        window.updateProductInlineDiscount = (cartId, manualDiscountVal) => {
-            const item = cart.find(i => i.cartId === cartId);
-            if (item) {
-                let discAmt = parseFloat(manualDiscountVal);
-                item.customBasketDiscount = isNaN(discAmt) || discAmt < 0 ? 0 : discAmt;
-                updateCartUITotalsOnly();
-            }
-        };
-
-        function updateCartUITotalsOnly() {
-            let subtotal = 0;
-            cart.forEach(i => {
-                let itemTotal = i.baseCalculatedPrice - i.customBasketDiscount;
-                if(itemTotal < 0) itemTotal = 0;
-                subtotal += itemTotal;
-                
-                // Live update individual price label fields without full redraw
-                const lbl = document.getElementById(`inline-price-${i.cartId}`);
-                if(lbl) lbl.innerText = itemTotal.toFixed(2);
-            });
-            
-            document.getElementById('cart-subtotal').innerText = subtotal.toFixed(2);
-            let grandTotal = subtotal;
-            document.getElementById('cart-grand-total').innerText = grandTotal.toFixed(2);
-        }
-
+ 
         function updateCartUI() {
             document.getElementById('cart-counter').innerText = cart.length;
-            const list = document.getElementById('cart-items-list');
-            const savedList = document.getElementById('saved-items-list');
-            let subtotal = 0;
-
+             const list = document.getElementById('cart-items-list');
+             const savedList = document.getElementById('saved-items-list');
+             let subtotal = 0;
+ 
             list.innerHTML = cart.map(i => {
-                let activePriceAfterDiscounts = i.baseCalculatedPrice - i.customBasketDiscount;
-                if(activePriceAfterDiscounts < 0) activePriceAfterDiscounts = 0;
-                subtotal += activePriceAfterDiscounts;
-
-                return `
-                    <div style="background:#151515; padding:10px; border:1px solid #222; margin-bottom:10px;">
-                        <div style="display:flex; justify-content:space-between; font-size:12px;">
-                            <span><strong>${i.name}</strong></span>
-                            <span><span id="inline-price-${i.cartId}">${activePriceAfterDiscounts.toFixed(2)}</span> NLE</span>
-                        </div>
-                        
-                        <div style="margin-top:6px; display:flex; align-items:center; gap:5px;">
-                            <span style="font-size:9px; color:var(--accent-color); text-transform:uppercase;">Less Discount (NLE):</span>
-                            <input type="number" value="${i.customBasketDiscount}" style="width:70px; font-size:11px; padding:2px; background:#000; border:1px solid var(--accent-color); color:#fff;" oninput="updateProductInlineDiscount(${i.cartId}, this.value)">
-                        </div>
-
-                        <div style="margin-top:8px; display:flex; gap:5px;">
+                 const originalPrice = parseFloat(i.price);
+                 let finalActivePrice = originalPrice;
+                 let discountTextHTML = '';
+ 
+                 if (i.discountPercentage && parseFloat(i.discountPercentage) > 0) {
+                    const pct = parseFloat(i.discountPercentage);
+                    finalActivePrice = originalPrice - (originalPrice * (pct / 100));
+                    discountTextHTML = `<span style="color:#ff4d6d; font-size:10px; display:block;">-${pct}% Applied (was ${originalPrice.toFixed(2)} NLE)</span>`;
+                 }
+                 subtotal += finalActivePrice;
+ 
+                 return `
+                    <div style="border-bottom:1px solid var(--border-color); padding:10px 0;">
+                        <p style="font-size:12px; font-weight:bold;">${i.name}</p>
+                        ${discountTextHTML}
+                        <p style="font-size:11px; color:var(--accent-color);">${finalActivePrice.toFixed(2)} NLE</p>
+                        <div style="display:flex; gap:10px; margin-top:5px;">
                             <button class="remove-btn" onclick="removeFromCart(${i.cartId})">Remove</button>
-                            <button class="save-btn" onclick="saveForLater(${i.cartId})">Save Later</button>
+                            <button class="save-btn" onclick="saveForLater(${i.cartId})">Save</button>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             }).join('');
-
-            if(savedItems.length > 0) {
-                document.getElementById('saved-items-container').style.display = 'block';
-                savedList.innerHTML = savedItems.map(i => `
-                    <div style="background:#0a0a0a; padding:8px; border:1px solid #1a1a1a; margin-bottom:5px; display:flex; justify-content:space-between; align-items:center;">
-                        <span style="font-size:11px;">${i.name}</span>
-                        <button class="save-btn" style="padding:4px 8px; font-size:8px;" onclick="moveToCart(${i.cartId})">Move to Cart</button>
-                    </div>
-                `).join('');
-            } else {
-                document.getElementById('saved-items-container').style.display = 'none';
-            }
-
+ 
+            savedList.innerHTML = savedItems.map(i => `
+                <div style="border-bottom:1px solid var(--border-color); padding:10px 0; opacity:0.6;">
+                    <p style="font-size:11px;">${i.name}</p>
+                    <button class="btn" style="padding:4px; font-size:8px; width:auto;" onclick="moveToCart(${i.cartId})">Move to Cart</button>
+                </div>`).join('');
+            
+            document.getElementById('saved-items-container').style.display = savedItems.length > 0 ? 'block' : 'none';
+ 
             document.getElementById('cart-subtotal').innerText = subtotal.toFixed(2);
-            let grandTotal = subtotal;
-            document.getElementById('cart-grand-total').innerText = grandTotal.toFixed(2);
+            document.getElementById('cart-grand-total').innerText = subtotal.toFixed(2);
         }
-
-        // Admin Edit Product Helpers
-        window.loadProductToEdit = (id) => {
-            const p = perfumes.find(item => item.firebaseId === id);
-            if (!p) return;
-            
-            document.getElementById('admin-p-id').value = p.firebaseId;
-            document.getElementById('admin-p-name').value = p.name;
-            document.getElementById('admin-p-price').value = p.price;
-            document.getElementById('admin-p-discount-percentage').value = p.discountPercentage || '';
-            document.getElementById('admin-p-color').value = p.color || '';
-            document.getElementById('admin-p-status').value = p.status || 'available';
-            
-            document.getElementById('admin-panel-title').innerText = "EDIT CURRENT PRODUCT";
-            document.getElementById('admin-submit-btn').innerText = "SAVE CHANGES";
-            document.getElementById('admin-cancel-edit').style.display = "inline-block";
-            
-            document.getElementById('admin-panel').scrollIntoView({ behavior: 'smooth' });
+ 
+        window.toggleCart = () => {
+            const side = document.getElementById('cart-sidebar');
+            side.style.display = side.style.display === 'block' ? 'none' : 'block';
         };
-
-        window.clearAdminForm = () => {
-            document.getElementById('admin-p-id').value = '';
-            document.getElementById('admin-p-name').value = '';
-            document.getElementById('admin-p-price').value = '';
-            document.getElementById('admin-p-discount-percentage').value = '';
-            document.getElementById('admin-p-color').value = '';
-            document.getElementById('admin-p-status').value = 'available';
-            document.getElementById('admin-p-file').value = '';
-            
-            document.getElementById('admin-panel-title').innerText = "STAFF CONTROL PANEL";
-            document.getElementById('admin-submit-btn').innerText = "ADD PRODUCT";
-            document.getElementById('admin-cancel-edit').style.display = "none";
-        };
-
+ 
         window.adminUpload = () => {
-            const editId = document.getElementById('admin-p-id').value;
             const name = document.getElementById('admin-p-name').value;
             const price = document.getElementById('admin-p-price').value;
             const discountPercentage = document.getElementById('admin-p-discount-percentage').value;
             const color = document.getElementById('admin-p-color').value;
             const status = document.getElementById('admin-p-status').value;
             const fileInput = document.getElementById('admin-p-file');
-
-            if (!name || !price) {
-                alert("Please enter both product name and original standard retail price.");
+ 
+            if(!name || !price || !fileInput.files[0]) {
+                alert("Please fill name, price and upload an image.");
                 return;
             }
-
-            const payload = {
-                name: name,
-                price: price,
-                discountPercentage: discountPercentage || 0,
-                color: color,
-                status: status
+ 
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Image = e.target.result;
+                db.ref('perfumes').push({
+                    name,
+                    price,
+                    discountPercentage: discountPercentage || 0,
+                    color,
+                    status,
+                    image: base64Image
+                }, () => {
+                    alert("Uploaded successfully!");
+                    document.getElementById('admin-p-name').value = '';
+                    document.getElementById('admin-p-price').value = '';
+                    document.getElementById('admin-p-discount-percentage').value = '';
+                    document.getElementById('admin-p-color').value = '';
+                    fileInput.value = '';
+                });
             };
-
-            const runSave = (imageUrl) => {
-                if(imageUrl) payload.image = imageUrl;
-                
-                if (editId) {
-                    // Update exact specific product node branches
-                    db.ref('perfumes/' + editId).update(payload).then(() => {
-                        alert("Product configuration modified successfully!");
-                        clearAdminForm();
-                    });
-                } else {
-                    // Create completely new entry branches
-                    if(!payload.image) payload.image = "https://via.placeholder.com/150?text=Luxury+Scent";
-                    db.ref('perfumes').push(payload).then(() => {
-                        alert("New inventory product catalogued successfully!");
-                        clearAdminForm();
-                    });
-                }
-            };
-
-            if (fileInput.files.length > 0) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    runSave(e.target.result);
-                };
-                reader.readAsDataURL(fileInput.files[0]);
-            } else {
-                if(editId) {
-                    runSave(null); 
-                } else {
-                    runSave("https://via.placeholder.com/150?text=Luxury+Scent");
-                }
-            }
+            reader.readAsDataURL(fileInput.files[0]);
         };
-
+ 
         window.toggleStatus = (id, currentStatus) => {
             const nextStatus = currentStatus === 'available' ? 'sold-out' : 'available';
             db.ref('perfumes/' + id).update({ status: nextStatus });
         };
-
+ 
         window.deleteProduct = (id) => {
-            if (confirm("Are you sure you want to completely drop this perfume listing?")) {
+            if(confirm("Delete product forever?")) {
                 db.ref('perfumes/' + id).remove();
             }
         };
-
+ 
         window.sendSuggestion = () => {
-            const text = document.getElementById('user-suggestion').value;
-            if(!text.trim()) return;
-            db.ref('suggestions').push(text).then(() => {
-                alert("Thank you! Your scent recommendation was dropped to our staff pipeline.");
+            const txt = document.getElementById('user-suggestion').value;
+            if(!txt) return;
+            db.ref('suggestions').push(txt, () => {
+                alert("Thank you! Suggestion recorded.");
                 document.getElementById('user-suggestion').value = '';
             });
         };
-
-        window.loginAdmin = () => {
-            const pin = prompt("Enter standard security operational login credential pin:");
-            if (pin === "23274") {
-                sessionStorage.setItem('isArisaAdmin', 'true');
-                document.getElementById('admin-panel').style.display = 'block';
-                renderProducts();
-            } else {
-                alert("Access unauthorized.");
+ 
+        window.checkoutWhatsApp = () => {
+            const name = document.getElementById('cust-name').value;
+            const phone = document.getElementById('cust-phone').value;
+            const address = document.getElementById('cust-address').value;
+            const sType = document.getElementById('service-type').value;
+            const pMethod = document.getElementById('payment-method').value;
+ 
+            if(!name || !phone || !address) {
+                alert("Please fill your profile delivery fields.");
+                return;
             }
+ 
+            let itemsSummary = cart.map(i => {
+                let originalPrice = parseFloat(i.price);
+                let finalPrice = originalPrice;
+                if (i.discountPercentage && parseFloat(i.discountPercentage) > 0) {
+                    finalPrice = originalPrice - (originalPrice * (parseFloat(i.discountPercentage) / 100));
+                }
+                return `• ${i.name} (${i.color || 'Standard'}) - ${finalPrice.toFixed(2)} NLE`;
+            }).join('\n');
+ 
+            const total = document.getElementById('cart-grand-total').innerText;
+            const timestamp = new Date().toLocaleString();
+ 
+            const orderPayload = {
+                customerName: name,
+                customerPhone: phone,
+                customerAddress: address,
+                serviceType: sType,
+                paymentMethod: pMethod,
+                timestamp: timestamp,
+                grandTotal: total,
+                items: cart.map(i => {
+                    let p = parseFloat(i.price);
+                    if (i.discountPercentage && parseFloat(i.discountPercentage) > 0) {
+                        p = p - (p * (parseFloat(i.discountPercentage) / 100));
+                    }
+                    return { name: i.name, color: i.color || '', activePrice: p.toFixed(2) };
+                })
+            };
+ 
+            const newOrderRef = db.ref('orders').push();
+            newOrderRef.set(orderPayload, () => {
+                let text = `*NEW ARISA ORDER INCOMING*\n\n`;
+                text += `*Date:* ${timestamp}\n`;
+                text += `*Customer:* ${name}\n`;
+                text += `*Phone:* ${phone}\n`;
+                text += `*Address:* ${address}\n`;
+                text += `*Logistics:* ${sType}\n`;
+                text += `*Payment:* ${pMethod}\n\n`;
+                text += `*ITEMS:*\n${itemsSummary}\n\n`;
+                text += `*TOTAL DUE:* ${total} NLE`;
+ 
+                // Build visual canvas breakdown
+                let htmlInvoice = `<p><strong>Customer:</strong> ${name}</p>`;
+                htmlInvoice += `<p><strong>Phone:</strong> ${phone}</p>`;
+                htmlInvoice += `<p><strong>Address:</strong> ${address}</p><br>`;
+                htmlInvoice += `<div style="border-top:1px dashed #333; padding-top:10px;">${orderPayload.items.map(x => `<div class="receipt-row"><span>${x.name}</span><span>${x.activePrice} NLE</span></div>`).join('')}</div>`;
+                htmlInvoice += `<br><div class="receipt-row" style="font-weight:bold; font-size:16px;"><span>Total:</span><span>${total} NLE</span></div>`;
+                
+                document.getElementById('canvas-receipt-details').innerHTML = htmlInvoice;
+                document.getElementById('receipt-details').innerHTML = htmlInvoice;
+                document.getElementById('receipt-modal').style.display = 'flex';
+                
+                cart = [];
+                updateCartUI();
+                document.getElementById('floating-cart-btn').style.display = 'none';
+                toggleCart();
+ 
+                window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(text)}`, '_blank');
+            });
         };
-
-        window.logoutAdmin = () => {
-            sessionStorage.removeItem('isArisaAdmin');
-            document.getElementById('admin-panel').style.display = 'none';
-            clearAdminForm();
-            renderProducts();
+ 
+        window.closeReceipt = () => {
+            document.getElementById('receipt-modal').style.display = 'none';
         };
-
+ 
         window.showHome = () => {
             document.getElementById('home-content').style.display = 'block';
             document.getElementById('page-content').style.display = 'none';
         };
-
-        function displaySubPage(title, innerHTML) {
+        
+        window.showAbout = () => {
             document.getElementById('home-content').style.display = 'none';
             document.getElementById('page-content').style.display = 'block';
-            document.getElementById('page-inner-content').innerHTML = `
-                <h2 style="color:var(--accent-color); text-transform:uppercase; margin-bottom:15px; letter-spacing:1px; font-size:16px;">${title}</h2>
-                <div style="font-size:12px; color:#ddd; text-align:justify;">${innerHTML}</div>
-                <button class="btn" style="max-width:150px; margin-top:20px;" onclick="showHome()">← Back Home</button>
-            `;
-        }
-
-        window.showAbout = () => {
-            displaySubPage("About Our Luxury House", "ARISA PERFUME STORE delivers exquisite long-lasting oils and high-concentration standard designers within the heart of Freetown, Sierra Leone. Our curations emphasize elegance, individuality, and premium aromatic profile projections.");
+            document.getElementById('page-inner-content').innerHTML = `<h2>About Us</h2><p>Luxury authentic fragrance distributions in Sierra Leone.</p>`;
         };
-
+ 
         window.showPolicy = () => {
-            displaySubPage("Store Operational Policies", "All delivery timelines are scheduled between 9:00 AM and 6:00 PM standard operating hours inside regional limits. Receipts generated are authenticated via official WhatsApp tracking loops. Returns are handled according to seal parameters within 24 hours.");
+            document.getElementById('home-content').style.display = 'none';
+            document.getElementById('page-content').style.display = 'block';
+            document.getElementById('page-inner-content').innerHTML = `<h2>Store Policies</h2><p>No refunds on opened bottles. Secure luxury deliveries guaranteed.</p>`;
         };
-
-        window.toggleCart = () => {
-            const sidebar = document.getElementById('cart-sidebar');
-            sidebar.style.display = sidebar.style.display === 'block' ? 'none' : 'block';
-        };
-
-        window.closeReceipt = () => {
-            document.getElementById('receipt-modal').style.display = 'none';
-        };
-
-        window.checkoutWhatsApp = () => {
-            const name = document.getElementById('cust-name').value;
-            const phone = document.getElementById('cust-phone').value;
-            const addr = document.getElementById('cust-address').value;
-            const service = document.getElementById('service-type').value;
-            const payment = document.getElementById('payment-method').value;
-
-            if(!name || !phone || !addr) {
-                alert("Please fill out your complete customer contact and drop location details.");
-                return;
+ 
+        window.loginAdmin = () => {
+            const code = prompt("Enter Administration Key:");
+            if(code === "ARISA2026") {
+                sessionStorage.setItem('isArisaAdmin', 'true');
+                document.getElementById('admin-panel').style.display = 'block';
+                renderProducts();
+            } else {
+                alert("Unauthorized Access Attempt.");
             }
-
-            if(cart.length === 0) {
-                alert("Your checkout tray is currently empty.");
-                return;
-            }
-
-            let orderItemsDataArray = [];
-            let textMessageSummary = `*NEW LUXURY INVOICE ORDER - ARISA STORE*\n\n`;
-            textMessageSummary += `*Customer:* ${name}\n`;
-            textMessageSummary += `*Contact:* ${phone}\n`;
-            textMessageSummary += `*Address/Note:* ${addr}\n`;
-            textMessageSummary += `*Logistics:* ${service}\n`;
-            textMessageSummary += `*Payment Target:* ${payment}\n`;
-            textMessageSummary += `---------------------------------------\n`;
-
-            let runningSum = 0;
-            cart.forEach((itm, index) => {
-                let currentFinalCost = itm.baseCalculatedPrice - itm.customBasketDiscount;
-                if(currentFinalCost < 0) currentFinalCost = 0;
-                runningSum += currentFinalCost;
-
-                textMessageSummary += `${index + 1}. ${itm.name} ${itm.color ? `(${itm.color})` : ''}\n`;
-                if(itm.customBasketDiscount > 0) {
-                    textMessageSummary += `   _Base Price: ${itm.baseCalculatedPrice.toFixed(2)} NLE_\n`;
-                    textMessageSummary += `   _Adjustment Discount Applied: -${itm.customBasketDiscount.toFixed(2)} NLE_\n`;
-                }
-                textMessageSummary += `   *Item Cost:* ${currentFinalCost.toFixed(2)} NLE\n\n`;
-
-                orderItemsDataArray.push({
-                    name: itm.name,
-                    color: itm.color || '',
-                    activePrice: currentFinalCost.toFixed(2)
-                });
-            });
-
-            textMessageSummary += `---------------------------------------\n`;
-            textMessageSummary += `*GRAND TOTAL NET DUE:* ${runningSum.toFixed(2)} NLE\n\n`;
-            textMessageSummary += `Thank you for ordering. Processing receipt canvas auto-downloads...`;
-
-            const timestampString = new Date().toLocaleString();
-
-            // Log directly into server database logs
-            db.ref('orders').push({
-                timestamp: timestampString,
-                customerName: name,
-                customerPhone: phone,
-                customerAddress: addr,
-                serviceType: service,
-                paymentMethod: payment,
-                items: orderItemsDataArray,
-                grandTotal: runningSum.toFixed(2)
-            });
-
-            // Populate preview arrays
-            const markupHTML = `
-                <div style="font-size:12px; margin-bottom:10px;"><strong>Date/Time:</strong> ${timestampString}</div>
-                <div style="font-size:12px; margin-bottom:5px;"><strong>Customer:</strong> ${name}</div>
-                <div style="font-size:12px; margin-bottom:5px;"><strong>Phone:</strong> ${phone}</div>
-                <div style="font-size:12px; margin-bottom:15px;"><strong>Address:</strong> ${addr}</div>
-                <div style="border-top:1px dashed var(--accent-color); padding-top:10px; margin-bottom:15px;">
-                    ${orderItemsDataArray.map(x => `
-                        <div class="receipt-row">
-                            <span>• ${x.name} ${x.color ? `(${x.color})` : ''}</span>
-                            <strong>${x.activePrice} NLE</strong>
-                        </div>
-                    `).join('')}
-                </div>
-                <div style="border-top:1px solid var(--accent-color); padding-top:10px; font-size:14px;" class="receipt-row">
-                    <span><strong>Total Amount:</strong></span>
-                    <strong style="color:var(--accent-color);">${runningSum.toFixed(2)} NLE</strong>
-                </div>
-                <div style="margin-top:10px; font-size:11px; background:#000; padding:8px; border:1px solid #222; border-radius:2px;">
-                    <strong>Fulfillment Channel:</strong> ${service}<br>
-                    <strong>Payment Mode Selected:</strong> ${payment}
-                </div>
-            `;
-
-            document.getElementById('receipt-details').innerHTML = markupHTML;
-            document.getElementById('canvas-receipt-details').innerHTML = markupHTML.replace(/var\(--accent-color\)/g, '#d4af37');
-
-            document.getElementById('receipt-modal').style.display = 'flex';
-            toggleCart();
-
-            // Export screenshot download flow parameters
-            setTimeout(() => {
-                const element = document.getElementById('receipt-capture-canvas');
-                html2canvas(element, { useCORS: true, allowTaint: true, scale: 2 }).then(canvas => {
-                    const link = document.createElement('a');
-                    link.download = `ARISA_ORDER_${Date.now()}.png`;
-                    link.href = canvas.toDataURL('image/png');
-                    link.click();
-
-                    // Open API communication window redirect 
-                    const encodedText = encodeURIComponent(textMessageSummary);
-                    window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodedText}`, '_blank');
-                    
-                    cart = [];
-                    updateCartUI();
-                    document.getElementById('floating-cart-btn').style.display = 'none';
-                }).catch(err => {
-                    // Fallback to plain communication link opening on hardware block anomalies
-                    const encodedText = encodeURIComponent(textMessageSummary);
-                    window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodedText}`, '_blank');
-                    cart = [];
-                    updateCartUI();
-                    document.getElementById('floating-cart-btn').style.display = 'none';
-                });
-            }, 1000);
         };
+ 
+        window.logoutAdmin = () => {
+            sessionStorage.removeItem('isArisaAdmin');
+            document.getElementById('admin-panel').style.display = 'none';
+            renderProducts();
+        };
+ 
+        showHome();
     </script>
 </body>
 </html>
