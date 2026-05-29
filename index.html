@@ -221,7 +221,7 @@
             z-index: 99;
             border: none;
         }
-        #cart-counter {
+        #cart-counter, #floating-cart-counter {
             position: absolute;
             top: -5px;
             right: -5px;
@@ -432,21 +432,26 @@
 
         <div style="margin-top:25px; text-align:left;">
             <h4 style="color:var(--accent-color); font-size:11px; margin-bottom:10px; letter-spacing:0.5px;">DISPATCH LOGISTICS DESTINATION ROUTING</h4>
-            <input type="text" id="cust-name" class="admin-input" placeholder="Full Recipient Name">
-            <input type="tel" id="cust-phone" class="admin-input" placeholder="Active WhatsApp Contact Phone Line">
-            <input type="text" id="cust-address" class="admin-input" placeholder="Delivery Physical Location Address Coordinates">
             
-            <p style="font-size:10px; color:#666; margin-bottom:4px;">LOGISTICS HANDLER DISTRIBUTION CHANNEL:</p>
-            <select id="service-type" class="admin-input">
-                <option value="Freetown Town-Delivery Express">Freetown Central Delivery Hub Node</option>
-                <option value="Provincial Transport Transit Courier Line">Provincial Courier Routing Terminal Service</option>
+            <input type="text" id="cust-name" class="admin-input" placeholder="Full Name">
+            
+            <input type="tel" id="cust-phone" class="admin-input" placeholder="Active WhatsApp Contact Phone Line">
+            
+            <p style="font-size:10px; color:#666; margin-bottom:4px;">ORDER METHOD:</p>
+            <select id="order-method" class="admin-input" onchange="handleOrderMethodChange()">
+                <option value="Delivery">Delivery</option>
+                <option value="Pick Up">Pick Up</option>
             </select>
+
+            <div id="address-input-wrapper">
+                <p style="font-size:10px; color:#666; margin-bottom:4px;">DELIVERY PHYSICAL LOCATION ADDRESS:</p>
+                <input type="text" id="cust-address" class="admin-input" placeholder="Physical Address Coordinates">
+            </div>
             
             <p style="font-size:10px; color:#666; margin-bottom:4px;">SETTLEMENT METHOD ARCHITECTURE PROVIDER:</p>
             <select id="payment-method" class="admin-input">
-                <option value="Orange Money Mobile Pay Gateway">Orange Money Asset Transaction Network</option>
-                <option value="Africell Afrimoney Payment Terminal">Afrimoney Mobile Wallet System</option>
-                <option value="Physical Cash Exchange Settlement on Delivery">Cash-on-Delivery Handover Validation</option>
+                <option value="CASH ON DELIVERY">CASH ON DELIVERY</option>
+                <option value="ORANGE MONEY PAYMENT">ORANGE MONEY PAYMENT</option>
             </select>
             
             <button class="btn" style="margin-top:15px; height:42px; font-size:11px;" onclick="checkoutWhatsApp()">SECURE WHATSAPP DISPATCH CHECKOUT</button>
@@ -455,7 +460,7 @@
 
     <button id="floating-cart-btn" onclick="toggleCart()">
         <i class="fa-solid fa-bag-shopping"></i>
-        <span id="cart-counter">0</span>
+        <span id="floating-cart-counter">0</span>
     </button>
 
     <div id="receipt-modal">
@@ -502,7 +507,6 @@
 
         // APP SYNCHRONIZATION EVENT AND INVENTORY FETCH PIPELINE LOOKUPS
         document.addEventListener("DOMContentLoaded", () => {
-            // Live synchronizing sequence tracking products table arrays
             db.ref('perfumes').on('value', (snapshot) => {
                 const data = snapshot.val();
                 perfumes = [];
@@ -515,7 +519,6 @@
                 document.getElementById('preloader').style.display = 'none';
             });
 
-            // Live synchronization event sequence tracking administration view metrics
             db.ref('orders').on('value', (snapshot) => {
                 const orderData = snapshot.val();
                 const container = document.getElementById('admin-orders-list');
@@ -536,8 +539,8 @@
                         <div style="background:#111; border:1px solid #222; padding:12px; margin-bottom:12px; border-radius:4px; text-align:left;">
                             <p style="color:var(--accent-color); font-weight:bold; font-size:11px;">TIMESTAMP BLOCK: ${ord.timestamp}</p>
                             <p><strong>Customer Target:</strong> ${ord.customerName} (${ord.customerPhone})</p>
-                            <p><strong>Address Coordinate:</strong> ${ord.customerAddress}</p>
-                            <p><strong>Logistics Provider/Mode:</strong> ${ord.serviceType} [${ord.paymentMethod}]</p>
+                            <p><strong>Delivery Setup:</strong> ${ord.orderMethod === 'Pick Up' ? 'Customer Pick Up' : ord.customerAddress}</p>
+                            <p><strong>Logistics Mode:</strong> [${ord.paymentMethod}]</p>
                             <p style="margin-top:5px; font-weight:bold; color:var(--accent-color);">Grand Bill Total: ${ord.grandTotal} NLE</p>
                             <p style="margin-top:5px; font-size:11px; text-decoration:underline;">Ordered Items:</p>
                             <ul style="margin-top:3px; margin-bottom:10px;">${lineItems}</ul>
@@ -547,7 +550,6 @@
                 container.innerHTML = html;
             });
 
-            // Live user preference customer recommendations input log display metrics
             db.ref('suggestions').on('value', (snapshot) => {
                 const data = snapshot.val();
                 const listContainer = document.getElementById('suggestion-display-list');
@@ -616,7 +618,6 @@
                     `;
                 }
 
-                // Check if item is flagged as new arrival
                 const arrivalBadgeHTML = (p.isNewArrival === 'yes') 
                     ? `<span class="status-badge" style="background:#d4af37; color:black; top: 22px; right: 5px;">NEW ARRIVAL</span>` 
                     : '';
@@ -692,7 +693,10 @@
         };
 
         function updateCartUI() {
+            // UPDATED: Show exactly how many items are selected right over the bag elements
             document.getElementById('cart-counter').innerText = cart.length;
+            document.getElementById('floating-cart-counter').innerText = cart.length;
+            
             const list = document.getElementById('cart-items-list');
             const savedList = document.getElementById('saved-items-list');
             let subtotal = 0;
@@ -739,10 +743,8 @@
                 document.getElementById('saved-items-container').style.display = 'none';
             }
 
-            // DYNAMIC MULTI-BUY FRAMEWORK INJECTION
             let rewardDiscount = 0;
             if (cart.length > 1) {
-                // Example Reward Plan: 15 NLE flat multi-buy reduction incentive if buying 2 or more products
                 rewardDiscount = 15.00;
                 document.getElementById('discount-row').style.display = 'block';
                 document.getElementById('cart-discount').innerText = rewardDiscount.toFixed(2);
@@ -757,7 +759,31 @@
             document.getElementById('cart-grand-total').innerText = grandTotal.toFixed(2);
         }
 
-        // ADMIN RUNTIME ELEMENT: SPELLING CORRECTION INJECTION MECHANISM
+        // CONTROL OVERLAY VIEW MOVEMENT: PREVENT SCROLLING WHILE CUSTOMER WRITES INFO
+        window.toggleCart = () => {
+            const el = document.getElementById('cart-sidebar');
+            if (el.style.display === 'block') {
+                el.style.display = 'none';
+                document.body.style.overflow = 'auto'; // release viewport scrolling
+                document.body.style.height = 'auto';
+            } else {
+                el.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // freeze viewport scrolling completely
+                document.body.style.height = '100vh';
+            }
+        };
+
+        // NEW: HANDLE DYNAMIC HIDING OF ADDRESS BOX FOR PICK UP METHOD
+        window.handleOrderMethodChange = () => {
+            const method = document.getElementById('order-method').value;
+            const addressWrapper = document.getElementById('address-input-wrapper');
+            if (method === 'Pick Up') {
+                addressWrapper.style.display = 'none';
+            } else {
+                addressWrapper.style.display = 'block';
+            }
+        };
+
         window.applySpellingCorrection = () => {
             const targetName = document.getElementById('edit-target-name').value.trim();
             const newName = document.getElementById('edit-new-name').value.trim();
@@ -767,7 +793,6 @@
                 return;
             }
 
-            // Verify active matching product from client tracking array
             const matchedProduct = perfumes.find(p => p.name.toLowerCase() === targetName.toLowerCase());
             
             if (!matchedProduct) {
@@ -775,7 +800,6 @@
                 return;
             }
 
-            // Safely push only the name patch update to Firebase node
             db.ref('perfumes/' + matchedProduct.firebaseId).update({ name: newName }, (err) => {
                 if (!err) {
                     alert(`Spelling updated from "${matchedProduct.name}" to "${newName}" successfully!`);
@@ -787,7 +811,6 @@
             });
         };
 
-        // INJECT DISCOUNTS DIRECTLY TO LIVE ITEMS IN DATABASE
         window.applyDiscountToExisting = () => {
             const targetName = document.getElementById('discount-target-name').value.trim();
             const newPrice = document.getElementById('discount-new-base-price').value.trim();
@@ -798,7 +821,6 @@
                 return;
             }
 
-            // Find matching product node via loaded cache sequence
             const matchedProduct = perfumes.find(p => p.name.toLowerCase() === targetName.toLowerCase());
             
             if (!matchedProduct) {
@@ -819,11 +841,6 @@
                     alert("Database write rejected. Verify network status permissions.");
                 }
             });
-        };
-
-        window.toggleCart = () => {
-            const el = document.getElementById('cart-sidebar');
-            el.style.display = el.style.display === 'block' ? 'none' : 'block';
         };
 
         window.showHome = () => {
@@ -891,7 +908,7 @@
             const discountPct = document.getElementById('admin-p-discount-percentage').value;
             const color = document.getElementById('admin-p-color').value;
             const status = document.getElementById('admin-p-status').value;
-            const isArrival = document.getElementById('admin-p-arrival').value; // Added field lookup
+            const isArrival = document.getElementById('admin-p-arrival').value;
             const fileInput = document.getElementById('admin-p-file');
 
             if (!name || !price || !fileInput.files[0]) {
@@ -908,7 +925,7 @@
                     discountPercentage: discountPct ? discountPct : "",
                     color: color ? color : "",
                     status: status,
-                    isNewArrival: isArrival, // Saved directly to node block
+                    isNewArrival: isArrival,
                     image: imgBase64
                 };
                 db.ref('perfumes').push(newProduct, (err) => {
@@ -929,12 +946,15 @@
         window.checkoutWhatsApp = () => {
             const name = document.getElementById('cust-name').value.trim();
             const phone = document.getElementById('cust-phone').value.trim();
-            const addr = document.getElementById('cust-address').value.trim();
-            const service = document.getElementById('service-type').value;
-            const payment = document.getElementById('payment-method').value;
+            const method = document.getElementById('order-method').value;
+            let addr = document.getElementById('cust-address').value.trim();
 
-            if(!name || !phone || !addr || cart.length === 0) {
-                alert("Please fill your customer details and verify your cart isn't empty before ordering.");
+            if (method === 'Pick Up') {
+                addr = "Customer Pick Up Option Selected";
+            }
+
+            if(!name || !phone || (method === 'Delivery' && !addr) || cart.length === 0) {
+                alert("Please fill your customer details completely and verify your cart before checkout.");
                 return;
             }
 
@@ -962,14 +982,16 @@
                 });
             });
 
+            const payment = document.getElementById('payment-method').value;
+
             const receiptHTML = `
                 <p style="font-size:11px; color:#aaa; margin-bottom:10px; text-align:center;">Date: ${timestamp}</p>
                 <div style="margin-bottom:15px; font-size:12px; border-bottom:1px solid #222; padding-bottom:10px;">
-                    <p><strong>Customer:</strong> ${name}</p>
-                    <p><strong>Phone:</strong> ${phone}</p>
-                    <p><strong>Address:</strong> ${addr}</p>
-                    <p><strong>Logistics:</strong> ${service}</p>
-                    <p><strong>Payment Mode:</strong> ${payment}</p>
+                    <p><strong>Customer Name:</strong> ${name}</p>
+                    <p><strong>Phone Line:</strong> ${phone}</p>
+                    <p><strong>Order System:</strong> ${method}</p>
+                    ${method === 'Delivery' ? `<p><strong>Address:</strong> ${addr}</p>` : ''}
+                    <p><strong>Settlement Mode:</strong> ${payment}</p>
                 </div>
                 <div style="margin-top:10px;">
                     <p style="font-size:11px; font-weight:bold; color:var(--accent-color); margin-bottom:8px;">PURCHASED ESSENCES:</p>
@@ -989,8 +1011,8 @@
                 timestamp: timestamp,
                 customerName: name,
                 customerPhone: phone,
+                orderMethod: method,
                 customerAddress: addr,
-                serviceType: service,
                 paymentMethod: payment,
                 grandTotal: grandTotal,
                 items: systemBackupItems
@@ -1042,10 +1064,12 @@
             waMessage += `*Customer Info:*\n`;
             waMessage += `Name: ${name}\n`;
             waMessage += `Phone: ${phone}\n`;
-            waMessage += `Address: ${addr}\n\n`;
-            waMessage += `*Logistics & Terms:*\n`;
-            waMessage += `Service: ${service}\n`;
-            waMessage += `Payment: ${payment}\n\n`;
+            waMessage += `Order Setup: ${method}\n`;
+            if (method === 'Delivery') {
+                waMessage += `Address: ${addr}\n`;
+            }
+            waMessage += `\n*Settlement Terms:*\n`;
+            waMessage += `Payment Mode: ${payment}\n\n`;
             waMessage += `*Selected Products:*\n`;
             waMessage += textMessageProducts;
             waMessage += `\n-----------------------------------------\n`;
