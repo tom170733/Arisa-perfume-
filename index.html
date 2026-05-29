@@ -174,8 +174,8 @@
         .color-label { font-size: 9px; color: #888; display: block; margin-bottom: 3px; text-transform: uppercase; }
         
         .btn { padding: 12px; background: var(--accent-color); color: black; font-weight: bold; text-transform: uppercase; font-size: 10px; border: none; cursor: pointer; width: 100%; transition: 0.3s; margin-top: 5px; border-radius: 2px; }
-        .remove-btn { background: #550000; color: white; font-size: 9px; padding: 8px; width: auto; }
-        .save-btn { background: #333; color: var(--accent-color); font-size: 9px; padding: 8px; width: auto; border: 1px solid var(--accent-color); }
+        .remove-btn { background: #550000; color: white; font-size: 9px; padding: 8px; width: auto; border: none; cursor: pointer; border-radius: 2px; }
+        .save-btn { background: #333; color: var(--accent-color); font-size: 9px; padding: 8px; width: auto; border: 1px solid var(--accent-color); cursor: pointer; border-radius: 2px; }
 
         #page-content { display: none; padding: 30px 5%; background: var(--bg-color); min-height: 70vh; }
         .content-box { border: 1px solid var(--accent-color); padding: 20px; background: #0a0a0a; }
@@ -254,20 +254,31 @@
 
     <div id="admin-panel">
         <h3 style="color:var(--accent-color); margin-bottom:15px;">STAFF CONTROL PANEL</h3>
-        <input type="text" id="admin-p-name" class="admin-input" placeholder="Product Name">
-        <input type="number" id="admin-p-price" class="admin-input" placeholder="Regular Price (NLE)">
-        <input type="number" id="admin-p-discount-percentage" class="admin-input" placeholder="Discount Percentage (% e.g., 15) - Leave empty if none">
-        <input type="text" id="admin-p-color" class="admin-input" placeholder="Color (e.g. Gold, Black, Clear)">
         
-        <p style="font-size:11px; color:var(--accent-color); margin-top:10px;">PRODUCT STATUS:</p>
-        <select id="admin-p-status" class="admin-input">
-            <option value="available">Available</option>
-            <option value="sold-out">Sold Out</option>
-        </select>
-        
-        <input type="file" id="admin-p-file" class="admin-input" accept="image/*">
-        <br>
-        <button class="btn" style="max-width: 200px; margin-top: 10px;" onclick="adminUpload()">ADD PRODUCT</button>
+        <div style="border: 1px solid #222; padding: 15px; margin-bottom: 20px; text-align: left;">
+            <h4 style="color:var(--accent-color); font-size:12px; margin-bottom:10px; text-transform: uppercase;">1. Upload New Item Asset</h4>
+            <input type="text" id="admin-p-name" class="admin-input" placeholder="Product Name">
+            <input type="number" id="admin-p-price" class="admin-input" placeholder="Regular Price (NLE)">
+            <input type="number" id="admin-p-discount-percentage" class="admin-input" placeholder="Discount Percentage (% e.g., 15) - Leave empty if none">
+            <input type="text" id="admin-p-color" class="admin-input" placeholder="Color (e.g. Gold, Black, Clear)">
+            
+            <p style="font-size:11px; color:var(--accent-color); margin-top:10px;">PRODUCT STATUS:</p>
+            <select id="admin-p-status" class="admin-input">
+                <option value="available">Available</option>
+                <option value="sold-out">Sold Out</option>
+            </select>
+            
+            <input type="file" id="admin-p-file" class="admin-input" accept="image/*">
+            <button class="btn" style="max-width: 200px; margin-top: 10px; display: block;" onclick="adminUpload()">ADD PRODUCT</button>
+        </div>
+
+        <div style="border: 1px solid #222; padding: 15px; margin-bottom: 20px; text-align: left;">
+            <h4 style="color:var(--accent-color); font-size:12px; margin-bottom:10px; text-transform: uppercase;">2. Inject Discounts into Existing Items</h4>
+            <input type="text" id="discount-target-name" class="admin-input" placeholder="Exact Product Name (e.g. Savage Essence)">
+            <input type="number" id="discount-new-base-price" class="admin-input" placeholder="Update Base Price (Optional NLE)">
+            <input type="number" id="discount-target-percentage" class="admin-input" placeholder="New Discount Value (% e.g. 25)">
+            <button class="btn" style="max-width: 200px; margin-top:10px; background: #ff4d6d; color: white;" onclick="applyDiscountToExisting()">APPLY DISCOUNT</button>
+        </div>
         
         <div id="admin-orders-section" style="margin-top:30px; border-top:2px dashed var(--accent-color); padding-top:20px;">
             <h4 style="color:var(--accent-color); font-size:14px; letter-spacing:1px; margin-bottom:15px;">LIVE CUSTOMER ORDERS</h4>
@@ -653,9 +664,57 @@
                 document.getElementById('saved-items-container').style.display = 'none';
             }
 
+            // DYNAMIC MULTI-BUY FRAMEWORK INJECTION
+            let rewardDiscount = 0;
+            if (cart.length > 1) {
+                // Example Reward Plan: 15 NLE flat multi-buy reduction incentive if buying 2 or more products
+                rewardDiscount = 15.00;
+                document.getElementById('discount-row').style.display = 'block';
+                document.getElementById('cart-discount').innerText = rewardDiscount.toFixed(2);
+            } else {
+                document.getElementById('discount-row').style.display = 'none';
+            }
+
+            let grandTotal = subtotal - rewardDiscount;
+            if (grandTotal < 0) grandTotal = 0;
+
             document.getElementById('cart-subtotal').innerText = subtotal.toFixed(2);
-            document.getElementById('cart-grand-total').innerText = subtotal.toFixed(2);
+            document.getElementById('cart-grand-total').innerText = grandTotal.toFixed(2);
         }
+
+        // INJECT DISCOUNTS DIRECTLY TO LIVE ITEMS IN DATABASE
+        window.applyDiscountToExisting = () => {
+            const targetName = document.getElementById('discount-target-name').value.trim();
+            const newPrice = document.getElementById('discount-new-base-price').value.trim();
+            const pct = document.getElementById('discount-target-percentage').value.trim();
+
+            if (!targetName || !pct) {
+                alert("Please specify the exact Product Name and target Discount percentage value.");
+                return;
+            }
+
+            // Find matching product node via loaded cache sequence
+            const matchedProduct = perfumes.find(p => p.name.toLowerCase() === targetName.toLowerCase());
+            
+            if (!matchedProduct) {
+                alert("No active matching product could be verified under that name. Check spelling accuracy.");
+                return;
+            }
+
+            const updateData = { discountPercentage: pct };
+            if (newPrice) updateData.price = newPrice;
+
+            db.ref('perfumes/' + matchedProduct.firebaseId).update(updateData, (err) => {
+                if (!err) {
+                    alert(`Discount modifications injected accurately into ${matchedProduct.name}!`);
+                    document.getElementById('discount-target-name').value = '';
+                    document.getElementById('discount-new-base-price').value = '';
+                    document.getElementById('discount-target-percentage').value = '';
+                } else {
+                    alert("Database write rejected. Verify network status permissions.");
+                }
+            });
+        };
 
         window.toggleCart = () => {
             const el = document.getElementById('cart-sidebar');
