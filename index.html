@@ -696,7 +696,6 @@
             // UPDATED: Show exactly how many items are selected right over the bag elements
             document.getElementById('cart-counter').innerText = cart.length;
             document.getElementById('floating-cart-counter').innerText = cart.length;
-            
             const list = document.getElementById('cart-items-list');
             const savedList = document.getElementById('saved-items-list');
             let subtotal = 0;
@@ -705,16 +704,13 @@
                 const originalPrice = parseFloat(i.price);
                 let finalActivePrice = originalPrice;
                 let discountTextHTML = '';
-
                 if (i.discountPercentage && parseFloat(i.discountPercentage) > 0) {
                     const pct = parseFloat(i.discountPercentage);
                     finalActivePrice = originalPrice - (originalPrice * (pct / 100));
                     discountTextHTML = `<span style="color:#ff4d6d; font-size:10px; display:block;">-${pct}% Applied (was ${originalPrice.toFixed(2)} NLE)</span>`;
                 }
-
                 subtotal += finalActivePrice;
-                i.calculatedCartPrice = finalActivePrice; 
-                
+                i.calculatedCartPrice = finalActivePrice;
                 return `
                     <div style="border-bottom:1px solid #222; padding:10px 0; display:flex; justify-content:space-between; align-items:center;">
                         <div style="text-align:left; max-width:65%;">
@@ -743,9 +739,14 @@
                 document.getElementById('saved-items-container').style.display = 'none';
             }
 
+            // NEW LOGIC: Calculate tiered percentage discounts based on total items inside cart
             let rewardDiscount = 0;
-            if (cart.length > 1) {
-                rewardDiscount = 15.00;
+            if (cart.length === 2) {
+                rewardDiscount = subtotal * 0.10; // Buy 2 get 10% off
+                document.getElementById('discount-row').style.display = 'block';
+                document.getElementById('cart-discount').innerText = rewardDiscount.toFixed(2);
+            } else if (cart.length >= 3) {
+                rewardDiscount = subtotal * 0.15; // Buy 3 or more get 15% off
                 document.getElementById('discount-row').style.display = 'block';
                 document.getElementById('cart-discount').innerText = rewardDiscount.toFixed(2);
             } else {
@@ -773,7 +774,7 @@
             }
         };
 
-        // NEW: HANDLE DYNAMIC HIDING OF ADDRESS BOX FOR PICK UP METHOD
+        // HANDLE DYNAMIC HIDING OF ADDRESS BOX FOR PICK UP METHOD
         window.handleOrderMethodChange = () => {
             const method = document.getElementById('order-method').value;
             const addressWrapper = document.getElementById('address-input-wrapper');
@@ -787,19 +788,15 @@
         window.applySpellingCorrection = () => {
             const targetName = document.getElementById('edit-target-name').value.trim();
             const newName = document.getElementById('edit-new-name').value.trim();
-
             if (!targetName || !newName) {
                 alert("Please fill in both the current name and the corrected spelling name.");
                 return;
             }
-
             const matchedProduct = perfumes.find(p => p.name.toLowerCase() === targetName.toLowerCase());
-            
             if (!matchedProduct) {
                 alert("No match found for that product name. Please verify spelling accuracy.");
                 return;
             }
-
             db.ref('perfumes/' + matchedProduct.firebaseId).update({ name: newName }, (err) => {
                 if (!err) {
                     alert(`Spelling updated from "${matchedProduct.name}" to "${newName}" successfully!`);
@@ -815,22 +812,17 @@
             const targetName = document.getElementById('discount-target-name').value.trim();
             const newPrice = document.getElementById('discount-new-base-price').value.trim();
             const pct = document.getElementById('discount-target-percentage').value.trim();
-
             if (!targetName || !pct) {
                 alert("Please specify the exact Product Name and target Discount percentage value.");
                 return;
             }
-
             const matchedProduct = perfumes.find(p => p.name.toLowerCase() === targetName.toLowerCase());
-            
             if (!matchedProduct) {
                 alert("No active matching product could be verified under that name. Check spelling accuracy.");
                 return;
             }
-
             const updateData = { discountPercentage: pct };
             if (newPrice) updateData.price = newPrice;
-
             db.ref('perfumes/' + matchedProduct.firebaseId).update(updateData, (err) => {
                 if (!err) {
                     alert(`Discount modifications injected accurately into ${matchedProduct.name}!`);
@@ -910,12 +902,10 @@
             const status = document.getElementById('admin-p-status').value;
             const isArrival = document.getElementById('admin-p-arrival').value;
             const fileInput = document.getElementById('admin-p-file');
-
             if (!name || !price || !fileInput.files[0]) {
                 alert("Name, regular base price structure and target image source must be defined.");
                 return;
             }
-
             const reader = new FileReader();
             reader.onload = function(e) {
                 const imgBase64 = e.target.result;
@@ -948,23 +938,18 @@
             const phone = document.getElementById('cust-phone').value.trim();
             const method = document.getElementById('order-method').value;
             let addr = document.getElementById('cust-address').value.trim();
-
             if (method === 'Pick Up') {
                 addr = "Customer Pick Up Option Selected";
             }
-
             if(!name || !phone || (method === 'Delivery' && !addr) || cart.length === 0) {
                 alert("Please fill your customer details completely and verify your cart before checkout.");
                 return;
             }
-
             const timestamp = new Date().toLocaleString();
             const grandTotal = document.getElementById('cart-grand-total').innerText;
-
             let invoiceItemsHTML = '';
             let textMessageProducts = '';
             let systemBackupItems = [];
-
             cart.forEach((itm, index) => {
                 const linePrice = itm.calculatedCartPrice ? itm.calculatedCartPrice : parseFloat(itm.price);
                 invoiceItemsHTML += `
@@ -972,18 +957,14 @@
                         <span>${index + 1}. ${itm.name} ${itm.color ? `(${itm.color})` : ''}</span>
                         <strong>${linePrice.toFixed(2)} NLE</strong>
                     </div>`;
-                
                 textMessageProducts += `• *${itm.name}* ${itm.color ? `(${itm.color})` : ''} - ${linePrice.toFixed(2)} NLE\n`;
-                
                 systemBackupItems.push({
                     name: itm.name,
                     color: itm.color ? itm.color : "",
                     activePrice: linePrice.toFixed(2)
                 });
             });
-
             const payment = document.getElementById('payment-method').value;
-
             const receiptHTML = `
                 <p style="font-size:11px; color:#aaa; margin-bottom:10px; text-align:center;">Date: ${timestamp}</p>
                 <div style="margin-bottom:15px; font-size:12px; border-bottom:1px solid #222; padding-bottom:10px;">
@@ -999,13 +980,10 @@
                 </div>
                 <div style="border-top:1px dashed var(--accent-color); margin-top:15px; padding-top:10px; text-align:right;">
                     <p style="font-size:16px; font-weight:bold; color:var(--accent-color);">Grand Total: ${grandTotal} NLE</p>
-                </div>
-            `;
-
+                </div>`;
             document.getElementById('receipt-details').innerHTML = receiptHTML;
             document.getElementById('canvas-receipt-details').innerHTML = receiptHTML;
             document.getElementById('receipt-modal').style.display = 'flex';
-
             const newOrderRef = db.ref('orders').push();
             newOrderRef.set({
                 timestamp: timestamp,
@@ -1017,12 +995,10 @@
                 grandTotal: grandTotal,
                 items: systemBackupItems
             });
-
             setTimeout(() => {
                 const canvasContainer = document.getElementById('receipt-capture-canvas');
                 html2canvas(canvasContainer, { useCORS: true, allowTaint: true, scale: 2 }).then(canvas => {
                     const imgData = canvas.toDataURL('image/jpeg', 0.9);
-                    
                     const opt = {
                         margin: 10,
                         filename: `ARISA-INVOICE-${Date.now()}.pdf`,
@@ -1030,7 +1006,6 @@
                         html2canvas: { scale: 2, useCORS: true },
                         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
                     };
-
                     const originalPdfArea = document.getElementById('pdf-invoice-area');
                     const downloadBtn = document.createElement('button');
                     downloadBtn.className = "btn";
@@ -1039,25 +1014,21 @@
                     downloadBtn.style.color = "black";
                     downloadBtn.style.marginTop = "10px";
                     downloadBtn.innerText = "DOWNLOAD PDF INVOICE RECEIPT";
-                    
                     downloadBtn.onclick = function() {
                         const actionBtn = document.getElementById('hide-pdf-btn');
                         const selfBtn = document.getElementById('dynamic-pdf-download-btn');
                         actionBtn.style.display = 'none';
                         selfBtn.style.display = 'none';
-
                         html2pdf().set(opt).from(originalPdfArea).save().then(() => {
                             actionBtn.style.display = 'block';
                             selfBtn.style.display = 'block';
                         });
                     };
-
                     if(!document.getElementById('dynamic-pdf-download-btn')) {
                         originalPdfArea.insertBefore(downloadBtn, document.getElementById('hide-pdf-btn'));
                     }
                 });
             }, 800);
-
             let waMessage = `*ARISA PERFUME STORE - NEW ORDER LUXURY INVOICE*\n`;
             waMessage += `-----------------------------------------\n`;
             waMessage += `*Date:* ${timestamp}\n\n`;
@@ -1075,15 +1046,12 @@
             waMessage += `\n-----------------------------------------\n`;
             waMessage += `*GRAND TOTAL:* *${grandTotal} NLE*\n\n`;
             waMessage += `_Invoice statement securely registered inside our database nodes via WhatsApp client redirect synchronization._`;
-
             const encodedMsg = encodeURIComponent(waMessage);
             const waURL = `https://wa.me/${myWhatsAppNumber}?text=${encodedMsg}`;
-            
             cart = [];
             updateCartUI();
             document.getElementById('floating-cart-btn').style.display = 'none';
             toggleCart();
-
             window.open(waURL, '_blank');
         };
 
