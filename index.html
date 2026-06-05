@@ -48,6 +48,7 @@
             letter-spacing: 2px;
             font-weight: 700;
             color: var(--accent-color);
+            cursor: pointer;
         }
         .logo-area p {
             font-size: 8px;
@@ -70,13 +71,13 @@
         }
         #preloader {
             position: fixed;
-            top:0; left:0; width:100%; height:100%;
-            background:#000;
-            z-index:9999;
-            display:flex;
-            flex-direction:column;
-            justify-content:center;
-            align-items:center;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
         .spinner {
             width: 40px;
@@ -634,7 +635,9 @@
                             ${sold ? 'SOLD OUT' : 'BUY'}
                         </button>
                         ${isAdmin ? `<button class="btn" style="background:#444; margin-top:5px; font-size:8px;" onclick="event.stopPropagation(); toggleStatus('${p.firebaseId}','${p.status}')">Status</button>
-                                     <button class="btn" style="background:red; margin-top:5px; font-size:8px;" onclick="event.stopPropagation(); deleteProduct('${p.firebaseId}')">Del</button>` : ''}
+                                     <button class="btn" style="background:red; margin-top:5px; font-size:8px;" onclick="event.stopPropagation(); deleteProduct('${p.firebaseId}')">Del</button>
+                                     <button class="btn" style="background:#00f2fe; color:black; margin-top:5px; font-size:8px;" onclick="event.stopPropagation(); quickModifyDiscount('${p.firebaseId}','${p.discountPercentage}')">Disc</button>
+                                     <button class="btn" style="background:#fff; color:black; margin-top:5px; font-size:8px;" onclick="event.stopPropagation(); quickToggleArrival('${p.firebaseId}','${p.isNewArrival}')">Arrival</button>` : ''}
                     </div>`;
             });
         }
@@ -645,7 +648,7 @@
                 tapTimer = setTimeout(() => {
                     addToCart(id);
                     tapTimer = null;
-                } , 300);
+                }, 300);
             } else {
                 clearTimeout(tapTimer);
                 tapTimer = null;
@@ -660,7 +663,7 @@
                 return;
             }
             const item = perfumes.find(p => p.firebaseId === id);
-            cart.push({...item, cartId: Date.now() + Math.random()}); 
+            cart.push({ ...item, cartId: Date.now() + Math.random() }); 
             history.pushState(null, null, window.location.pathname);
             updateCartUI();
             document.getElementById('floating-cart-btn').style.display = 'block';
@@ -669,7 +672,7 @@
         window.removeFromCart = (cartId) => {
             cart = cart.filter(item => item.cartId !== cartId);
             updateCartUI();
-            if(cart.length === 0) document.getElementById('floating-cart-btn').style.display = 'none';
+            if (cart.length === 0) document.getElementById('floating-cart-btn').style.display = 'none';
         };
 
         window.saveForLater = (cartId) => {
@@ -682,7 +685,7 @@
         window.moveToCart = (cartId) => {
             const item = savedItems.find(i => i.cartId === cartId);
             const duplicateCheck = cart.find(i => i.firebaseId === item.firebaseId);
-            if(duplicateCheck) {
+            if (duplicateCheck) {
                 alert("This item is already in your active cart panel.");
                 return;
             }
@@ -693,9 +696,9 @@
         };
 
         function updateCartUI() {
-            // UPDATED: Show exactly how many items are selected right over the bag elements
             document.getElementById('cart-counter').innerText = cart.length;
             document.getElementById('floating-cart-counter').innerText = cart.length;
+            
             const list = document.getElementById('cart-items-list');
             const savedList = document.getElementById('saved-items-list');
             let subtotal = 0;
@@ -704,13 +707,16 @@
                 const originalPrice = parseFloat(i.price);
                 let finalActivePrice = originalPrice;
                 let discountTextHTML = '';
+                
                 if (i.discountPercentage && parseFloat(i.discountPercentage) > 0) {
                     const pct = parseFloat(i.discountPercentage);
                     finalActivePrice = originalPrice - (originalPrice * (pct / 100));
                     discountTextHTML = `<span style="color:#ff4d6d; font-size:10px; display:block;">-${pct}% Applied (was ${originalPrice.toFixed(2)} NLE)</span>`;
                 }
+                
                 subtotal += finalActivePrice;
                 i.calculatedCartPrice = finalActivePrice;
+                
                 return `
                     <div style="border-bottom:1px solid #222; padding:10px 0; display:flex; justify-content:space-between; align-items:center;">
                         <div style="text-align:left; max-width:65%;">
@@ -728,7 +734,7 @@
                     </div>`;
             }).join('');
 
-            if(savedItems.length > 0) {
+            if (savedItems.length > 0) {
                 document.getElementById('saved-items-container').style.display = 'block';
                 savedList.innerHTML = savedItems.map(i => `
                     <div style="border-bottom:1px dashed #222; padding:8px 0; display:flex; justify-content:space-between; align-items:center; opacity:0.6;">
@@ -739,15 +745,14 @@
                 document.getElementById('saved-items-container').style.display = 'none';
             }
 
-            // NEW LOGIC: Calculate tiered percentage discounts based on total items inside cart
             let rewardDiscount = 0;
             if (cart.length === 2) {
-                rewardDiscount = subtotal * 0.10; // Buy 2 get 10% off
-                document.getElementById('discount-row').style.display = 'block';
+                rewardDiscount = subtotal * 0.10; 
+                document.getElementById('discount-row').style.display = 'flex';
                 document.getElementById('cart-discount').innerText = rewardDiscount.toFixed(2);
             } else if (cart.length >= 3) {
-                rewardDiscount = subtotal * 0.15; // Buy 3 or more get 15% off
-                document.getElementById('discount-row').style.display = 'block';
+                rewardDiscount = subtotal * 0.15; 
+                document.getElementById('discount-row').style.display = 'flex';
                 document.getElementById('cart-discount').innerText = rewardDiscount.toFixed(2);
             } else {
                 document.getElementById('discount-row').style.display = 'none';
@@ -760,21 +765,19 @@
             document.getElementById('cart-grand-total').innerText = grandTotal.toFixed(2);
         }
 
-        // CONTROL OVERLAY VIEW MOVEMENT: PREVENT SCROLLING WHILE CUSTOMER WRITES INFO
         window.toggleCart = () => {
             const el = document.getElementById('cart-sidebar');
-            if (el.style.display === 'block') {
+            if (el.style.display === 'flex') {
                 el.style.display = 'none';
-                document.body.style.overflow = 'auto'; // release viewport scrolling
+                document.body.style.overflow = 'auto'; 
                 document.body.style.height = 'auto';
             } else {
-                el.style.display = 'block';
-                document.body.style.overflow = 'hidden'; // freeze viewport scrolling completely
+                el.style.display = 'flex';
+                document.body.style.overflow = 'hidden'; 
                 document.body.style.height = '100vh';
             }
         };
 
-        // HANDLE DYNAMIC HIDING OF ADDRESS BOX FOR PICK UP METHOD
         window.handleOrderMethodChange = () => {
             const method = document.getElementById('order-method').value;
             const addressWrapper = document.getElementById('address-input-wrapper');
@@ -860,7 +863,7 @@
 
         window.sendSuggestion = () => {
             const input = document.getElementById('user-suggestion');
-            if(!input.value.trim()) return;
+            if (!input.value.trim()) return;
             db.ref('suggestions').push(input.value.trim());
             input.value = '';
             alert("Suggestion securely logged into our system backend. Thank you!");
@@ -889,9 +892,26 @@
         };
 
         window.deleteProduct = (id) => {
-            if(confirm("Permanently erase product inventory configuration block from node databases?")) {
+            if (confirm("Permanently erase product inventory configuration block from node databases?")) {
                 db.ref('perfumes/' + id).remove();
             }
+        };
+
+        window.quickModifyDiscount = (id, currentDiscount) => {
+            const val = prompt("Enter new discount percentage (Enter 0 to clear discount completely):", currentDiscount || "0");
+            if (val === null) return; 
+            const pct = parseFloat(val);
+            if (isNaN(pct) || pct < 0) {
+                alert("Please enter a valid numeric value.");
+                return;
+            }
+            const updatedPct = pct === 0 ? "" : pct.toString();
+            db.ref('perfumes/' + id).update({ discountPercentage: updatedPct });
+        };
+
+        window.quickToggleArrival = (id, currentArrivalStatus) => {
+            const nextArrival = currentArrivalStatus === 'yes' ? 'no' : 'yes';
+            db.ref('perfumes/' + id).update({ isNewArrival: nextArrival });
         };
 
         window.adminUpload = () => {
@@ -902,10 +922,12 @@
             const status = document.getElementById('admin-p-status').value;
             const isArrival = document.getElementById('admin-p-arrival').value;
             const fileInput = document.getElementById('admin-p-file');
+            
             if (!name || !price || !fileInput.files[0]) {
                 alert("Name, regular base price structure and target image source must be defined.");
                 return;
             }
+            
             const reader = new FileReader();
             reader.onload = function(e) {
                 const imgBase64 = e.target.result;
@@ -919,7 +941,7 @@
                     image: imgBase64
                 };
                 db.ref('perfumes').push(newProduct, (err) => {
-                    if(!err) {
+                    if (!err) {
                         alert("Product metadata added successfully!");
                         document.getElementById('admin-p-name').value = '';
                         document.getElementById('admin-p-price').value = '';
@@ -938,18 +960,21 @@
             const phone = document.getElementById('cust-phone').value.trim();
             const method = document.getElementById('order-method').value;
             let addr = document.getElementById('cust-address').value.trim();
+            
             if (method === 'Pick Up') {
                 addr = "Customer Pick Up Option Selected";
             }
-            if(!name || !phone || (method === 'Delivery' && !addr) || cart.length === 0) {
+            if (!name || !phone || (method === 'Delivery' && !addr) || cart.length === 0) {
                 alert("Please fill your customer details completely and verify your cart before checkout.");
                 return;
             }
+            
             const timestamp = new Date().toLocaleString();
             const grandTotal = document.getElementById('cart-grand-total').innerText;
             let invoiceItemsHTML = '';
             let textMessageProducts = '';
             let systemBackupItems = [];
+            
             cart.forEach((itm, index) => {
                 const linePrice = itm.calculatedCartPrice ? itm.calculatedCartPrice : parseFloat(itm.price);
                 invoiceItemsHTML += `
@@ -964,6 +989,7 @@
                     activePrice: linePrice.toFixed(2)
                 });
             });
+            
             const payment = document.getElementById('payment-method').value;
             const receiptHTML = `
                 <p style="font-size:11px; color:#aaa; margin-bottom:10px; text-align:center;">Date: ${timestamp}</p>
@@ -981,9 +1007,11 @@
                 <div style="border-top:1px dashed var(--accent-color); margin-top:15px; padding-top:10px; text-align:right;">
                     <p style="font-size:16px; font-weight:bold; color:var(--accent-color);">Grand Total: ${grandTotal} NLE</p>
                 </div>`;
+                
             document.getElementById('receipt-details').innerHTML = receiptHTML;
             document.getElementById('canvas-receipt-details').innerHTML = receiptHTML;
             document.getElementById('receipt-modal').style.display = 'flex';
+            
             const newOrderRef = db.ref('orders').push();
             newOrderRef.set({
                 timestamp: timestamp,
@@ -995,10 +1023,10 @@
                 grandTotal: grandTotal,
                 items: systemBackupItems
             });
+            
             setTimeout(() => {
                 const canvasContainer = document.getElementById('receipt-capture-canvas');
                 html2canvas(canvasContainer, { useCORS: true, allowTaint: true, scale: 2 }).then(canvas => {
-                    const imgData = canvas.toDataURL('image/jpeg', 0.9);
                     const opt = {
                         margin: 10,
                         filename: `ARISA-INVOICE-${Date.now()}.pdf`,
@@ -1014,6 +1042,7 @@
                     downloadBtn.style.color = "black";
                     downloadBtn.style.marginTop = "10px";
                     downloadBtn.innerText = "DOWNLOAD PDF INVOICE RECEIPT";
+                    
                     downloadBtn.onclick = function() {
                         const actionBtn = document.getElementById('hide-pdf-btn');
                         const selfBtn = document.getElementById('dynamic-pdf-download-btn');
@@ -1024,11 +1053,12 @@
                             selfBtn.style.display = 'block';
                         });
                     };
-                    if(!document.getElementById('dynamic-pdf-download-btn')) {
+                    if (!document.getElementById('dynamic-pdf-download-btn')) {
                         originalPdfArea.insertBefore(downloadBtn, document.getElementById('hide-pdf-btn'));
                     }
                 });
             }, 800);
+            
             let waMessage = `*ARISA PERFUME STORE - NEW ORDER LUXURY INVOICE*\n`;
             waMessage += `-----------------------------------------\n`;
             waMessage += `*Date:* ${timestamp}\n\n`;
@@ -1046,8 +1076,10 @@
             waMessage += `\n-----------------------------------------\n`;
             waMessage += `*GRAND TOTAL:* *${grandTotal} NLE*\n\n`;
             waMessage += `_Invoice statement securely registered inside our database nodes via WhatsApp client redirect synchronization._`;
+            
             const encodedMsg = encodeURIComponent(waMessage);
             const waURL = `https://wa.me/${myWhatsAppNumber}?text=${encodedMsg}`;
+            
             cart = [];
             updateCartUI();
             document.getElementById('floating-cart-btn').style.display = 'none';
@@ -1058,7 +1090,7 @@
         window.closeReceipt = () => {
             document.getElementById('receipt-modal').style.display = 'none';
             const oldBtn = document.getElementById('dynamic-pdf-download-btn');
-            if(oldBtn) oldBtn.remove();
+            if (oldBtn) oldBtn.remove();
             showHome();
         };
     </script>
