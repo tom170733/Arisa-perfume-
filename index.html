@@ -4,22 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARISA COLLECTION | PREMIUM SHOWROOM</title>
-    <!-- Firebase App (the core Firebase SDK) -->
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <!-- Firebase Realtime Database SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <!-- html2canvas and html2pdf libraries for invoice generation -->
+    <!-- Utilities -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.bundle.min.js/5.0.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
-            --bg-color: #f7fafd;
+            --bg-color: #f8fafc;
             --card-bg: #ffffff;
             --accent-pink: #ff6b8b;
-            --accent-blue: #4a90e2;
-            --text-color: #2c3e50;
-            --text-muted: #7f8c8d;
-            --border-color: #eef2f5;
+            --accent-blue: #2563eb;
+            --accent-blue-light: #eff6ff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
         }
         * {
             margin: 0;
@@ -30,7 +30,7 @@
         }
         body {
             background-color: var(--bg-color);
-            color: var(--text-color);
+            color: var(--text-dark);
             padding-bottom: 60px;
             opacity: 0;
             transition: opacity 0.4s ease;
@@ -39,14 +39,14 @@
             opacity: 1;
         }
         
-        /* Fixed Apple iOS Direct-Load Guard Preloader Overlay */
+        /* Premium Ocean Blue Opening Preloader Face */
         #preloader-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #ffffff;
+            background-color: var(--accent-blue);
             z-index: 99999;
             display: flex;
             flex-direction: column;
@@ -54,21 +54,20 @@
             justify-content: center;
         }
         .luxury-spinner {
-            width: 55px;
-            height: 55px;
-            border: 4px solid #eef2f5;
-            border-top: 4px solid var(--accent-pink);
-            border-right: 4px solid var(--accent-blue);
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid #ffffff;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
             margin-bottom: 20px;
         }
         .preloader-brand {
-            color: var(--accent-blue);
-            font-size: 16px;
-            letter-spacing: 3px;
+            color: #ffffff;
+            font-size: 18px;
+            letter-spacing: 4px;
             text-transform: uppercase;
-            font-weight: 600;
+            font-weight: 700;
             animation: pulse 1.8s ease-in-out infinite;
         }
         @keyframes spin {
@@ -76,10 +75,11 @@
             100% { transform: rotate(360deg); }
         }
         @keyframes pulse {
-            0%, 100% { opacity: 0.7; transform: scale(0.98); }
+            0%, 100% { opacity: 0.8; transform: scale(0.98); }
             50% { opacity: 1; transform: scale(1.02); }
         }
 
+        /* Clean Header Architecture */
         header {
             background: #ffffff;
             padding: 20px 15px;
@@ -91,94 +91,111 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.02);
         }
         header h1 {
-            color: var(--accent-pink);
-            font-size: 24px;
-            letter-spacing: 2px;
+            color: var(--text-dark);
+            font-size: 26px;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            font-weight: 700;
+            font-weight: 800;
             cursor: pointer;
+            margin-bottom: 12px;
+        }
+        header h1 span {
+            color: var(--accent-pink);
         }
         nav {
-            margin-top: 15px;
             display: flex;
             justify-content: center;
-            gap: 25px;
+            gap: 30px;
         }
         nav a {
             color: var(--text-muted);
             text-decoration: none;
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
             cursor: pointer;
-            transition: color 0.3s;
+            transition: color 0.2s;
+            position: relative;
+            padding-bottom: 4px;
         }
-        nav a:hover, nav a.active {
+        nav a.active {
             color: var(--accent-blue);
         }
+        nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent-blue);
+            border-radius: 2px;
+        }
+        
+        /* Category Navigation Selector */
         .section-bar {
             display: flex;
             justify-content: center;
-            gap: 12px;
+            gap: 16px;
             padding: 15px 10px;
             background: #ffffff;
             border-bottom: 1px solid var(--border-color);
         }
         .sec-btn {
-            background: #f7fafd;
-            border: 1px solid #e2e8f0;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
             color: var(--text-muted);
-            padding: 10px 22px;
-            font-size: 12px;
-            font-weight: 600;
+            padding: 12px 26px;
+            font-size: 13px;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             cursor: pointer;
-            border-radius: 25px;
-            transition: all 0.3s ease;
+            border-radius: 30px;
+            transition: all 0.2s ease;
         }
         .sec-btn.active {
-            background: var(--accent-pink);
+            background: var(--text-dark);
             color: #ffffff;
-            border-color: var(--accent-pink);
-            box-shadow: 0 4px 10px rgba(255, 107, 139, 0.2);
+            border-color: var(--text-dark);
         }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 25px 15px;
+            padding: 30px 15px;
         }
+        
+        /* Product Layout Grid */
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px;
         }
         .product-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
+            border-radius: 16px;
+            padding: 16px;
             position: relative;
             cursor: pointer;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.01);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.01), 0 2px 4px -1px rgba(0,0,0,0.01);
         }
         .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(74, 144, 226, 0.08);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px -3px rgba(0,0,0,0.04), 0 4px 6px -2px rgba(0,0,0,0.02);
             border-color: #cbd5e1;
         }
         .product-image {
             width: 100%;
-            height: 165px;
+            height: 200px;
             background: #f8fafc;
-            border-radius: 8px;
-            margin-bottom: 12px;
+            border-radius: 12px;
+            margin-bottom: 14px;
             overflow: hidden;
             display: flex;
             align-items: center;
@@ -189,227 +206,237 @@
             max-height: 100%;
             object-fit: cover;
         }
+        
+        /* Badges & Tags */
         .status-badge {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: 8px;
-            padding: 4px 10px;
-            border-radius: 20px;
+            top: 12px;
+            left: 12px;
+            font-size: 9px;
+            padding: 5px 12px;
+            border-radius: 30px;
             text-transform: uppercase;
             font-weight: 700;
             letter-spacing: 0.5px;
+            z-index: 10;
         }
-        .status-badge.available { background: #2ecc71; color: white; }
-        .status-badge.sold-out { background: #e74c3c; color: white; }
-        .color-label {
-            font-size: 10px;
-            color: var(--text-muted);
-            display: block;
-            margin: 4px 0;
+        .status-badge.available { background: #dcfce7; color: #166534; }
+        .status-badge.sold-out { background: #fee2e2; color: #991b1b; }
+        
+        .new-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 9px;
+            padding: 5px 12px;
+            border-radius: 30px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .price-box {
-            margin: 10px 0;
-        }
-        .price {
             font-weight: 700;
-            color: var(--accent-blue);
+            background: var(--accent-pink);
+            color: #ffffff;
+            z-index: 10;
+        }
+
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .product-title {
             font-size: 15px;
-        }
-        .old-price-strike {
-            text-decoration: line-through;
-            color: #94a3b8;
-            font-size: 11px;
-            margin-right: 6px;
-        }
-        .discount-badge {
-            color: var(--accent-pink);
-            font-size: 10px;
-            display: block;
-            margin-top: 3px;
             font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+            line-height: 1.4;
         }
-        .btn {
-            background: transparent;
-            border: 1px solid var(--accent-blue);
-            color: var(--accent-blue);
-            width: 100%;
-            padding: 10px;
+        
+        /* Customer-Facing Color Options Dot UI Component */
+        .color-options-preview {
+            display: flex;
+            gap: 6px;
+            margin: 6px 0 12px 0;
+            align-items: center;
+        }
+        .color-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 1px solid rgba(0,0,0,0.15);
+            display: inline-block;
+        }
+        .color-dot.pink { background-color: #ff6b8b; }
+        .color-dot.blue { background-color: #2563eb; }
+        .color-dot.white { background-color: #ffffff; }
+        
+        .price-container {
+            margin-top: auto;
+            padding-top: 10px;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .price-current {
+            font-weight: 800;
+            color: var(--text-dark);
+            font-size: 17px;
+        }
+        .price-old {
+            text-decoration: line-through;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+        .discount-tag {
+            color: var(--accent-pink);
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 700;
+            margin-left: auto;
+        }
+        
+        .btn {
+            background: var(--accent-blue);
+            border: none;
+            color: #ffffff;
+            width: 100%;
+            padding: 12px;
+            font-size: 12px;
+            font-weight: 700;
             letter-spacing: 1px;
             cursor: pointer;
-            border-radius: 6px;
+            border-radius: 10px;
             text-transform: uppercase;
-            transition: all 0.2s;
+            transition: background 0.2s;
         }
         .btn:hover:not(:disabled) {
-            background: var(--accent-blue);
-            color: #ffffff;
+            background: #1d4ed8;
         }
         .btn:disabled {
-            border-color: #cbd5e1;
+            background: #e2e8f0;
             color: #94a3b8;
             cursor: not-allowed;
         }
+
+        /* Fixed Cart Floating Widget Element */
         #floating-cart-btn {
             position: fixed;
             bottom: 25px;
             right: 25px;
-            background: var(--accent-pink);
+            background: var(--text-dark);
             color: #ffffff;
             border: none;
-            width: 55px;
-            height: 55px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            font-size: 20px;
+            font-size: 22px;
             cursor: pointer;
             z-index: 200;
-            box-shadow: 0 6px 20px rgba(255, 107, 139, 0.4);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
             display: none;
             transition: transform 0.2s;
         }
-        #floating-cart-btn:hover {
-            transform: scale(1.08);
-        }
         #floating-cart-counter {
             position: absolute;
-            top: -2px;
-            left: -2px;
-            background: var(--accent-blue);
+            top: -4px;
+            left: -4px;
+            background: var(--accent-pink);
             color: white;
-            font-size: 10px;
-            width: 22px;
-            height: 22px;
+            font-size: 11px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
         }
+
+        /* Sidebar Elements Layout */
         .sidebar {
             position: fixed;
             top: 0;
             right: 0;
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
             height: 100vh;
             background: #ffffff;
             border-left: 1px solid var(--border-color);
             z-index: 300;
             display: none;
             flex-direction: column;
-            padding: 25px;
-            box-shadow: -10px 0 35px rgba(0,0,0,0.05);
+            padding: 30px;
+            box-shadow: -10px 0 50px rgba(0,0,0,0.05);
         }
         .sidebar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 15px;
+            padding-bottom: 20px;
             margin-bottom: 20px;
         }
         .sidebar-header h2 {
-            font-size: 16px;
-            color: var(--accent-blue);
-            letter-spacing: 1px;
+            font-size: 18px;
+            color: var(--text-dark);
             text-transform: uppercase;
-            font-weight: 700;
+            font-weight: 800;
+            letter-spacing: 0.5px;
         }
         .close-sidebar-btn {
             background: transparent;
             border: none;
             color: var(--text-muted);
-            font-size: 26px;
+            font-size: 30px;
             cursor: pointer;
-            transition: color 0.3s;
         }
-        .close-sidebar-btn:hover {
-            color: var(--accent-pink);
-        }
+
         .cart-scroll-area {
             flex-grow: 1;
             overflow-y: auto;
-            margin-bottom: 20px;
-            padding-right: 5px;
+            margin-bottom: 25px;
         }
         .checkout-inputs {
             background: #f8fafc;
-            padding: 15px;
-            border-radius: 8px;
+            padding: 20px;
+            border-radius: 12px;
             margin-bottom: 20px;
             border: 1px solid var(--border-color);
-        }
-        .checkout-inputs input, .checkout-inputs select, .checkout-inputs textarea {
-            width: 100%;
-            background: #ffffff;
-            border: 1px solid #cbd5e1;
-            color: var(--text-color);
-            padding: 10px;
-            font-size: 13px;
-            border-radius: 6px;
-            margin-top: 6px;
-            margin-bottom: 14px;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-        .checkout-inputs input:focus, .checkout-inputs select:focus, .checkout-inputs textarea:focus {
-            border-color: var(--accent-blue);
         }
         .checkout-inputs label {
             font-size: 11px;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            font-weight: 600;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 6px;
         }
+        .checkout-inputs input, .checkout-inputs select, .checkout-inputs textarea {
+            width: 100%;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: var(--text-dark);
+            padding: 12px;
+            font-size: 14px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            outline: none;
+        }
+        
         .summary-row {
             display: flex;
             justify-content: space-between;
-            font-size: 13px;
-            margin-bottom: 6px;
-            color: var(--text-color);
+            font-size: 14px;
+            margin-bottom: 8px;
         }
-        .save-btn {
-            background: transparent;
-            border: 1px solid #cbd5e1;
-            color: var(--text-muted);
-            font-size: 9px;
-            padding: 4px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-        .save-btn:hover {
-            border-color: var(--accent-blue);
-            color: var(--accent-blue);
-        }
-        .remove-btn {
-            background: transparent;
-            border: 1px solid rgba(231, 76, 60, 0.2);
-            color: #e74c3c;
-            font-size: 9px;
-            padding: 4px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-        .remove-btn:hover {
-            background: rgba(231, 76, 60, 0.05);
-            border-color: #e74c3c;
-        }
+
+        /* Variant Option Selector Dialog Popup Layer Container */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0,0,0,0.4);
+            background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(4px);
             z-index: 400;
             display: flex;
@@ -417,6 +444,37 @@
             justify-content: center;
             padding: 20px;
         }
+        .modal-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 25px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+        }
+        .variant-pill-box {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0 25px 0;
+        }
+        .variant-pill {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+        .variant-pill.selected {
+            border-color: var(--accent-blue);
+            background: var(--accent-blue-light);
+            color: var(--accent-blue);
+        }
+
         .receipt-container {
             background: #fff;
             color: #000;
@@ -426,28 +484,19 @@
             padding: 25px;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-        }
-        .receipt-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            border-bottom: 1px dashed #ddd;
-            padding: 8px 0;
         }
         .admin-box {
             background: #ffffff;
-            border: 2px dashed var(--accent-blue);
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 20px;
-            margin-bottom: 25px;
+            border: 2px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
         }
         .admin-box h2 {
-            font-size: 14px;
-            color: var(--accent-blue);
+            font-size: 15px;
+            color: var(--text-dark);
             margin-bottom: 15px;
-            font-weight: 700;
+            font-weight: 800;
         }
         .admin-grid-inputs {
             display: grid;
@@ -458,24 +507,23 @@
         .admin-grid-inputs input, .admin-grid-inputs select {
             background: #f8fafc;
             border: 1px solid #cbd5e1;
-            color: var(--text-color);
-            padding: 8px;
-            font-size: 12px;
-            border-radius: 6px;
+            padding: 10px;
+            font-size: 13px;
+            border-radius: 8px;
             outline: none;
         }
     </style>
 </head>
 <body>
 
-    <!-- Apple iOS Direct-Load Guard Preloader Overlay -->
+    <!-- Professional Ocean Blue Face Loader View Overlay Panel Screen -->
     <div id="preloader-screen">
         <div class="luxury-spinner"></div>
         <div class="preloader-brand">ARISA COLLECTION</div>
     </div>
 
     <header>
-        <h1 onclick="showHome()">ARISA COLLECTION</h1>
+        <h1 onclick="showHome()">ARISA <span>COLLECTION</span></h1>
         <nav>
             <a onclick="showHome()" id="nav-home" class="active">HOME</a>
             <a onclick="showAbout()" id="nav-about">ABOUT</a>
@@ -484,31 +532,28 @@
         </nav>
     </header>
 
-    <!-- Category Section Switching Bar -->
     <div class="section-bar" id="category-section-bar">
         <button class="sec-btn active" id="sec-perfume" onclick="switchSection('perfume')">Perfumes & Body Care</button>
         <button class="sec-btn" id="sec-clothing" onclick="switchSection('clothing')">Clothing & Apparel</button>
     </div>
 
     <div class="container">
-        <!-- Main Application Dynamic Layout Area -->
         <div id="home-content">
             
-            <!-- Securely Hidden Administration Node Interface Terminal -->
+            <!-- Store Admin Node Control Board Module Overlay Frame (Completely Hidden From Customers) -->
             <div id="admin-panel" class="admin-box" style="display:none;">
-                <h2>STORE ADMINISTRATION NODE MANAGEMENT CONTROL</h2>
+                <h2>STORE INVENTORY SYSTEM CONTROL MODULE</h2>
                 <div class="admin-grid-inputs">
-                    <input type="text" id="admin-p-name" placeholder="Item Name">
-                    <input type="number" id="admin-p-price" placeholder="Base Price Structure">
+                    <input type="text" id="admin-p-name" placeholder="Product Name">
+                    <input type="number" id="admin-p-price" placeholder="Price (NLE)">
                     <input type="number" id="admin-p-discount-percentage" placeholder="Discount % (Optional)">
-                    <input type="text" id="admin-p-color" placeholder="Color/Variant Description">
                     <select id="admin-p-status">
-                        <option value="available">Available Block</option>
-                        <option value="sold-out">Sold Out State</option>
+                        <option value="available">Available</option>
+                        <option value="sold-out">Sold Out</option>
                     </select>
                     <select id="admin-p-arrival">
-                        <option value="no">Regular Inventory Stock</option>
-                        <option value="yes">Flag New Arrival Placement</option>
+                        <option value="no">Regular Inventory</option>
+                        <option value="yes">New Arrival Flag</option>
                     </select>
                     <select id="admin-p-category">
                         <option value="perfume">Perfumes & Body Care</option>
@@ -516,99 +561,95 @@
                     </select>
                 </div>
                 <div style="margin-bottom:15px;">
-                    <label style="font-size:11px; color:var(--text-muted); display:block; margin-bottom:5px; font-weight:600;">SELECT ITEM CONFIGURATION THUMBNAIL SOURCE IMAGE:</label>
-                    <input type="file" id="admin-p-file" accept="image/*" style="font-size:12px; color:var(--text-color);">
+                    <label style="font-size:11px; color:var(--text-muted); display:block; margin-bottom:5px; font-weight:700;">SELECT PRODUCT IMAGE ARCHIVE:</label>
+                    <input type="file" id="admin-p-file" accept="image/*" style="font-size:13px;">
                 </div>
                 <div style="display:flex; gap:12px;">
-                    <button class="btn" style="background:var(--accent-pink); color:white; border-color:var(--accent-pink);" onclick="adminUpload()">PUSH NEW PRODUCT INTO FIREBASE NODE</button>
-                    <button class="btn" style="background:#cbd5e1; border-color:#cbd5e1; color:var(--text-color);" onclick="logoutAdmin()">LOGOUT SYSTEM KEYS</button>
+                    <button class="btn" style="background:var(--text-dark);" onclick="adminUpload()">SAVE NEW PRODUCT ENTRY</button>
+                    <button class="btn" style="background:#cbd5e1; color:var(--text-dark);" onclick="logoutAdmin()">EXIT SESSION</button>
                 </div>
                 
                 <hr style="border:0; border-top:1px solid var(--border-color); margin:20px 0;">
                 
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:20px;">
-                    <div style="background:#f8fafc; padding:15px; border-radius:8px; border:1px solid var(--border-color);">
-                        <span style="font-size:11px; color:var(--accent-blue); font-weight:bold; display:block; margin-bottom:8px;">QUICK SPELLING CORRECTION PATCH</span>
-                        <input type="text" id="edit-target-name" placeholder="Exact Current Item Name" style="width:100%; padding:8px; font-size:12px; background:white; border:1px solid #cbd5e1; margin-bottom:8px; border-radius:6px; outline:none;">
-                        <input type="text" id="edit-new-name" placeholder="Corrected Spelling Output Name" style="width:100%; padding:8px; font-size:12px; background:white; border:1px solid #cbd5e1; margin-bottom:8px; border-radius:6px; outline:none;">
-                        <button class="btn" style="font-size:10px; padding:6px;" onclick="applySpellingCorrection()">DEPLOY INLINE SPELLING CORRECTION</button>
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:20px;">
+                    <div style="background:#f8fafc; padding:15px; border-radius:10px; border:1px solid var(--border-color);">
+                        <span style="font-size:11px; color:var(--accent-blue); font-weight:bold; display:block; margin-bottom:8px;">SPELLING PATCH CORRECTION DATA TOOL</span>
+                        <input type="text" id="edit-target-name" placeholder="Target Exact Product Name" style="width:100%; padding:8px; font-size:13px; border:1px solid #cbd5e1; margin-bottom:8px; border-radius:6px; outline:none;">
+                        <input type="text" id="edit-new-name" placeholder="New Corrected Name String" style="width:100%; padding:8px; font-size:13px; border:1px solid #cbd5e1; margin-bottom:8px; border-radius:6px; outline:none;">
+                        <button class="btn" style="font-size:11px; padding:8px; background:var(--text-dark);" onclick="applySpellingCorrection()">COMMIT CORRECTION UPDATE</button>
                     </div>
-                    <div style="background:#f8fafc; padding:15px; border-radius:8px; border:1px solid var(--border-color);">
-                        <span style="font-size:11px; color:var(--accent-blue); font-weight:bold; display:block; margin-bottom:8px;">QUICK BULK DISCOUNT / PRICE MODIFICATION ENGINE</span>
-                        <input type="text" id="discount-target-name" placeholder="Target Product Exact Name" style="width:100%; padding:8px; font-size:12px; background:white; border:1px solid #cbd5e1; margin-bottom:8px; border-radius:6px; outline:none;">
-                        <input type="number" id="discount-new-base-price" placeholder="New Base Price Value" style="width:100%; padding:8px; font-size:12px; background:white; border:1px solid #cbd5e1; margin-bottom:8px; border-radius:6px; outline:none;">
-                        <input type="number" id="discount-target-percentage" placeholder="New Discount % Setting" style="width:100%; padding:8px; font-size:12px; background:white; border:1px solid #cbd5e1; margin-bottom:8px; border-radius:6px; outline:none;">
-                        <button class="btn" style="font-size:10px; padding:6px;" onclick="applyDiscountToExisting()">MUTATE TARGET INVENTORY PRICING DATA</button>
+                    <div style="background:#f8fafc; padding:15px; border-radius:10px; border:1px solid var(--border-color);">
+                        <span style="font-size:11px; color:var(--accent-blue); font-weight:bold; display:block; margin-bottom:8px;">BULK PRICING & INVENTORY DISCOUNT OVERRIDE</span>
+                        <input type="text" id="discount-target-name" placeholder="Target Product Name Matching" style="width:100%; padding:8px; font-size:13px; border:1px solid #cbd5e1; margin-bottom:8px; border-radius:6px; outline:none;">
+                        <input type="number" id="discount-new-base-price" placeholder="New Base Price Struct" style="width:100%; padding:8px; font-size:13px; border:1px solid #cbd5e1; margin-bottom:8px; border-radius:6px; outline:none;">
+                        <input type="number" id="discount-target-percentage" placeholder="New Promo Discount % Value" style="width:100%; padding:8px; font-size:13px; border:1px solid #cbd5e1; margin-bottom:8px; border-radius:6px; outline:none;">
+                        <button class="btn" style="font-size:11px; padding:8px; background:var(--text-dark);" onclick="applyDiscountToExisting()">MUTATE PRICING MATRIX</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Main Interactive Retail Shopping Grid Node System Matrix -->
+            <!-- Highly Scannable Luxury Product Exhibition Catalog Grid Map -->
             <div class="product-grid" id="products-catalogue-grid"></div>
             
-            <!-- User System Suggestions Input Wrapper Content -->
-            <div style="margin-top:50px; border-top:1px solid var(--border-color); padding-top:25px; text-align:center;">
-                <p style="font-size:12px; color:var(--text-muted); font-weight:600; margin-bottom:12px;">Have specific inventory requests or optimization thoughts?</p>
-                <div style="max-width:400px; margin:0 auto; display:flex; gap:10px;">
-                    <input type="text" id="user-suggestion" placeholder="Type store collections suggestions here..." style="flex-grow:1; background:white; border:1px solid #cbd5e1; border-radius:6px; color:var(--text-color); font-size:13px; padding:10px; outline:none;">
-                    <button class="btn" style="width:auto; padding:0 20px; background:var(--accent-pink); color:white; border-color:var(--accent-pink);" onclick="sendSuggestion()">Submit</button>
+            <div style="margin-top:60px; border-top:1px solid var(--border-color); padding-top:30px; text-align:center;">
+                <p style="font-size:13px; color:var(--text-muted); font-weight:700; margin-bottom:12px;">Missing a specific perfume line or apparel look? Share with us:</p>
+                <div style="max-width:440px; margin:0 auto; display:flex; gap:10px;">
+                    <input type="text" id="user-suggestion" placeholder="Enter collection request details..." style="flex-grow:1; background:white; border:1px solid #cbd5e1; border-radius:8px; font-size:14px; padding:12px; outline:none;">
+                    <button class="btn" style="width:auto; padding:0 24px; background:var(--text-dark);" onclick="sendSuggestion()">Submit</button>
                 </div>
             </div>
             
-            <!-- Admin Login Point (Kept visually hidden, accessible via secret triple tap/click on this invisible div) -->
-            <div style="text-align:center; margin-top:40px; opacity: 0.01; cursor: default;" onclick="handleSecretAdminTap()">
-                <span>[ADMIN PORTAL]</span>
+            <!-- Cryptographic Admin Entry Sensor Vector Pad Zone -->
+            <div style="text-align:center; margin-top:50px; opacity: 0.005; cursor: default;" onclick="handleSecretAdminTap()">
+                <span>[NODE ENG KEYPORT TERMINAL ENTRY]</span>
             </div>
         </div>
 
-        <!-- Static Text Pages Wrapper Window -->
-        <div id="page-content" style="display:none; background:var(--card-bg); border:1px solid var(--border-color); padding:30px; border-radius:12px; margin-top:10px;">
+        <div id="page-content" style="display:none; background:var(--card-bg); border:1px solid var(--border-color); padding:40px; border-radius:16px; margin-top:10px; line-height:1.6;">
             <div id="page-inner-content"></div>
-            <button class="btn" style="margin-top:20px; max-width:150px;" onclick="showHome()">Return Home</button>
+            <button class="btn" style="margin-top:25px; max-width:165px; background:var(--text-dark);" onclick="showHome()">Return Home</button>
         </div>
     </div>
 
-    <!-- Floating Circular Reactive Mobile Shopping Basket Action Interface -->
+    <!-- Floating Order Basket Icon Panel Trigger -->
     <button id="floating-cart-btn" onclick="toggleCart()">
-        🛒 <span id="floating-cart-counter">0</span>
+        🛍️ <span id="floating-cart-counter">0</span>
     </button>
 
-    <!-- Interactive Sidebar E-commerce Sliding Shopping Cart Module Context Panel -->
+    <!-- Side View E-commerce Cart Panel Canvas Layout Container -->
     <div class="sidebar" id="cart-sidebar">
         <div class="sidebar-header">
-            <h2>YOUR ARISA BASKET</h2>
+            <h2>SHOPPING BAG</h2>
             <button class="close-sidebar-btn" onclick="toggleCart()">×</button>
         </div>
         
         <div class="cart-scroll-area">
             <div id="cart-items-list"></div>
-            
-            <div id="saved-items-container" style="margin-top:25px; display:none;">
-                <h3 style="font-size:11px; color:var(--accent-blue); border-bottom:1px solid var(--border-color); padding-bottom:6px; margin-bottom:10px; text-transform:uppercase; font-weight:700;">DEFERRED STOCK ITEMS (SAVED FOR LATER)</h3>
+            <div id="saved-items-container" style="margin-top:30px; display:none;">
+                <h3 style="font-size:12px; color:var(--text-muted); border-bottom:1px solid var(--border-color); padding-bottom:8px; margin-bottom:12px; font-weight:700;">SAVED ITEMS</h3>
                 <div id="saved-items-list"></div>
             </div>
         </div>
 
-        <!-- Checkout Target Destination Metadata Information Form Inputs Elements Block -->
         <div class="checkout-inputs">
-            <label>Recipient Legal Identity Name</label>
-            <input type="text" id="cust-name" placeholder="Enter Full Name">
+            <label>Full Customer Name</label>
+            <input type="text" id="cust-name" placeholder="Enter full recipient name">
             
-            <label>WhatsApp Operational Contact Line Phone</label>
+            <label>WhatsApp Phone Number Line</label>
             <input type="tel" id="cust-phone" placeholder="e.g. +23277000000">
             
-            <label>Logistics Fulfillment Method Strategy</label>
+            <label>Fulfillment Method Option</label>
             <select id="order-method" onchange="handleOrderMethodChange()">
-                <option value="Delivery">Standard Dispatched Courier Delivery Mode</option>
-                <option value="Pick Up">Walk-In Physical Location Store Counter Pick Up</option>
+                <option value="Delivery">Dispatch Courier Home/Office Delivery</option>
+                <option value="Pick Up">Physical Showroom Front Counter Pick Up</option>
             </select>
             
             <div id="address-input-wrapper">
-                <label>Precise Coordinates Geography Dropoff Address</label>
-                <textarea id="cust-address" rows="2" placeholder="Provide Detailed Street and Junction Information Boundaries..."></textarea>
+                <label>Pinpoint Delivery Address Location Boundaries</label>
+                <textarea id="cust-address" rows="2" placeholder="Street name, junction details, neighborhood markers..." style="width:100%; padding:12px; border:1px solid #cbd5e1; border-radius:8px; outline:none; font-size:14px;"></textarea>
             </div>
             
-            <label>Monetary Settlement Mode Gateway</label>
+            <label>Order Settlement Gateway Payment Mode</label>
             <select id="payment-method">
                 <option value="Orange Money">Orange Money Mobile Wallet Service</option>
                 <option value="Afrimoney">Afrimoney System Account Transfer</option>
@@ -616,55 +657,62 @@
             </select>
         </div>
 
-        <!-- Final Pricing Matrix Summary Computation Results Layout -->
-        <div style="border-top:1px solid var(--border-color); padding-top:15px; margin-bottom:20px;">
+        <div style="border-top:1px solid var(--border-color); padding-top:20px; margin-bottom:25px;">
             <div class="summary-row">
-                <span style="color:var(--text-muted)">Aggregated Cart Raw Subtotal:</span>
-                <span><span id="cart-subtotal">0.00</span> NLE</span>
+                <span style="color:var(--text-muted)">Items Subtotal Balance:</span>
+                <span style="font-weight:600;"><span id="cart-subtotal">0.00</span> NLE</span>
             </div>
             <div class="summary-row" id="discount-row" style="color:var(--accent-pink); font-weight:700; display:none;">
-                <span>Tiered Multi-Item Bundle Discount Reward Applied:</span>
-                <span>-<span id="cart-discount">0.00</span> NLE</span>
+                <span>Multi-Item Rewards Promotion Discount:</span>
+                <span>-<span>0.00</span> NLE</span>
             </div>
-            <div class="summary-row" style="font-size:16px; font-weight:700; color:var(--accent-blue); border-top:1px solid #cbd5e1; margin-top:8px; padding-top:8px;">
-                <span>Total Computational Settlement Balance:</span>
+            <div class="summary-row" style="font-size:18px; font-weight:800; color:var(--text-dark); border-top:1px solid var(--border-color); margin-top:12px; padding-top:12px;">
+                <span>Total Due:</span>
                 <span><span id="cart-grand-total">0.00</span> NLE</span>
             </div>
         </div>
 
-        <button class="btn" style="background:var(--accent-pink); color:white; border-color:var(--accent-pink); padding:14px; font-weight:700;" onclick="checkoutWhatsApp()">EXECUTE REDIRECT WHATSAPP ORDER</button>
+        <button class="btn" style="background:var(--accent-blue); padding:16px; font-size:13px;" onclick="checkoutWhatsApp()">COMPLETE PURCHASE VIA WHATSAPP</button>
     </div>
 
-    <!-- Hidden High Fidelity Virtual Node Matrix Container For Image Invoices Rendering Pipeline -->
-    <div id="receipt-capture-canvas" style="position: absolute; left: -9999px; top: 0; background: white; width: 450px; padding: 25px; color: black;">
-        <div id="canvas-receipt-inner-wrapper" style="border: 2px solid #000; padding: 20px;">
-            <h1 style="text-align: center; color: #000; font-size: 20px; letter-spacing: 1px; margin-bottom: 2px; font-weight: bold;">ARISA COLLECTION</h1>
-            <p style="text-align: center; font-size: 10px; text-transform: uppercase; color: #555; letter-spacing: 0.5px; margin-bottom: 15px;">Official Verified Premium Commercial Invoice Statements</p>
-            <div id="canvas-receipt-details"></div>
-            <div style="margin-top: 25px; text-align: center; font-size: 9px; color: #777; border-top: 1px solid #ccc; padding-top: 10px;">
-                Thank you for selecting Arisa Collection luxury services assets! Please retain this document for warranty verification tracking checks.
+    <!-- Color Picker Dialog Overlay Window Matrix Component Frame Modal -->
+    <div class="modal-overlay" id="variant-modal" style="display:none;">
+        <div class="modal-card">
+            <h3 style="font-size:16px; font-weight:800; margin-bottom:6px; color:var(--text-dark);" id="v-modal-title">SELECT WEBPAGE COLOR CHOICE</h3>
+            <p style="font-size:13px; color:var(--text-muted);">Please confirm your preferred design layout profile tone variation options configuration below:</p>
+            <div class="variant-pill-box">
+                <div class="variant-pill selected" id="pill-pink" onclick="selectVariantColor('Pink')">Pink</div>
+                <div class="variant-pill" id="pill-blue" onclick="selectVariantColor('Blue')">Blue</div>
+                <div class="variant-pill" id="pill-white" onclick="selectVariantColor('White')">White</div>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <button class="btn" onclick="confirmVariantSelection()">ADD SELECTED CHOICE TO BAG</button>
+                <button class="btn" style="background:#cbd5e1; color:var(--text-dark); max-width:90px;" onclick="closeVariantModal()">CANCEL</button>
             </div>
         </div>
     </div>
 
-    <!-- Live Interfacing Invoice Presentation Screen Modal Dialog Box Layout Window -->
+    <!-- Render Framework Virtual Canvas Node Struct -->
+    <div id="receipt-capture-canvas" style="position: absolute; left: -9999px; top: 0; background: white; width: 450px; padding: 25px; color: black;">
+        <div id="canvas-receipt-inner-wrapper" style="border: 2px solid #000; padding: 20px;">
+            <h1 style="text-align: center; font-size: 20px; letter-spacing: 1px; margin-bottom: 2px; font-weight: bold;">ARISA COLLECTION</h1>
+            <p style="text-align: center; font-size: 10px; text-transform: uppercase; color: #555; letter-spacing: 0.5px; margin-bottom: 15px;">OFFICIAL SECURE INVOICE MATRIX STATEMENT</p>
+            <div id="canvas-receipt-details"></div>
+        </div>
+    </div>
+
+    <!-- Active High Fidelity Invoice Display Node Modal View Screen Popup Window Layout -->
     <div class="modal-overlay" id="receipt-modal" style="display:none;">
         <div class="receipt-container" id="pdf-invoice-area">
             <h1 style="text-align:center; font-size:22px; color:#000; letter-spacing:1px; font-weight:bold; margin-bottom:2px;">ARISA COLLECTION</h1>
-            <p style="text-align:center; font-size:9px; color:#666; text-transform:uppercase; letter-spacing:1px; margin-bottom:15px; border-bottom:2px solid #000; padding-bottom:10px;">PREMIUM SYSTEM GENERATED INVOICE RECEIPT</p>
-            
+            <p style="text-align:center; font-size:9px; color:#666; text-transform:uppercase; letter-spacing:1px; margin-bottom:15px; border-bottom:2px solid #000; padding-bottom:10px;">DIGITAL INVOICE MATRIX RECEIPT</p>
             <div id="receipt-details" style="color:#000;"></div>
-            
-            <div style="margin-top:20px; font-size:9px; color:#555; text-align:center; line-height:1.4; border-top:1px dashed #bbb; padding-top:10px;">
-                This system receipt statement is instantly validated, committed directly to backend datablocks, and translated via client execution nodes.
-            </div>
-            
-            <button class="btn" id="hide-pdf-btn" style="background:#000; color:white; margin-top:10px; border-color:#000;" onclick="closeReceipt()">DISMISS AND ROUTE BACK HOME CONTENT</button>
+            <button class="btn" id="hide-pdf-btn" style="background:#000; color:white; margin-top:10px; border-color:#000;" onclick="closeReceipt()">RETURN HOME</button>
         </div>
     </div>
 
     <script>
-        // --- REALTIME WEB CLIENT VARIABLE PARAMETERS SYNCHRONIZATION DATA CONFIGURATION ---
+        // --- SECURE REALTIME FIREBASE STORAGE DATA LAYER SETUP INTERFACE ---
         const firebaseConfig = {
             apiKey: "AIzaSyDE-YourActualValidKeyStringHere-ExampleOnly",
             databaseURL: "https://testing-c7414-default-rtdb.firebaseio.com/"
@@ -680,6 +728,10 @@
         let currentSection = 'perfume'; 
         let dataLoaded = false;
         let secretClickCount = 0;
+        
+        // Active Tracking State Variant Struct Fields Variables
+        let activeTargetProductId = null;
+        let activeSelectedColor = 'Pink';
 
         function switchSection(sectionName) {
             currentSection = sectionName;
@@ -747,7 +799,7 @@
             const filteredItems = itemsCollection.filter(item => item.category === currentSection);
 
             if (filteredItems.length === 0) {
-                grid.innerHTML = `<p style="grid-column: 1/-1; font-size:13px; color:var(--text-muted); text-align:center; padding:40px 0;">No available product items cataloged inside this collection layer section yet.</p>`;
+                grid.innerHTML = `<p style="grid-column: 1/-1; font-size:14px; color:var(--text-muted); text-align:center; padding:50px 0;">No active luxury stock matching this catalog node structure yet.</p>`;
                 return;
             }
 
@@ -760,67 +812,94 @@
                     let pct = parseFloat(p.discountPercentage);
                     let finalPrice = originalPrice - (originalPrice * (pct / 100));
                     priceDisplayHTML = `
-                        <div class="price-box">
-                            <span class="old-price-strike">${originalPrice} NLE</span>
-                            <span class="price">${finalPrice.toFixed(2)} NLE</span>
-                            <span class="discount-badge">${pct}% OFF</span>
+                        <div class="price-container">
+                            <span class="price-current">${finalPrice.toFixed(2)} NLE</span>
+                            <span class="price-old">${originalPrice} NLE</span>
+                            <span class="discount-tag">${pct}% OFF</span>
                         </div>
                     `;
                 } else {
                     priceDisplayHTML = `
-                        <div class="price-box">
-                            <span class="price">${originalPrice} NLE</span>
+                        <div class="price-container">
+                            <span class="price-current">${originalPrice} NLE</span>
                         </div>
                     `;
                 }
 
                 const arrivalBadgeHTML = (p.isNewArrival === 'yes') 
-                    ? `<span class="status-badge" style="background:var(--accent-pink); color:white; top: 34px; right: 10px; left: auto;">NEW</span>` 
+                    ? `<span class="new-badge">NEW</span>` 
                     : '';
 
                 grid.innerHTML += `
-                    <div class="product-card" onclick="${sold ? '' : `handleProductTap('${p.firebaseId}')`}">
+                    <div class="product-card" onclick="${sold ? '' : `openVariantModal('${p.firebaseId}')`}">
                         <span class="status-badge ${p.status}">${p.status.replace('-', ' ')}</span>
                         ${arrivalBadgeHTML}
                         <div class="product-image"><img src="${p.image}"></div>
-                        <h3 style="font-size:13px; font-weight:600; color:var(--text-color);">${p.name}</h3>
-                        ${p.color ? `<span class="color-label">${p.color}</span>` : ''}
-                        ${priceDisplayHTML}
-                        <button class="btn" ${sold ? 'disabled' : ''}>
-                            ${sold ? 'SOLD OUT' : 'BUY'}
-                        </button>
-                        ${isAdmin ? `<div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-top:8px;">
-                                     <button class="btn" style="background:#4a90e2; border-color:#4a90e2; color:white; font-size:8px; padding:4px 0;" onclick="event.stopPropagation(); toggleStatus('${p.firebaseId}','${p.status}')">Status</button>
-                                     <button class="btn" style="background:#e74c3c; border-color:#e74c3c; color:white; font-size:8px; padding:4px 0;" onclick="event.stopPropagation(); deleteProduct('${p.firebaseId}')">Del</button>
-                                     <button class="btn" style="background:#ff6b8b; border-color:#ff6b8b; color:white; font-size:8px; padding:4px 0;" onclick="event.stopPropagation(); quickModifyDiscount('${p.firebaseId}','${p.discountPercentage}')">Disc</button>
-                                     <button class="btn" style="background:#2c3e50; border-color:#2c3e50; color:white; font-size:8px; padding:4px 0;" onclick="event.stopPropagation(); quickToggleArrival('${p.firebaseId}','${p.isNewArrival}')">Arrival</button></div>` : ''}
+                        <div class="product-info">
+                            <h3 class="product-title">${p.name}</h3>
+                            
+                            <!-- Customer Color Choice Display Engine -->
+                            <div class="color-options-preview">
+                                <span style="font-size:11px; color:var(--text-muted); font-weight:600; margin-right:4px;">Colors:</span>
+                                <span class="color-dot pink"></span>
+                                <span class="color-dot blue"></span>
+                                <span class="color-dot white"></span>
+                            </div>
+                            
+                            ${priceDisplayHTML}
+                            <button class="btn" ${sold ? 'disabled' : ''}>
+                                ${sold ? 'SOLD OUT' : 'CHOOSE VARIANT'}
+                            </button>
+                        </div>
+                        ${isAdmin ? `<div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-top:12px; border-top:1px solid #e2e8f0; padding-top:8px;">
+                                     <button class="btn" style="background:#2563eb; color:white; font-size:9px; padding:6px 0;" onclick="event.stopPropagation(); toggleStatus('${p.firebaseId}','${p.status}')">Status</button>
+                                     <button class="btn" style="background:#dc2626; color:white; font-size:9px; padding:6px 0;" onclick="event.stopPropagation(); deleteProduct('${p.firebaseId}')">Del</button>
+                                     <button class="btn" style="background:#db2777; color:white; font-size:9px; padding:6px 0;" onclick="event.stopPropagation(); quickModifyDiscount('${p.firebaseId}','${p.discountPercentage}')">Disc</button>
+                                     <button class="btn" style="background:#1e293b; color:white; font-size:9px; padding:6px 0;" onclick="event.stopPropagation(); quickToggleArrival('${p.firebaseId}','${p.isNewArrival}')">Arrival</button></div>` : ''}
                     </div>`;
             });
         }
 
-        let tapTimer = null;
-        window.handleProductTap = (id) => {
-            if (tapTimer === null) {
-                tapTimer = setTimeout(() => {
-                    addToCart(id);
-                    tapTimer = null;
-                }, 300);
-            } else {
-                clearTimeout(tapTimer);
-                tapTimer = null;
-                addToCart(id);
-            }
+        // Customer Variant Interface Modal Operations Logic
+        window.openVariantModal = (productId) => {
+            activeTargetProductId = productId;
+            const item = itemsCollection.find(p => p.firebaseId === productId);
+            document.getElementById('v-modal-title').innerText = item.name;
+            selectVariantColor('Pink'); // Default starting point
+            document.getElementById('variant-modal').style.display = 'flex';
         };
 
-        window.addToCart = (id) => {
-            const existingItem = cart.find(i => i.firebaseId === id);
-            if (existingItem) {
-                alert("This item is already added to your cart!");
+        window.closeVariantModal = () => {
+            document.getElementById('variant-modal').style.display = 'none';
+        };
+
+        window.selectVariantColor = (colorName) => {
+            activeSelectedColor = colorName;
+            document.getElementById('pill-pink').classList.remove('selected');
+            document.getElementById('pill-blue').classList.remove('selected');
+            document.getElementById('pill-white').classList.remove('selected');
+            document.getElementById('pill-' + colorName.toLowerCase()).classList.add('selected');
+        };
+
+        window.confirmVariantSelection = () => {
+            if(!activeTargetProductId) return;
+            const item = itemsCollection.find(p => p.firebaseId === activeTargetProductId);
+            const duplicateCheck = cart.find(i => i.firebaseId === activeTargetProductId && i.chosenColor === activeSelectedColor);
+            
+            if (duplicateCheck) {
+                alert("This exact item variant combination matching color choice is already in your bag!");
+                closeVariantModal();
                 return;
             }
-            const item = itemsCollection.find(p => p.firebaseId === id);
-            cart.push({ ...item, cartId: Date.now() + Math.random() }); 
+
+            cart.push({ 
+                ...item, 
+                cartId: Date.now() + Math.random(),
+                chosenColor: activeSelectedColor 
+            }); 
+            
             updateCartUI();
+            closeVariantModal();
             document.getElementById('floating-cart-btn').style.display = 'block';
         };
 
@@ -839,11 +918,6 @@
 
         window.moveToCart = (cartId) => {
             const item = savedItems.find(i => i.cartId === cartId);
-            const duplicateCheck = cart.find(i => i.firebaseId === item.firebaseId);
-            if (duplicateCheck) {
-                alert("This item is already in your active cart panel.");
-                return;
-            }
             cart.push(item);
             savedItems = savedItems.filter(i => i.cartId !== cartId);
             updateCartUI();
@@ -865,21 +939,21 @@
                 if (i.discountPercentage && parseFloat(i.discountPercentage) > 0) {
                     const pct = parseFloat(i.discountPercentage);
                     finalActivePrice = originalPrice - (originalPrice * (pct / 100));
-                    discountTextHTML = `<span style="color:var(--accent-pink); font-size:10px; display:block;">-${pct}% Applied (was ${originalPrice.toFixed(2)} NLE)</span>`;
+                    discountTextHTML = `<span style="color:var(--accent-pink); font-size:11px; display:block;">-${pct}% Off Applied (Was ${originalPrice.toFixed(2)} NLE)</span>`;
                 }
                 
                 subtotal += finalActivePrice;
                 i.calculatedCartPrice = finalActivePrice;
                 
                 return `
-                    <div style="border-bottom:1px solid var(--border-color); padding:12px 0; display:flex; justify-content:space-between; align-items:center;">
-                        <div style="text-align:left; max-width:65%;">
-                            <h4 style="font-size:13px; color:var(--text-color); font-weight:600;">${i.name}</h4>
-                            ${i.color ? `<span style="font-size:10px; color:var(--text-muted);">Variant: ${i.color}</span>` : ''}
+                    <div style="border-bottom:1px solid var(--border-color); padding:14px 0; display:flex; justify-content:space-between; align-items:center;">
+                        <div style="text-align:left; max-width:70%;">
+                            <h4 style="font-size:14px; color:var(--text-dark); font-weight:700;">${i.name}</h4>
+                            <span style="font-size:11px; color:var(--accent-blue); background:var(--accent-blue-light); padding:2px 8px; border-radius:4px; display:inline-block; margin-top:4px; font-weight:700; text-transform:uppercase;">Color: ${i.chosenColor}</span>
                             ${discountTextHTML}
                         </div>
                         <div style="text-align:right;">
-                            <span style="font-size:13px; font-weight:700; color:var(--accent-blue); display:block; margin-bottom:6px;">${finalActivePrice.toFixed(2)} NLE</span>
+                            <span style="font-size:14px; font-weight:800; color:var(--text-dark); display:block; margin-bottom:6px;">${finalActivePrice.toFixed(2)} NLE</span>
                             <div style="display:flex; gap:6px; justify-content:flex-end;">
                                 <button class="save-btn" onclick="saveForLater(${i.cartId})">Save</button>
                                 <button class="remove-btn" onclick="removeFromCart(${i.cartId})">Remove</button>
@@ -892,8 +966,8 @@
                 document.getElementById('saved-items-container').style.display = 'block';
                 savedList.innerHTML = savedItems.map(i => `
                     <div style="border-bottom:1px dashed var(--border-color); padding:10px 0; display:flex; justify-content:space-between; align-items:center; opacity:0.6;">
-                        <span style="font-size:12px; color:var(--text-color);">${i.name}</span>
-                        <button class="save-btn" onclick="moveToCart(${i.cartId})">Move to Cart</button>
+                        <span style="font-size:13px; color:var(--text-dark);">${i.name} (${i.chosenColor})</span>
+                        <button class="save-btn" onclick="moveToCart(${i.cartId})">Move to Bag</button>
                     </div>`).join('');
             } else {
                 document.getElementById('saved-items-container').style.display = 'none';
@@ -903,11 +977,11 @@
             if (cart.length === 2) {
                 rewardDiscount = subtotal * 0.10; 
                 document.getElementById('discount-row').style.display = 'flex';
-                document.getElementById('cart-discount').innerText = rewardDiscount.toFixed(2);
+                document.getElementById('discount-row').children[1].innerText = `-${rewardDiscount.toFixed(2)} NLE`;
             } else if (cart.length >= 3) {
                 rewardDiscount = subtotal * 0.15; 
                 document.getElementById('discount-row').style.display = 'flex';
-                document.getElementById('cart-discount').innerText = rewardDiscount.toFixed(2);
+                document.getElementById('discount-row').children[1].innerText = `-${rewardDiscount.toFixed(2)} NLE`;
             } else {
                 document.getElementById('discount-row').style.display = 'none';
             }
@@ -946,7 +1020,7 @@
                 if (!err) {
                     document.getElementById('edit-target-name').value = '';
                     document.getElementById('edit-new-name').value = '';
-                    alert("Correction deployed successfully.");
+                    alert("Spelling alignment update synchronized successfully.");
                 }
             });
         };
@@ -965,7 +1039,7 @@
                     document.getElementById('discount-target-name').value = '';
                     document.getElementById('discount-new-base-price').value = '';
                     document.getElementById('discount-target-percentage').value = '';
-                    alert("Pricing structure modified.");
+                    alert("Pricing structure successfully updated.");
                 }
             });
         };
@@ -987,8 +1061,8 @@
             document.getElementById('nav-about').className = 'active';
             document.getElementById('nav-policy').className = '';
             document.getElementById('page-inner-content').innerHTML = `
-                <h2 style="color:var(--accent-blue); margin-bottom:15px; font-size:18px;">ABOUT US</h2>
-                <p style="font-size:14px; color:var(--text-color); line-height:1.8;">Welcome to ARISA COLLECTION, Freetown's ultimate sanctuary for premium, high-fidelity luxury garments, perfumes, and body care assets. We curate world-class aesthetic solutions designed to leave an unforgettable imprint.</p>
+                <h2 style="color:var(--text-dark); margin-bottom:15px; font-size:20px; font-weight:800; letter-spacing:0.5px;">ABOUT US</h2>
+                <p style="font-size:15px; color:var(--text-dark); line-height:1.8;">Welcome to ARISA COLLECTION, Freetown's ultimate sanctuary for premium, high-fidelity luxury garments, perfumes, and body care assets. We curate world-class aesthetic solutions designed to leave an unforgettable imprint.</p>
             `;
         };
 
@@ -1000,8 +1074,8 @@
             document.getElementById('nav-about').className = '';
             document.getElementById('nav-policy').className = 'active';
             document.getElementById('page-inner-content').innerHTML = `
-                <h2 style="color:var(--accent-blue); margin-bottom:15px; font-size:18px;">STORE POLICY</h2>
-                <p style="font-size:14px; color:var(--text-color); line-height:1.8;"><strong>Logistics & Delivery:</strong> We offer reliable scheduled dispatch coordinates throughout Freetown between 9:00 AM and 6:00 PM daily. Delivery fees are applied contextually based on your pinpointed location boundaries.<br><br><strong>Returns:</strong> All sales executed are definitive. Ensure sizing configurations and testing profiles are confirmed before final payment settlement.</p>
+                <h2 style="color:var(--text-dark); margin-bottom:15px; font-size:20px; font-weight:800; letter-spacing:0.5px;">STORE POLICY</h2>
+                <p style="font-size:15px; color:var(--text-dark); line-height:1.8;"><strong>Logistics & Delivery:</strong> We offer reliable scheduled dispatch coordinates throughout Freetown between 9:00 AM and 6:00 PM daily. Delivery fees are applied contextually based on your pinpointed location boundaries.<br><br><strong>Returns:</strong> All sales executed are definitive. Ensure sizing configurations and testing profiles are confirmed before final payment settlement.</p>
             `;
         };
 
@@ -1015,7 +1089,7 @@
 
         window.loginAdmin = () => {
             const password = prompt("Enter Administration Verification Key Password:");
-            if (password === "ARISA2026") {
+            if (password === "AMIRA") {
                 sessionStorage.setItem('isArisaAdmin', 'true');
                 document.getElementById('admin-panel').style.display = 'block';
                 renderProducts();
@@ -1036,7 +1110,7 @@
         };
 
         window.deleteProduct = (id) => {
-            if (confirm("Permanently erase product inventory configuration block from node databases?")) {
+            if (confirm("Permanently erase product configuration block?")) {
                 db.ref('perfumes/' + id).remove();
             }
         };
@@ -1059,7 +1133,6 @@
             const name = document.getElementById('admin-p-name').value;
             const price = document.getElementById('admin-p-price').value;
             const discountPct = document.getElementById('admin-p-discount-percentage').value;
-            const color = document.getElementById('admin-p-color').value;
             const status = document.getElementById('admin-p-status').value;
             const isArrival = document.getElementById('admin-p-arrival').value;
             const category = document.getElementById('admin-p-category').value;
@@ -1074,7 +1147,6 @@
                     name: name,
                     price: price,
                     discountPercentage: discountPct ? discountPct : "",
-                    color: color ? color : "",
                     status: status,
                     isNewArrival: isArrival,
                     category: category,
@@ -1085,9 +1157,8 @@
                         document.getElementById('admin-p-name').value = '';
                         document.getElementById('admin-p-price').value = '';
                         document.getElementById('admin-p-discount-percentage').value = '';
-                        document.getElementById('admin-p-color').value = '';
                         fileInput.value = '';
-                        alert("Product uploaded successfully.");
+                        alert("Product securely saved to database.");
                     }
                 });
             };
@@ -1112,34 +1183,34 @@
             cart.forEach((itm, index) => {
                 const linePrice = itm.calculatedCartPrice ? itm.calculatedCartPrice : parseFloat(itm.price);
                 invoiceItemsHTML += `
-                    <div class="receipt-row">
-                        <span>${index + 1}. ${itm.name} ${itm.color ? `(${itm.color})` : ''}</span>
+                    <div style="display:flex; justify-content:space-between; font-size:13px; padding:6px 0; border-bottom:1px dotted #ccc;">
+                        <span>${index + 1}. ${itm.name} (Color: ${itm.chosenColor})</span>
                         <strong>${linePrice.toFixed(2)} NLE</strong>
                     </div>`;
-                textMessageProducts += `• *${itm.name}* ${itm.color ? `(${itm.color})` : ''} - ${linePrice.toFixed(2)} NLE\n`;
+                textMessageProducts += `• *${itm.name}* (Color: ${itm.chosenColor}) - ${linePrice.toFixed(2)} NLE\n`;
                 systemBackupItems.push({
                     name: itm.name,
-                    color: itm.color ? itm.color : "",
+                    color: itm.chosenColor,
                     activePrice: linePrice.toFixed(2)
                 });
             });
             
             const payment = document.getElementById('payment-method').value;
             const receiptHTML = `
-                <p style="font-size:11px; color:#666; margin-bottom:10px; text-align:center;">Date: ${timestamp}</p>
-                <div style="margin-bottom:15px; font-size:12px; border-bottom:1px solid #ddd; padding-bottom:10px;">
+                <p style="font-size:12px; color:#555; margin-bottom:10px; text-align:center;">Date: ${timestamp}</p>
+                <div style="margin-bottom:15px; font-size:13px; border-bottom:1px solid #ddd; padding-bottom:10px; line-height:1.5;">
                     <p><strong>Customer Name:</strong> ${name}</p>
                     <p><strong>Phone Line:</strong> ${phone}</p>
-                    <p><strong>Order System:</strong> ${method}</p>
+                    <p><strong>Fulfillment Setup:</strong> ${method}</p>
                     ${method === 'Delivery' ? `<p><strong>Address:</strong> ${addr}</p>` : ''}
-                    <p><strong>Settlement Mode:</strong> ${payment}</p>
+                    <p><strong>Payment Strategy:</strong> ${payment}</p>
                 </div>
                 <div style="margin-top:10px;">
-                    <p style="font-size:11px; font-weight:bold; color:#000; margin-bottom:8px;">PURCHASED ITEMS:</p>
+                    <p style="font-size:12px; font-weight:bold; color:#000; margin-bottom:8px;">ORDERED STOCK LIST:</p>
                     ${invoiceItemsHTML}
                 </div>
-                <div style="border-top:1px dashed #000; margin-top:15px; padding-top:10px; text-align:right;">
-                    <p style="font-size:16px; font-weight:bold; color:#000;">Grand Total: ${grandTotal} NLE</p>
+                <div style="border-top:2px solid #000; margin-top:15px; padding-top:10px; text-align:right;">
+                    <p style="font-size:17px; font-weight:bold; color:#000;">Grand Total: ${grandTotal} NLE</p>
                 </div>`;
                 
             document.getElementById('receipt-details').innerHTML = receiptHTML;
@@ -1174,7 +1245,7 @@
                     downloadBtn.style.background = "#000";
                     downloadBtn.style.color = "white";
                     downloadBtn.style.marginTop = "10px";
-                    downloadBtn.innerText = "DOWNLOAD PDF INVOICE RECEIPT";
+                    downloadBtn.innerText = "DOWNLOAD PDF RECEIPT";
                     
                     downloadBtn.onclick = function() {
                         const actionBtn = document.getElementById('hide-pdf-btn');
@@ -1192,17 +1263,17 @@
                 });
             }, 800);
             
-            let waMessage = `*ARISA COLLECTION - NEW ORDER* \n`;
+            let waMessage = `*ARISA COLLECTION - NEW RECEIPT* \n`;
             waMessage += `-----------------------------------------\n`;
             waMessage += `*Date:* ${timestamp}\n\n`;
-            waMessage += `*Customer Info:*\n`;
+            waMessage += `*Customer Details:*\n`;
             waMessage += `Name: ${name}\n`;
             waMessage += `Phone: ${phone}\n`;
-            waMessage += `Order Setup: ${method}\n`;
+            waMessage += `Fulfillment: ${method}\n`;
             if (method === 'Delivery') waMessage += `Address: ${addr}\n`;
-            waMessage += `\n*Settlement Terms:*\n`;
-            waMessage += `Payment Mode: ${payment}\n\n`;
-            waMessage += `*Selected Products:*\n`;
+            waMessage += `\n*Payment Details:*\n`;
+            waMessage += `Method: ${payment}\n\n`;
+            waMessage += `*Items Ordered:*\n`;
             waMessage += textMessageProducts;
             waMessage += `\n-----------------------------------------\n`;
             waMessage += `*GRAND TOTAL:* *${grandTotal} NLE*\n\n`;
