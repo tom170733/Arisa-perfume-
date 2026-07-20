@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARISA COLLECTION | PREMIUM SHOWROOM</title>
-    <!-- Firebase Core and Database SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <title>ARISA COLLECTION | LIVE PREMIUM SHOWROOM</title>
     <!-- Utilities for Professional PDF / Invoice Export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.bundle.min.js/5.0.1/html2pdf.bundle.min.js"></script>
@@ -35,54 +32,7 @@
             background-color: var(--bg-color);
             color: var(--text-dark);
             padding-bottom: 80px;
-            opacity: 0;
-            transition: opacity 0.4s ease;
         }
-        body.loaded {
-            opacity: 1;
-        }
-        
-        /* Premium Ocean Blue Opening Preloader Face */
-        #preloader-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--accent-blue);
-            z-index: 99999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .luxury-spinner {
-            width: 44px;
-            height: 44px;
-            border: 3px solid rgba(255, 255, 255, 0.15);
-            border-top: 3px solid #ffffff;
-            border-radius: 50%;
-            animation: spin 0.75s linear infinite;
-            margin-bottom: 24px;
-        }
-        .preloader-brand {
-            color: #ffffff;
-            font-size: 14px;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            font-weight: 700;
-            animation: pulse 2s ease-in-out infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 0.7; transform: scale(0.97); }
-            50% { opacity: 1; transform: scale(1.03); }
-        }
-
-        /* Standard Professional Header Layout */
         header {
             background: #ffffff;
             padding: 24px 20px;
@@ -102,15 +52,8 @@
             cursor: pointer;
             margin-bottom: 16px;
         }
-        header h1 span {
-            color: var(--accent-pink);
-            font-weight: 300;
-        }
-        nav {
-            display: flex;
-            justify-content: center;
-            gap: 36px;
-        }
+        header h1 span { color: var(--accent-pink); font-weight: 300; }
+        nav { display: flex; justify-content: center; gap: 36px; }
         nav a {
             color: var(--text-muted);
             text-decoration: none;
@@ -119,16 +62,10 @@
             text-transform: uppercase;
             letter-spacing: 1.5px;
             cursor: pointer;
-            transition: color 0.2s ease;
             position: relative;
             padding-bottom: 6px;
         }
-        nav a:hover {
-            color: var(--text-dark);
-        }
-        nav a.active {
-            color: var(--accent-blue);
-        }
+        nav a.active { color: var(--accent-blue); }
         nav a.active::after {
             content: '';
             position: absolute;
@@ -137,10 +74,7 @@
             width: 70%;
             height: 2px;
             background: var(--accent-blue);
-            border-radius: 2px;
         }
-        
-        /* Clean Category Subnavigation Selection Bar */
         .section-bar {
             display: flex;
             justify-content: center;
@@ -157,28 +91,15 @@
             font-size: 12px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            cursor: pointer;
             border-radius: 20px;
-            transition: all 0.2s ease;
-        }
-        .sec-btn:hover {
-            border-color: #cbd5e1;
-            color: var(--text-dark);
+            cursor: pointer;
         }
         .sec-btn.active {
             background: var(--text-dark);
             color: #ffffff;
             border-color: var(--text-dark);
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 32px 20px;
-        }
-        
-        /* Professional Luxury E-commerce Catalog Matrix Grid */
+        .container { max-width: 1200px; margin: 0 auto; padding: 32px 20px; }
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -193,13 +114,7 @@
             cursor: pointer;
             display: flex;
             flex-direction: column;
-            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
             box-shadow: var(--shadow-sm);
-        }
-        .product-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-            border-color: #cbd5e1;
         }
         .product-image {
             width: 100%;
@@ -207,18 +122,12 @@
             background: #f8fafc;
             border-radius: 8px;
             margin-bottom: 16px;
-            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
         }
-        .product-image img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: cover;
-        }
-        
-        /* Modern Clean Badges */
+        .product-image img { width: 100%; height: 100%; object-fit: cover; }
         .status-badge {
             position: absolute;
             top: 24px;
@@ -228,12 +137,9 @@
             border-radius: 4px;
             text-transform: uppercase;
             font-weight: 700;
-            letter-spacing: 0.5px;
-            z-index: 10;
         }
         .status-badge.available { background: #e2f8f0; color: #065f46; }
         .status-badge.sold-out { background: #fee2e2; color: #991b1b; }
-        
         .new-badge {
             position: absolute;
             top: 24px;
@@ -245,67 +151,12 @@
             font-weight: 700;
             background: var(--accent-pink);
             color: #ffffff;
-            z-index: 10;
-            letter-spacing: 0.5px;
         }
-
-        .product-info {
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-        .product-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 4px;
-            line-height: 1.4;
-        }
-        
-        /* Visual Interactive Color Preview Element Dots */
-        .color-options-preview {
-            display: flex;
-            gap: 6px;
-            margin: 8px 0 14px 0;
-            align-items: center;
-        }
-        .color-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            border: 1px solid rgba(0,0,0,0.1);
-            display: inline-block;
-        }
-        .color-dot.pink { background-color: #ff6b8b; }
-        .color-dot.blue { background-color: #2563eb; }
-        .color-dot.white { background-color: #ffffff; }
-        
-        .price-container {
-            margin-top: auto;
-            padding-top: 8px;
-            display: flex;
-            align-items: baseline;
-            gap: 8px;
-            margin-bottom: 14px;
-        }
-        .price-current {
-            font-weight: 800;
-            color: var(--text-dark);
-            font-size: 16px;
-        }
-        .price-old {
-            text-decoration: line-through;
-            color: var(--text-muted);
-            font-size: 12px;
-        }
-        .discount-tag {
-            color: var(--accent-pink);
-            font-size: 11px;
-            font-weight: 700;
-            margin-left: auto;
-        }
-        
-        /* Core UI Form Input Elements & Action Controllers Buttons Layout */
+        .product-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .price-container { margin-top: auto; padding-top: 8px; display: flex; align-items: baseline; gap: 8px; margin-bottom: 14px; }
+        .price-current { font-weight: 800; font-size: 16px; }
+        .price-old { text-decoration: line-through; color: var(--text-muted); font-size: 12px; }
+        .discount-tag { color: var(--accent-pink); font-size: 11px; font-weight: 700; margin-left: auto; }
         .btn {
             background: var(--accent-blue);
             border: none;
@@ -314,22 +165,25 @@
             padding: 12px 16px;
             font-size: 11px;
             font-weight: 700;
-            letter-spacing: 1px;
-            cursor: pointer;
             border-radius: 6px;
             text-transform: uppercase;
-            transition: background-color 0.15s ease;
+            cursor: pointer;
         }
-        .btn:hover:not(:disabled) {
-            background: #172554;
-        }
-        .btn:disabled {
-            background: #f1f5f9;
-            color: #94a3b8;
-            cursor: not-allowed;
+        .btn:disabled { background: #f1f5f9; color: #94a3b8; cursor: not-allowed; }
+        
+        /* Sync Loading Overlay */
+        #sync-loader {
+            background: var(--accent-blue-light);
+            color: var(--accent-blue);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 24px;
+            border: 1px solid #cbd5e1;
         }
 
-        /* Fixed Shopping Cart Widget Icon Frame */
         #floating-cart-btn {
             position: fixed;
             bottom: 30px;
@@ -345,10 +199,6 @@
             z-index: 200;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             display: none;
-            transition: transform 0.2s ease;
-        }
-        #floating-cart-btn:hover {
-            transform: scale(1.05);
         }
         #floating-cart-counter {
             position: absolute;
@@ -365,8 +215,6 @@
             justify-content: center;
             font-weight: 700;
         }
-
-        /* Side View Flyout Checkout Drawer Panels */
         .sidebar {
             position: fixed;
             top: 0;
@@ -380,192 +228,27 @@
             display: none;
             flex-direction: column;
             padding: 24px;
-            box-shadow: -10px 0 40px rgba(0,0,0,0.03);
         }
-        .sidebar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 16px;
-            margin-bottom: 20px;
-        }
-        .sidebar-header h2 {
-            font-size: 16px;
-            color: var(--text-dark);
-            text-transform: uppercase;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-        }
-        .close-sidebar-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 28px;
-            cursor: pointer;
-        }
-
-        .cart-scroll-area {
-            flex-grow: 1;
-            overflow-y: auto;
-            margin-bottom: 20px;
-            padding-right: 4px;
-        }
-        .checkout-inputs {
-            background: #f8fafc;
-            padding: 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border: 1px solid var(--border-color);
-        }
-        .checkout-inputs label {
-            font-size: 10px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 700;
-            display: block;
-            margin-bottom: 6px;
-        }
-        .checkout-inputs input, .checkout-inputs select, .checkout-inputs textarea {
-            width: 100%;
-            background: #ffffff;
-            border: 1px solid #cbd5e1;
-            color: var(--text-dark);
-            padding: 10px 12px;
-            font-size: 13px;
-            border-radius: 6px;
-            margin-bottom: 14px;
-            outline: none;
-            transition: border-color 0.15s ease;
-        }
-        .checkout-inputs input:focus, .checkout-inputs select:focus, .checkout-inputs textarea:focus {
-            border-color: var(--accent-blue);
-        }
-        
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            margin-bottom: 8px;
-        }
-        .save-btn, .remove-btn {
-            background: transparent;
-            border: none;
-            font-size: 11px;
-            font-weight: 700;
-            cursor: pointer;
-            padding: 2px 4px;
-        }
-        .save-btn { color: var(--accent-blue); }
-        .remove-btn { color: #dc2626; margin-left: 8px; }
-
-        /* Professional Admin Hub Control Station Panel Configuration Window Block */
-        .admin-box {
-            background: #ffffff;
-            border: 1px solid var(--text-dark);
-            border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 36px;
-            box-shadow: var(--shadow-md);
-        }
-        .admin-box h2 {
-            font-size: 14px;
-            color: var(--text-dark);
-            margin-bottom: 16px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-bottom: 2px solid var(--text-dark);
-            padding-bottom: 8px;
-        }
-        .admin-grid-inputs {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-        .admin-grid-inputs input, .admin-grid-inputs select {
-            background: #ffffff;
-            border: 1px solid #cbd5e1;
-            padding: 11px;
-            font-size: 13px;
-            border-radius: 6px;
-            outline: none;
-            color: var(--text-dark);
-        }
-        .admin-grid-inputs input:focus, .admin-grid-inputs select:focus {
-            border-color: var(--text-dark);
-        }
-
-        /* Variant Options Window Dialog Screen Elements */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(15, 23, 42, 0.4);
-            backdrop-filter: blur(4px);
-            z-index: 400;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .modal-card {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 24px;
-            width: 100%;
-            max-width: 380px;
-            box-shadow: var(--shadow-lg);
-        }
-        .variant-pill-box {
-            display: flex;
-            gap: 10px;
-            margin: 16px 0 24px 0;
-        }
-        .variant-pill {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 12px;
-            transition: all 0.15s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .variant-pill.selected {
-            border-color: var(--accent-blue);
-            background: var(--accent-blue-light);
-            color: var(--accent-blue);
-        }
-
-        .receipt-container {
-            background: #fff;
-            color: #000;
-            width: 100%;
-            max-width: 460px;
-            border-radius: 8px;
-            padding: 24px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 20px; }
+        .close-sidebar-btn { background: transparent; border: none; font-size: 28px; cursor: pointer; color: var(--text-muted); }
+        .cart-scroll-area { flex-grow: 1; overflow-y: auto; margin-bottom: 20px; }
+        .checkout-inputs { background: #f8fafc; padding: 16px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border-color); }
+        .checkout-inputs label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 6px; }
+        .checkout-inputs input, .checkout-inputs select, .checkout-inputs textarea { width: 100%; padding: 10px 12px; font-size: 13px; border-radius: 6px; border: 1px solid #cbd5e1; margin-bottom: 14px; outline: none; }
+        .summary-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; }
+        .admin-box { background: #ffffff; border: 1px solid var(--text-dark); border-radius: 12px; padding: 24px; margin-bottom: 36px; }
+        .admin-box h2 { font-size: 14px; margin-bottom: 16px; font-weight: 800; text-transform: uppercase; border-bottom: 2px solid var(--text-dark); padding-bottom: 8px; }
+        .admin-grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 16px; }
+        .admin-grid-inputs input, .admin-grid-inputs select { border: 1px solid #cbd5e1; padding: 11px; font-size: 13px; border-radius: 6px; outline: none; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); z-index: 400; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .modal-card { background: #ffffff; border-radius: 12px; padding: 24px; width: 100%; max-width: 380px; }
+        .variant-pill-box { display: flex; gap: 10px; margin: 16px 0 24px 0; }
+        .variant-pill { flex: 1; text-align: center; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 12px; text-transform: uppercase; }
+        .variant-pill.selected { border-color: var(--accent-blue); background: var(--accent-blue-light); color: var(--accent-blue); }
     </style>
 </head>
 <body>
 
-    <!-- Professional Ocean Blue Face Loader View Overlay Panel Screen -->
-    <div id="preloader-screen">
-        <div class="luxury-spinner"></div>
-        <div class="preloader-brand">ARISA COLLECTION</div>
-    </div>
-
-    <!-- Main Navigation Bar Architecture Header Section -->
     <header>
         <h1 onclick="showHome()">ARISA <span>COLLECTION</span></h1>
         <nav>
@@ -576,258 +259,187 @@
         </nav>
     </header>
 
-    <!-- Interactive Navigation Tab Filters Grid Category Struct -->
     <div class="section-bar" id="category-section-bar">
         <button class="sec-btn active" id="sec-perfume" onclick="switchSection('perfume')">Perfumes & Body Care</button>
         <button class="sec-btn" id="sec-clothing" onclick="switchSection('clothing')">Clothing & Apparel</button>
     </div>
 
     <div class="container">
+        <!-- Visual loading state checker for users -->
+        <div id="sync-loader">🔄 Synchronizing Live Showroom Catalogue...</div>
+
         <div id="home-content">
             
-            <!-- Store Admin Node Control Board Module Overlay Frame -->
+            <!-- Live Cloud Admin Panel Interface -->
             <div id="admin-panel" class="admin-box" style="display:none;">
-                <h2>STORE INVENTORY SYSTEM CONTROL MODULE</h2>
+                <h2>LIVE INVENTORY MANAGER (CLOUD SYNC ACTIVE)</h2>
                 <div class="admin-grid-inputs">
                     <input type="text" id="admin-p-name" placeholder="Product Name">
                     <input type="number" id="admin-p-price" placeholder="Base Price (NLE)">
                     <input type="number" id="admin-p-discount-percentage" placeholder="Discount % (Optional)">
                     <select id="admin-p-status">
-                        <option value="available">Available Stock Status</option>
-                        <option value="sold-out">Sold Out Out-of-Stock</option>
+                        <option value="available">Available Status</option>
+                        <option value="sold-out">Sold Out Status</option>
                     </select>
                     <select id="admin-p-arrival">
-                        <option value="no">Regular Inventory Stock</option>
-                        <option value="yes">New Arrival Flag Label</option>
+                        <option value="no">Regular Stock</option>
+                        <option value="yes">New Arrival Label</option>
                     </select>
                     <select id="admin-p-category">
-                        <option value="perfume">Perfumes & Body Care Category</option>
-                        <option value="clothing">Clothing & Apparel Category</option>
+                        <option value="perfume">Perfumes & Body Care</option>
+                        <option value="clothing">Clothing & Apparel</option>
                     </select>
                 </div>
                 <div style="margin-bottom:20px; background:#f8fafc; padding:12px; border-radius:6px; border:1px dashed #cbd5e1;">
-                    <label style="font-size:11px; color:var(--text-muted); display:block; margin-bottom:6px; font-weight:700; text-transform:uppercase;">SELECT PRODUCT IMAGE ARCHIVE SOURCE FILE:</label>
+                    <label style="font-size:11px; color:var(--text-muted); display:block; margin-bottom:6px; font-weight:700; text-transform:uppercase;">Snap or Upload Product Photo:</label>
                     <input type="file" id="admin-p-file" accept="image/*" style="font-size:12px;">
                 </div>
                 <div style="display:flex; gap:12px;">
-                    <button class="btn" id="admin-save-btn" style="background:var(--text-dark); padding:14px;" onclick="adminUpload()">SAVE NEW PRODUCT ENTRY</button>
+                    <button class="btn" id="admin-save-btn" style="background:var(--text-dark); padding:14px;" onclick="adminUploadLive()">PUBLISH LIVE FOR CUSTOMERS</button>
                     <button class="btn" style="background:#e2e8f0; color:var(--text-dark); padding:14px; max-width:140px;" onclick="logoutAdmin()">EXIT SESSION</button>
-                </div>
-                
-                <hr style="border:0; border-top:1px solid var(--border-color); margin:24px 0;">
-                
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:16px;">
-                    <div style="background:#f8fafc; padding:16px; border-radius:8px; border:1px solid var(--border-color);">
-                        <span style="font-size:11px; color:var(--accent-blue); font-weight:bold; display:block; margin-bottom:8px; text-transform:uppercase;">SPELLING PATCH CORRECTION DATA TOOL</span>
-                        <input type="text" id="edit-target-name" placeholder="Target Exact Product Name" style="width:100%; padding:8px; font-size:13px; border:1px solid #cbd5e1; margin-bottom:8px; border-radius:6px; outline:none;">
-                        <input type="text" id="edit-new-name" placeholder="New Corrected Name String" style="width:100%; padding:8px; font-size:13px; border:1px solid #cbd5e1; margin-bottom:8px; border-radius:6px; outline:none;">
-                        <button class="btn" style="font-size:10px; padding:10px; background:var(--text-dark);" onclick="applySpellingCorrection()">COMMIT CORRECTION UPDATE</button>
-                    </div>
-                    <div style="background:#f8fafc; padding:16px; border-radius:8px; border:1px solid var(--border-color);">
-                        <span style="font-size:11px; color:var(--accent-blue); font-weight:bold; display:block; margin-bottom:8px; text-transform:uppercase;">BULK PRICING & INVENTORY DISCOUNT OVERRIDE</span>
-                        <input type="text" id="discount-target-name" placeholder="Target Product Name Matching" style="width:100%; padding:8px; font-size:13px; border:1px solid #cbd5e1; margin-bottom:8px; border-radius:6px; outline:none;">
-                        <input type="number" id="discount-new-base-price" placeholder="New Base Price Struct" style="width:100%; padding:8px; font-size:13px; border:1px solid #cbd5e1; margin-bottom:8px; border-radius:6px; outline:none;">
-                        <input type="number" id="discount-target-percentage" placeholder="New Promo Discount % Value" style="width:100%; padding:8px; font-size:13px; border:1px solid #cbd5e1; margin-bottom:8px; border-radius:6px; outline:none;">
-                        <button class="btn" style="font-size:10px; padding:10px; background:var(--text-dark);" onclick="applyDiscountToExisting()">MUTATE PRICING MATRIX</button>
-                    </div>
                 </div>
             </div>
 
-            <!-- Highly Scannable Product Exhibition Catalog Grid Map -->
             <div class="product-grid" id="products-catalogue-grid"></div>
             
-            <div style="margin-top:64px; border-top:1px solid var(--border-color); padding-top:32px; text-align:center;">
-                <p style="font-size:12px; color:var(--text-muted); font-weight:700; margin-bottom:12px; text-transform:uppercase; letter-spacing:0.5px;">Missing a specific product configuration line or apparel look? Send feedback:</p>
-                <div style="max-width:460px; margin:0 auto; display:flex; gap:8px;">
-                    <input type="text" id="user-suggestion" placeholder="Enter custom item layout request coordinates..." style="flex-grow:1; background:white; border:1px solid #cbd5e1; border-radius:6px; font-size:13px; padding:10px 12px; outline:none;">
-                    <button class="btn" style="width:auto; padding:0 20px; background:var(--text-dark);" onclick="sendSuggestion()">Submit</button>
-                </div>
-            </div>
-            
-            <!-- Cryptographic Admin Entry Sensor Vector Pad Zone -->
-            <div style="text-align:center; margin-top:60px; padding: 20px; opacity: 0.1; cursor: default;" onclick="handleSecretAdminTap()">
-                <span style="font-size: 10px; color: var(--text-muted);">[ ARISA SYSTEM MANAGEMENT NODE TERMINAL ]</span>
+            <!-- Triple tap target zone at bottom -->
+            <div style="text-align:center; margin-top:80px; padding: 20px; opacity: 0.15;" onclick="handleSecretAdminTap()">
+                <span style="font-size: 10px; color: var(--text-muted); cursor: pointer;">[ ARISA LIVE BROADCAST CONTROL ]</span>
             </div>
         </div>
 
-        <!-- System Core Informational Display Screens Base Framework Wrapper -->
         <div id="page-content" style="display:none; background:var(--card-bg); border:1px solid var(--border-color); padding:32px; border-radius:12px; margin-top:10px; line-height:1.7;">
             <div id="page-inner-content"></div>
             <button class="btn" style="margin-top:24px; max-width:160px; background:var(--text-dark);" onclick="showHome()">Return Home</button>
         </div>
     </div>
 
-    <!-- Floating Order Basket Icon Panel Trigger -->
-    <button id="floating-cart-btn" onclick="toggleCart()">
-        🛍️ <span id="floating-cart-counter">0</span>
-    </button>
+    <button id="floating-cart-btn" onclick="toggleCart()">🛍️ <span id="floating-cart-counter">0</span></button>
 
-    <!-- Side View E-commerce Cart Panel Canvas Layout Container -->
     <div class="sidebar" id="cart-sidebar">
         <div class="sidebar-header">
             <h2>SHOPPING BAG</h2>
             <button class="close-sidebar-btn" onclick="toggleCart()">×</button>
         </div>
         
-        <div class="cart-scroll-area">
-            <div id="cart-items-list"></div>
-            <div id="saved-items-container" style="margin-top:24px; display:none;">
-                <h3 style="font-size:11px; color:var(--text-muted); border-bottom:1px solid var(--border-color); padding-bottom:6px; margin-bottom:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">SAVED ITEMS</h3>
-                <div id="saved-items-list"></div>
-            </div>
-        </div>
+        <div class="cart-scroll-area"><div id="cart-items-list"></div></div>
 
         <div class="checkout-inputs">
-            <label>Full Customer Name</label>
-            <input type="text" id="cust-name" placeholder="Enter full recipient name">
-            
-            <label>WhatsApp Phone Number Line</label>
+            <label>Customer Name</label>
+            <input type="text" id="cust-name" placeholder="Enter recipient name">
+            <label>WhatsApp Number</label>
             <input type="tel" id="cust-phone" placeholder="e.g. +23277000000">
-            
-            <label>Fulfillment Method Option</label>
+            <label>Fulfillment Setup</label>
             <select id="order-method" onchange="handleOrderMethodChange()">
-                <option value="Delivery">Dispatch Courier Home/Office Delivery</option>
-                <option value="Pick Up">Physical Showroom Front Counter Pick Up</option>
+                <option value="Delivery">Courier Delivery</option>
+                <option value="Pick Up">Showroom Pick Up</option>
             </select>
-            
             <div id="address-input-wrapper">
-                <label>Pinpoint Delivery Address Location Boundaries</label>
-                <textarea id="cust-address" rows="2" placeholder="Street name, junction details, neighborhood markers..." style="width:100%; padding:10px 12px; border:1px solid #cbd5e1; border-radius:6px; outline:none; font-size:13px; font-family:inherit; resize:none;"></textarea>
+                <label>Pinpoint Address</label>
+                <textarea id="cust-address" rows="2" placeholder="Street layout details..."></textarea>
             </div>
-            
-            <label>Order Settlement Gateway Payment Mode</label>
+            <label>Payment Mode</label>
             <select id="payment-method">
-                <option value="Orange Money">Orange Money Mobile Wallet Service</option>
-                <option value="Afrimoney">Afrimoney System Account Transfer</option>
-                <option value="Cash on Delivery">Physical Cash Currency Spot Settlement</option>
+                <option value="Orange Money">Orange Money</option>
+                <option value="Afrimoney">Afrimoney</option>
+                <option value="Cash on Delivery">Cash on Delivery</option>
             </select>
         </div>
 
         <div style="border-top:1px solid var(--border-color); padding-top:16px; margin-bottom:20px;">
             <div class="summary-row">
-                <span style="color:var(--text-muted)">Items Subtotal Balance:</span>
+                <span style="color:var(--text-muted)">Subtotal:</span>
                 <span style="font-weight:600;"><span id="cart-subtotal">0.00</span> NLE</span>
             </div>
-            <div class="summary-row" id="discount-row" style="color:var(--accent-pink); font-weight:700; display:none;">
-                <span>Multi-Item Rewards Promotion Discount:</span>
-                <span>-<span>0.00</span> NLE</span>
-            </div>
-            <div class="summary-row" style="font-size:16px; font-weight:800; color:var(--text-dark); border-top:1px solid var(--border-color); margin-top:10px; padding-top:10px;">
+            <div class="summary-row" style="font-size:16px; font-weight:800; border-top:1px solid var(--border-color); margin-top:10px; padding-top:10px;">
                 <span>Total Due:</span>
                 <span><span id="cart-grand-total">0.00</span> NLE</span>
             </div>
         </div>
-
-        <button class="btn" style="background:var(--accent-blue); padding:14px; font-size:12px;" onclick="checkoutWhatsApp()">COMPLETE PURCHASE VIA WHATSAPP</button>
+        <button class="btn" style="padding:14px;" onclick="checkoutWhatsApp()">COMPLETE & SEND WHATSAPP MESSAGE</button>
     </div>
 
-    <!-- Color Picker Dialog Overlay Window Matrix Component Frame Modal -->
+    <!-- Variant Choice Modal -->
     <div class="modal-overlay" id="variant-modal" style="display:none;">
         <div class="modal-card">
-            <h3 style="font-size:15px; font-weight:800; margin-bottom:6px; color:var(--text-dark);" id="v-modal-title">SELECT WEBPAGE COLOR CHOICE</h3>
-            <p style="font-size:12px; color:var(--text-muted); line-height:1.5;">Please confirm your preferred design layout profile tone variation options configuration below:</p>
+            <h3 style="font-size:15px; font-weight:800; margin-bottom:6px;" id="v-modal-title">SELECT OPTION</h3>
             <div class="variant-pill-box">
                 <div class="variant-pill selected" id="pill-pink" onclick="selectVariantColor('Pink')">Pink</div>
                 <div class="variant-pill" id="pill-blue" onclick="selectVariantColor('Blue')">Blue</div>
                 <div class="variant-pill" id="pill-white" onclick="selectVariantColor('White')">White</div>
             </div>
             <div style="display:flex; gap:10px;">
-                <button class="btn" onclick="confirmVariantSelection()">ADD SELECTED CHOICE TO BAG</button>
+                <button class="btn" onclick="confirmVariantSelection()">ADD TO BAG</button>
                 <button class="btn" style="background:#e2e8f0; color:var(--text-dark); max-width:90px;" onclick="closeVariantModal()">CANCEL</button>
             </div>
         </div>
     </div>
 
-    <!-- Render Framework Virtual Canvas Node Struct -->
-    <div id="receipt-capture-canvas" style="position: absolute; left: -9999px; top: 0; background: white; width: 450px; padding: 25px; color: black;">
-        <div id="canvas-receipt-inner-wrapper" style="border: 2px solid #000; padding: 20px;">
-            <h1 style="text-align: center; font-size: 20px; letter-spacing: 1px; margin-bottom: 2px; font-weight: bold;">ARISA COLLECTION</h1>
-            <p style="text-align: center; font-size: 10px; text-transform: uppercase; color: #555; letter-spacing: 0.5px; margin-bottom: 15px;">OFFICIAL SECURE INVOICE MATRIX STATEMENT</p>
-            <div id="canvas-receipt-details"></div>
-        </div>
-    </div>
-
-    <!-- Active High Fidelity Invoice Display Node Modal View Screen Popup Window Layout -->
-    <div class="modal-overlay" id="receipt-modal" style="display:none;">
-        <div class="receipt-container" id="pdf-invoice-area">
-            <h1 style="text-align:center; font-size:20px; color:#000; letter-spacing:1px; font-weight:bold; margin-bottom:2px;">ARISA COLLECTION</h1>
-            <p style="text-align:center; font-size:9px; color:#666; text-transform:uppercase; letter-spacing:1px; margin-bottom:15px; border-bottom:2px solid #000; padding-bottom:10px;">DIGITAL INVOICE MATRIX RECEIPT</p>
-            <div id="receipt-details" style="color:#000;"></div>
-            <button class="btn" id="hide-pdf-btn" style="background:#000; color:white; margin-top:14px; border-radius:4px;" onclick="closeReceipt()">RETURN HOME</button>
-        </div>
-    </div>
-
     <script>
-        // --- REALTIME DATABASE INITIALIZATION VARIABLES ---
-        const firebaseConfig = {
-            apiKey: "AIzaSyDE-YourActualValidKeyStringHere-ExampleOnly", 
-            databaseURL: "https://testing-c7414-default-rtdb.firebaseio.com/"
-        };
-        
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-
         const myWhatsAppNumber = "23274646545"; 
+        
+        // Free Key-Value Storage Engine API Endpoint for Instant Live Syncing
+        const cloudStorageUrl = "https://kvdb.io/MN74qTqWv9Z3x8w7KqL5aG/arisa_store_catalog";
+
         let itemsCollection = []; 
         let cart = [];
-        let savedItems = [];
         let currentSection = 'perfume'; 
-        let dataLoaded = false;
         let secretClickCount = 0;
-        
         let activeTargetProductId = null;
         let activeSelectedColor = 'Pink';
+
+        // Load the catalog data live from the cloud storage whenever a user visits
+        async function fetchLiveCloudCatalog() {
+            const loader = document.getElementById('sync-loader');
+            try {
+                const response = await fetch(cloudStorageUrl);
+                if (response.ok) {
+                    itemsCollection = await response.json();
+                    loader.style.backgroundColor = "#e2f8f0";
+                    loader.style.color = "#065f46";
+                    loader.innerText = "✅ Live Catalog Updated!";
+                    setTimeout(() => loader.style.display = 'none', 2000);
+                } else {
+                    // Initialize with default fallback if server bin is new
+                    itemsCollection = [];
+                    loader.style.display = 'none';
+                }
+            } catch (error) {
+                console.log("Server setup initialized, loading baseline backup profile...");
+                loader.innerText = "⚠️ Running Offline Backup Mode";
+                itemsCollection = [
+                    { id: "1", name: "Premium Oud Sample", price: "450", discountPercentage: "", status: "available", isNewArrival: "yes", category: "perfume", image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100%' height='100%' fill='%23eff6ff'/><text x='50%' y='55%' font-family='sans-serif' font-size='10' text-anchor='middle' fill='%231e3a8a'>No Photo snapped</text></svg>" }
+                ];
+            }
+            renderProducts();
+        }
+
+        window.onload = function() {
+            fetchLiveCloudCatalog();
+            if (sessionStorage.getItem('isArisaAdmin') === 'true') {
+                document.getElementById('admin-panel').style.display = 'block';
+            }
+        };
+
+        async function pushLiveCloudCatalog() {
+            try {
+                await fetch(cloudStorageUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(itemsCollection)
+                });
+            } catch (e) {
+                alert("Cloud Sync connection timed out. Check your mobile internet status.");
+            }
+        }
 
         function switchSection(sectionName) {
             currentSection = sectionName;
             document.getElementById('sec-perfume').classList.remove('active');
             document.getElementById('sec-clothing').classList.remove('active');
-            if(sectionName === 'perfume') {
-                document.getElementById('sec-perfume').classList.add('active');
-            } else if(sectionName === 'clothing') {
-                document.getElementById('sec-clothing').classList.add('active');
-            }
+            document.getElementById('sec-' + sectionName).classList.add('active');
             renderProducts();
         }
-
-        function clearPreloader() {
-            const preloader = document.getElementById('preloader-screen');
-            if (preloader) {
-                preloader.style.opacity = '0';
-                setTimeout(() => {
-                    preloader.style.display = 'none';
-                    document.body.classList.add('loaded');
-                }, 400);
-            }
-        }
-
-        // Realtime sync: Updates your catalog instantly across all customer phone devices!
-        db.ref('perfumes').on('value', (snapshot) => {
-            itemsCollection = [];
-            snapshot.forEach((childSnapshot) => {
-                let data = childSnapshot.val();
-                data.firebaseId = childSnapshot.key;
-                if (!data.category) data.category = 'perfume';
-                itemsCollection.push(data);
-            });
-            renderProducts();
-            
-            if (!dataLoaded) {
-                dataLoaded = true;
-                setTimeout(clearPreloader, 800); 
-            }
-        }, (error) => {
-            setTimeout(clearPreloader, 1000);
-        });
-
-        window.onload = function() {
-            if (sessionStorage.getItem('isArisaAdmin') === 'true') {
-                document.getElementById('admin-panel').style.display = 'block';
-            }
-            setTimeout(() => {
-                if (!dataLoaded) clearPreloader();
-            }, 3000);
-        };
 
         function handleSecretAdminTap() {
             secretClickCount++;
@@ -840,12 +452,11 @@
         function renderProducts() {
             const grid = document.getElementById('products-catalogue-grid');
             grid.innerHTML = '';
-
             const isAdmin = sessionStorage.getItem('isArisaAdmin') === 'true';
             const filteredItems = itemsCollection.filter(item => item.category === currentSection);
 
             if (filteredItems.length === 0) {
-                grid.innerHTML = `<p style="grid-column: 1/-1; font-size:13px; color:var(--text-muted); text-align:center; padding:64px 0; font-weight:500;">No items active under this showroom category.</p>`;
+                grid.innerHTML = `<p style="grid-column: 1/-1; font-size:13px; color:var(--text-muted); text-align:center; padding:64px 0;">No items active under this catalog profile.</p>`;
                 return;
             }
 
@@ -862,60 +473,133 @@
                             <span class="price-current">${finalPrice.toFixed(2)} NLE</span>
                             <span class="price-old">${originalPrice.toFixed(2)} NLE</span>
                             <span class="discount-tag">${pct}% OFF</span>
-                        </div>
-                    `;
+                        </div>`;
                 } else {
-                    priceDisplayHTML = `
-                        <div class="price-container">
-                            <span class="price-current">${originalPrice.toFixed(2)} NLE</span>
-                        </div>
-                    `;
+                    priceDisplayHTML = `<div class="price-container"><span class="price-current">${originalPrice.toFixed(2)} NLE</span></div>`;
                 }
 
-                const arrivalBadgeHTML = (p.isNewArrival === 'yes') 
-                    ? `<span class="new-badge">NEW</span>` 
-                    : '';
-
                 grid.innerHTML += `
-                    <div class="product-card" onclick="${sold ? '' : `openVariantModal('${p.firebaseId}')`}">
-                        <span class="status-badge ${p.status}">${p.status.replace('-', ' ')}</span>
-                        ${arrivalBadgeHTML}
+                    <div class="product-card" onclick="${sold ? '' : `openVariantModal('${p.id}')`}">
+                        <span class="status-badge ${p.status}">${p.status}</span>
+                        ${p.isNewArrival === 'yes' ? '<span class="new-badge">NEW</span>' : ''}
                         <div class="product-image"><img src="${p.image}"></div>
                         <div class="product-info">
                             <h3 class="product-title">${p.name}</h3>
-                            
-                            <div class="color-options-preview">
-                                <span style="font-size:11px; color:var(--text-muted); font-weight:600; margin-right:4px;">Options:</span>
-                                <span class="color-dot pink"></span>
-                                <span class="color-dot blue"></span>
-                                <span class="color-dot white"></span>
-                            </div>
-                            
                             ${priceDisplayHTML}
-                            <button class="btn" ${sold ? 'disabled' : ''}>
-                                ${sold ? 'OUT OF STOCK' : 'CHOOSE VARIANT'}
-                            </button>
+                            <button class="btn" ${sold ? 'disabled' : ''}>${sold ? 'OUT OF STOCK' : 'CHOOSE VARIANT'}</button>
                         </div>
                         ${isAdmin ? `<div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-top:12px; border-top:1px solid #e2e8f0; padding-top:8px;">
-                                     <button class="btn" style="background:#2563eb; color:white; font-size:9px; padding:6px 0;" onclick="event.stopPropagation(); toggleStatus('${p.firebaseId}','${p.status}')">Status</button>
-                                     <button class="btn" style="background:#dc2626; color:white; font-size:9px; padding:6px 0;" onclick="event.stopPropagation(); deleteProduct('${p.firebaseId}')">Del</button>
-                                     <button class="btn" style="background:#db2777; color:white; font-size:9px; padding:6px 0;" onclick="event.stopPropagation(); quickModifyDiscount('${p.firebaseId}','${p.discountPercentage}')">Disc</button>
-                                     <button class="btn" style="background:#1e293b; color:white; font-size:9px; padding:6px 0;" onclick="event.stopPropagation(); quickToggleArrival('${p.firebaseId}','${p.isNewArrival}')">Arrival</button></div>` : ''}
+                            <button class="btn" style="background:#dc2626; font-size:9px; padding:6px 0;" onclick="event.stopPropagation(); deleteProductLive('${p.id}')">Delete Item</button>
+                            <button class="btn" style="background:#2563eb; font-size:9px; padding:6px 0;" onclick="event.stopPropagation(); toggleStatusLive('${p.id}')">Toggle Status</button>
+                        </div>` : ''}
                     </div>`;
             });
         }
 
+        // --- Core Smart Mobile Image Compression & Upload System ---
+        window.adminUploadLive = function() {
+            const name = document.getElementById('admin-p-name').value.trim();
+            const price = document.getElementById('admin-p-price').value.trim();
+            const discountPct = document.getElementById('admin-p-discount-percentage').value.trim();
+            const status = document.getElementById('admin-p-status').value;
+            const isArrival = document.getElementById('admin-p-arrival').value;
+            const category = document.getElementById('admin-p-category').value;
+            const fileInput = document.getElementById('admin-p-file');
+            
+            if (!name || !price) {
+                alert("Please complete the Name and Price input boxes.");
+                return;
+            }
+
+            const saveBtn = document.getElementById('admin-save-btn');
+            saveBtn.disabled = true;
+            saveBtn.innerText = "COMPRESSING IMAGE & SYNCING LIVE...";
+
+            const finalizePush = async (imageString) => {
+                const newProduct = {
+                    id: Date.now().toString(),
+                    name: name,
+                    price: price,
+                    discountPercentage: discountPct,
+                    status: status,
+                    isNewArrival: isArrival,
+                    category: category,
+                    image: imageString
+                };
+                
+                itemsCollection.push(newProduct);
+                await pushLiveCloudCatalog(); // Sync changes straight to the customers' view
+                
+                // Reset admin layout parameters
+                document.getElementById('admin-p-name').value = '';
+                document.getElementById('admin-p-price').value = '';
+                document.getElementById('admin-p-discount-percentage').value = '';
+                fileInput.value = '';
+                
+                saveBtn.disabled = false;
+                saveBtn.innerText = "PUBLISH LIVE FOR CUSTOMERS";
+                renderProducts();
+                alert("Success! Product is now live. Customers will see it instantly when they open the site.");
+            };
+
+            if (fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        // Scale picture resolution slightly down so it broadcasts instantly over mobile data packages
+                        const MAX_SIZE = 350; 
+                        let width = img.width;
+                        let height = img.height;
+                        if (width > height) {
+                            if (width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; }
+                        } else {
+                            if (height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        
+                        // Convert downscaled graphic into high efficiency string file layout 
+                        finalizePush(canvas.toDataURL('image/jpeg', 0.60));
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                finalizePush("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100%' height='100%' fill='%23eff6ff'/><text x='50%' y='55%' font-family='sans-serif' font-size='10' text-anchor='middle' fill='%231e3a8a'>No Image</text></svg>");
+            }
+        };
+
+        window.deleteProductLive = async function(id) {
+            if(confirm("Permanently delete this item from the live store catalog?")) {
+                itemsCollection = itemsCollection.filter(p => p.id !== id);
+                await pushLiveCloudCatalog();
+                renderProducts();
+            }
+        };
+
+        window.toggleStatusLive = async function(id) {
+            itemsCollection = itemsCollection.map(p => {
+                if(p.id === id) {
+                    p.status = p.status === 'available' ? 'sold-out' : 'available';
+                }
+                return p;
+            });
+            await pushLiveCloudCatalog();
+            renderProducts();
+        };
+
         window.openVariantModal = (productId) => {
             activeTargetProductId = productId;
-            const item = itemsCollection.find(p => p.firebaseId === productId);
+            const item = itemsCollection.find(p => p.id === productId);
             document.getElementById('v-modal-title').innerText = item.name;
-            selectVariantColor('Pink'); 
             document.getElementById('variant-modal').style.display = 'flex';
         };
 
-        window.closeVariantModal = () => {
-            document.getElementById('variant-modal').style.display = 'none';
-        };
+        window.closeVariantModal = () => { document.getElementById('variant-modal').style.display = 'none'; };
 
         window.selectVariantColor = (colorName) => {
             activeSelectedColor = colorName;
@@ -926,219 +610,52 @@
         };
 
         window.confirmVariantSelection = () => {
-            if(!activeTargetProductId) return;
-            const item = itemsCollection.find(p => p.firebaseId === activeTargetProductId);
-            const duplicateCheck = cart.find(i => i.firebaseId === activeTargetProductId && i.chosenColor === activeSelectedColor);
-            
-            if (duplicateCheck) {
-                alert("This color option variation has already been added to your shopping bag.");
-                closeVariantModal();
-                return;
-            }
-
-            cart.push({ 
-                ...item, 
-                cartId: Date.now() + Math.random(),
-                chosenColor: activeSelectedColor 
-            }); 
-            
+            const item = itemsCollection.find(p => p.id === activeTargetProductId);
+            cart.push({ ...item, cartId: Date.now(), chosenColor: activeSelectedColor }); 
             updateCartUI();
             closeVariantModal();
             document.getElementById('floating-cart-btn').style.display = 'block';
         };
 
-        window.removeFromCart = (cartId) => {
-            cart = cart.filter(item => item.cartId !== cartId);
-            updateCartUI();
-            if (cart.length === 0) document.getElementById('floating-cart-btn').style.display = 'none';
-        };
-
-        window.saveForLater = (cartId) => {
-            const item = cart.find(i => i.cartId === cartId);
-            savedItems.push(item);
-            cart = cart.filter(i => i.cartId !== cartId);
-            updateCartUI();
-        };
-
-        window.moveToCart = (cartId) => {
-            const item = savedItems.find(i => i.cartId === cartId);
-            cart.push(item);
-            savedItems = savedItems.filter(i => i.cartId !== cartId);
-            updateCartUI();
-        };
-
         function updateCartUI() {
             document.getElementById('cart-counter').innerText = cart.length;
             document.getElementById('floating-cart-counter').innerText = cart.length;
-            
             const list = document.getElementById('cart-items-list');
-            const savedList = document.getElementById('saved-items-list');
             let subtotal = 0;
 
             list.innerHTML = cart.map(i => {
-                const originalPrice = parseFloat(i.price);
-                let finalActivePrice = originalPrice;
-                let discountTextHTML = '';
-                
-                if (i.discountPercentage && parseFloat(i.discountPercentage) > 0) {
-                    const pct = parseFloat(i.discountPercentage);
-                    finalActivePrice = originalPrice - (originalPrice * (pct / 100));
-                    discountTextHTML = `<span style="color:var(--accent-pink); font-size:11px; display:block; font-weight:600;">-${pct}% Applied (Was ${originalPrice.toFixed(2)} NLE)</span>`;
-                }
-                
-                subtotal += finalActivePrice;
-                i.calculatedCartPrice = finalActivePrice;
-                
+                const base = parseFloat(i.price);
+                const final = i.discountPercentage ? (base - (base * (parseFloat(i.discountPercentage)/100))) : base;
+                subtotal += final;
                 return `
-                    <div style="border-bottom:1px solid var(--border-color); padding:14px 0; display:flex; justify-content:space-between; align-items:center;">
-                        <div style="text-align:left; max-width:70%;">
-                            <h4 style="font-size:13px; color:var(--text-dark); font-weight:700;">${i.name}</h4>
-                            <span style="font-size:11px; color:var(--accent-blue); background:var(--accent-blue-light); padding:2px 8px; border-radius:4px; display:inline-block; margin-top:4px; font-weight:700;">Color: ${i.chosenColor}</span>
-                            ${discountTextHTML}
+                    <div style="border-bottom:1px solid var(--border-color); padding:14px 0; display:flex; justify-content:space-between;">
+                        <div>
+                            <h4 style="font-size:13px; font-weight:700;">${i.name}</h4>
+                            <span style="font-size:11px; color:var(--accent-blue);">Option: ${i.chosenColor}</span>
                         </div>
-                        <div style="text-align:right;">
-                            <span style="font-size:13px; font-weight:800; color:var(--text-dark); display:block; margin-bottom:6px;">${finalActivePrice.toFixed(2)} NLE</span>
-                            <div style="display:flex; justify-content:flex-end;">
-                                <button class="save-btn" onclick="saveForLater(${i.cartId})">Save</button>
-                                <button class="remove-btn" onclick="removeFromCart(${i.cartId})">Remove</button>
-                            </div>
-                        </div>
+                        <span style="font-size:13px; font-weight:800;">${final.toFixed(2)} NLE</span>
                     </div>`;
             }).join('');
 
-            if (savedItems.length > 0) {
-                document.getElementById('saved-items-container').style.display = 'block';
-                savedList.innerHTML = savedItems.map(i => `
-                    <div style="border-bottom:1px dashed var(--border-color); padding:10px 0; display:flex; justify-content:space-between; align-items:center; opacity:0.6;">
-                        <span style="font-size:12px; color:var(--text-dark); font-weight:500;">${i.name} (${i.chosenColor})</span>
-                        <button class="save-btn" onclick="moveToCart(${i.cartId})">Move to Bag</button>
-                    </div>`).join('');
-            } else {
-                document.getElementById('saved-items-container').style.display = 'none';
-            }
-
-            let rewardDiscount = 0;
-            if (cart.length === 2) {
-                rewardDiscount = subtotal * 0.10; 
-                document.getElementById('discount-row').style.display = 'flex';
-                document.getElementById('discount-row').children[1].innerText = `-${rewardDiscount.toFixed(2)} NLE`;
-            } else if (cart.length >= 3) {
-                rewardDiscount = subtotal * 0.15; 
-                document.getElementById('discount-row').style.display = 'flex';
-                document.getElementById('discount-row').children[1].innerText = `-${rewardDiscount.toFixed(2)} NLE`;
-            } else {
-                document.getElementById('discount-row').style.display = 'none';
-            }
-
-            let grandTotal = subtotal - rewardDiscount;
-            if (grandTotal < 0) grandTotal = 0;
-
             document.getElementById('cart-subtotal').innerText = subtotal.toFixed(2);
-            document.getElementById('cart-grand-total').innerText = grandTotal.toFixed(2);
+            document.getElementById('cart-grand-total').innerText = subtotal.toFixed(2);
         }
 
         window.toggleCart = () => {
             const el = document.getElementById('cart-sidebar');
-            if (el.style.display === 'flex') {
-                el.style.display = 'none';
-                document.body.style.overflow = 'auto'; 
-            } else {
-                el.style.display = 'flex';
-                document.body.style.overflow = 'hidden'; 
-            }
+            el.style.display = el.style.display === 'flex' ? 'none' : 'flex';
         };
 
         window.handleOrderMethodChange = () => {
-            const method = document.getElementById('order-method').value;
-            const addressWrapper = document.getElementById('address-input-wrapper');
-            addressWrapper.style.display = (method === 'Pick Up') ? 'none' : 'block';
-        };
-
-        window.applySpellingCorrection = () => {
-            const targetName = document.getElementById('edit-target-name').value.trim();
-            const newName = document.getElementById('edit-new-name').value.trim();
-            if (!targetName || !newName) return;
-            const matchedProduct = itemsCollection.find(p => p.name.toLowerCase() === targetName.toLowerCase());
-            if (!matchedProduct) return;
-            db.ref('perfumes/' + matchedProduct.firebaseId).update({ name: newName }, (err) => {
-                if (!err) {
-                    document.getElementById('edit-target-name').value = '';
-                    document.getElementById('edit-new-name').value = '';
-                    alert("Spelling alignment update synchronized successfully.");
-                }
-            });
-        };
-
-        window.applyDiscountToExisting = () => {
-            const targetName = document.getElementById('discount-target-name').value.trim();
-            const newPrice = document.getElementById('discount-new-base-price').value.trim();
-            const pct = document.getElementById('discount-target-percentage').value.trim();
-            if (!targetName || !pct) return;
-            const matchedProduct = itemsCollection.find(p => p.name.toLowerCase() === targetName.toLowerCase());
-            if (!matchedProduct) return;
-            const updateData = { discountPercentage: pct };
-            if (newPrice) updateData.price = newPrice;
-            db.ref('perfumes/' + matchedProduct.firebaseId).update(updateData, (err) => {
-                if (!err) {
-                    document.getElementById('discount-target-name').value = '';
-                    document.getElementById('discount-new-base-price').value = '';
-                    document.getElementById('discount-target-percentage').value = '';
-                    alert("Pricing structure successfully updated.");
-                }
-            });
-        };
-
-        window.showHome = () => {
-            document.getElementById('home-content').style.display = 'block';
-            document.getElementById('page-content').style.display = 'none';
-            document.getElementById('category-section-bar').style.display = 'flex';
-            document.getElementById('nav-home').className = 'active';
-            document.getElementById('nav-about').className = '';
-            document.getElementById('nav-policy').className = '';
-        };
-
-        window.showAbout = () => {
-            document.getElementById('home-content').style.display = 'none';
-            document.getElementById('category-section-bar').style.display = 'none';
-            document.getElementById('page-content').style.display = 'block';
-            document.getElementById('nav-home').className = '';
-            document.getElementById('nav-about').className = 'active';
-            document.getElementById('nav-policy').className = '';
-            document.getElementById('page-inner-content').innerHTML = `
-                <h2 style="color:var(--text-dark); margin-bottom:16px; font-size:16px; font-weight:800; letter-spacing:0.5px;">ABOUT US</h2>
-                <p style="font-size:14px; color:var(--text-dark); line-height:1.8;">Welcome to ARISA COLLECTION, Freetown's ultimate showroom sanctuary for premium quality fragrances, body care luxury, and contemporary style lookbooks.</p>
-            `;
-        };
-
-        window.showPolicy = () => {
-            document.getElementById('home-content').style.display = 'none';
-            document.getElementById('category-section-bar').style.display = 'none';
-            document.getElementById('page-content').style.display = 'block';
-            document.getElementById('nav-home').className = '';
-            document.getElementById('nav-about').className = '';
-            document.getElementById('nav-policy').className = 'active';
-            document.getElementById('page-inner-content').innerHTML = `
-                <h2 style="color:var(--text-dark); margin-bottom:16px; font-size:16px; font-weight:800; letter-spacing:0.5px;">STORE POLICY</h2>
-                <p style="font-size:14px; color:var(--text-dark); line-height:1.8;"><strong>Logistics Architecture:</strong> Standard secure courier dispatch operates within Freetown boundary limits between 9:00 AM and 6:00 PM daily. Delivery fees are compiled based on location parameters.</p>
-            `;
-        };
-
-        window.sendSuggestion = () => {
-            const input = document.getElementById('user-suggestion');
-            if (!input.value.trim()) return;
-            db.ref('suggestions').push(input.value.trim());
-            input.value = '';
-            alert("Suggestion securely logged.");
+            document.getElementById('address-input-wrapper').style.display = 
+                (document.getElementById('order-method').value === 'Pick Up') ? 'none' : 'block';
         };
 
         window.loginAdmin = () => {
-            const password = prompt("Enter Administration Verification Key Password:");
-            if (password === "AMIRA") {
+            if (prompt("Enter Control Verification Password:") === "AMIRA") {
                 sessionStorage.setItem('isArisaAdmin', 'true');
                 document.getElementById('admin-panel').style.display = 'block';
                 renderProducts();
-            } else {
-                alert("Authorization Denied.");
             }
         };
 
@@ -1148,237 +665,38 @@
             renderProducts();
         };
 
-        window.toggleStatus = (id, currentStatus) => {
-            const nextStatus = currentStatus === 'available' ? 'sold-out' : 'available';
-            db.ref('perfumes/' + id).update({ status: nextStatus });
-        };
-
-        window.deleteProduct = (id) => {
-            if (confirm("Permanently erase product configuration block?")) {
-                db.ref('perfumes/' + id).remove();
-            }
-        };
-
-        window.quickModifyDiscount = (id, currentDiscount) => {
-            const val = prompt("Enter new discount percentage:", currentDiscount || "0");
-            if (val === null) return; 
-            const pct = parseFloat(val);
-            if (isNaN(pct) || pct < 0) return;
-            const updatedPct = pct === 0 ? "" : pct.toString();
-            db.ref('perfumes/' + id).update({ discountPercentage: updatedPct });
-        };
-
-        window.quickToggleArrival = (id, currentArrivalStatus) => {
-            const nextArrival = currentArrivalStatus === 'yes' ? 'no' : 'yes';
-            db.ref('perfumes/' + id).update({ isNewArrival: nextArrival });
-        };
-
-        // --- Streamlined Phone Camera-to-Store Upload Engine with Compression ---
-        window.adminUpload = () => {
-            const name = document.getElementById('admin-p-name').value.trim();
-            const price = document.getElementById('admin-p-price').value.trim();
-            const discountPct = document.getElementById('admin-p-discount-percentage').value.trim();
-            const status = document.getElementById('admin-p-status').value;
-            const isArrival = document.getElementById('admin-p-arrival').value;
-            const category = document.getElementById('admin-p-category').value;
-            const fileInput = document.getElementById('admin-p-file');
-            const saveBtn = document.getElementById('admin-save-btn');
-            
-            if (!name || !price || !fileInput.files[0]) {
-                alert("Please supply a Name, Price value, and an entry layout Image asset.");
-                return;
-            }
-
-            saveBtn.disabled = true;
-            saveBtn.innerText = "COMPRESSING & UPLOADING VIA MOBILE...";
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    // Automatically downscales massive mobile camera images down to light web-size
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 450;
-                    const MAX_HEIGHT = 450;
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > height) {
-                        if (width > MAX_WIDTH) {
-                            height *= MAX_WIDTH / width;
-                            width = MAX_WIDTH;
-                        }
-                    } else {
-                        if (height > MAX_HEIGHT) {
-                            width *= MAX_HEIGHT / height;
-                            height = MAX_HEIGHT;
-                        }
-                    }
-
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-
-                    // High efficiency compressed format string
-                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
-
-                    const newProduct = {
-                        name: name,
-                        price: price,
-                        discountPercentage: discountPct ? discountPct : "",
-                        status: status,
-                        isNewArrival: isArrival,
-                        category: category,
-                        image: compressedBase64
-                    };
-                    
-                    db.ref('perfumes').push(newProduct, (err) => {
-                        saveBtn.disabled = false;
-                        saveBtn.innerText = "SAVE NEW PRODUCT ENTRY";
-                        if (!err) {
-                            document.getElementById('admin-p-name').value = '';
-                            document.getElementById('admin-p-price').value = '';
-                            document.getElementById('admin-p-discount-percentage').value = '';
-                            fileInput.value = '';
-                            alert("Success! Item live immediately for all active phone customers.");
-                        } else {
-                            alert("Database error: " + err.message);
-                        }
-                    });
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(fileInput.files[0]);
-        };
-
         window.checkoutWhatsApp = () => {
             const name = document.getElementById('cust-name').value.trim();
             const phone = document.getElementById('cust-phone').value.trim();
-            const method = document.getElementById('order-method').value;
-            let addr = document.getElementById('cust-address').value.trim();
-            
-            if (method === 'Pick Up') addr = "Customer Pick Up Option Selected";
-            if (!name || !phone || (method === 'Delivery' && !addr) || cart.length === 0) return;
-            
-            const timestamp = new Date().toLocaleString();
             const grandTotal = document.getElementById('cart-grand-total').innerText;
-            let invoiceItemsHTML = '';
-            let textMessageProducts = '';
-            let systemBackupItems = [];
-            
-            cart.forEach((itm, index) => {
-                const linePrice = itm.calculatedCartPrice ? itm.calculatedCartPrice : parseFloat(itm.price);
-                invoiceItemsHTML += `
-                    <div style="display:flex; justify-content:space-between; font-size:13px; padding:6px 0; border-bottom:1px dotted #ccc;">
-                        <span>${index + 1}. ${itm.name} (Color: ${itm.chosenColor})</span>
-                        <strong>${linePrice.toFixed(2)} NLE</strong>
-                    </div>`;
-                textMessageProducts += `• *${itm.name}* (Color: ${itm.chosenColor}) - ${linePrice.toFixed(2)} NLE\n`;
-                systemBackupItems.push({
-                    name: itm.name,
-                    color: itm.chosenColor,
-                    activePrice: linePrice.toFixed(2)
-                });
-            });
-            
-            const payment = document.getElementById('payment-method').value;
-            const receiptHTML = `
-                <p style="font-size:12px; color:#555; margin-bottom:10px; text-align:center;">Date: ${timestamp}</p>
-                <div style="margin-bottom:15px; font-size:13px; border-bottom:1px solid #ddd; padding-bottom:10px; line-height:1.5;">
-                    <p><strong>Customer Name:</strong> ${name}</p>
-                    <p><strong>Phone Line:</strong> ${phone}</p>
-                    <p><strong>Fulfillment Setup:</strong> ${method}</p>
-                    ${method === 'Delivery' ? `<p><strong>Address:</strong> ${addr}</p>` : ''}
-                    <p><strong>Payment Strategy:</strong> ${payment}</p>
-                </div>
-                <div style="margin-top:10px;">
-                    <p style="font-size:12px; font-weight:bold; color:#000; margin-bottom:8px;">ORDERED STOCK LIST:</p>
-                    ${invoiceItemsHTML}
-                </div>
-                <div style="border-top:2px solid #000; margin-top:15px; padding-top:10px; text-align:right;">
-                    <p style="font-size:16px; font-weight:bold; color:#000;">Grand Total: ${grandTotal} NLE</p>
-                </div>`;
-                
-            document.getElementById('receipt-details').innerHTML = receiptHTML;
-            document.getElementById('canvas-receipt-details').innerHTML = receiptHTML;
-            document.getElementById('receipt-modal').style.display = 'flex';
-            
-            db.ref('orders').push({
-                timestamp: timestamp,
-                customerName: name,
-                customerPhone: phone,
-                orderMethod: method,
-                customerAddress: addr,
-                paymentMethod: payment,
-                grandTotal: grandTotal,
-                items: systemBackupItems
-            });
-            
-            setTimeout(() => {
-                const canvasContainer = document.getElementById('receipt-capture-canvas');
-                html2canvas(canvasContainer, { useCORS: true, allowTaint: true, scale: 2 }).then(canvas => {
-                    const opt = {
-                        margin: 10,
-                        filename: `ARISA-INVOICE-${Date.now()}.pdf`,
-                        image: { type: 'jpeg', quality: 0.98 },
-                        html2canvas: { scale: 2, useCORS: true },
-                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                    };
-                    const originalPdfArea = document.getElementById('pdf-invoice-area');
-                    const downloadBtn = document.createElement('button');
-                    downloadBtn.className = "btn";
-                    downloadBtn.id = "dynamic-pdf-download-btn";
-                    downloadBtn.style.background = "#000";
-                    downloadBtn.style.color = "white";
-                    downloadBtn.style.marginTop = "14px";
-                    downloadBtn.innerText = "DOWNLOAD PDF RECEIPT";
-                    
-                    downloadBtn.onclick = function() {
-                        const actionBtn = document.getElementById('hide-pdf-btn');
-                        const selfBtn = document.getElementById('dynamic-pdf-download-btn');
-                        actionBtn.style.display = 'none';
-                        selfBtn.style.display = 'none';
-                        html2pdf().set(opt).from(originalPdfArea).save().then(() => {
-                            actionBtn.style.display = 'block';
-                            selfBtn.style.display = 'block';
-                        });
-                    };
-                    if (!document.getElementById('dynamic-pdf-download-btn')) {
-                        originalPdfArea.insertBefore(downloadBtn, document.getElementById('hide-pdf-btn'));
-                    }
-                });
-            }, 800);
-            
-            let waMessage = `*ARISA COLLECTION - NEW INVOICE RECEIPT* \n`;
-            waMessage += `-----------------------------------------\n`;
-            waMessage += `*Date:* ${timestamp}\n\n`;
-            waMessage += `*Customer Info:*\n`;
-            waMessage += `Name: ${name}\n`;
-            waMessage += `Phone: ${phone}\n`;
-            waMessage += `Fulfillment: ${method}\n`;
-            if (method === 'Delivery') waMessage += `Address: ${addr}\n`;
-            waMessage += `\n*Payment Details:*\n`;
-            waMessage += `Method: ${payment}\n\n`;
-            waMessage += `*Items Ordered:*\n`;
-            waMessage += textMessageProducts;
-            waMessage += `\n-----------------------------------------\n`;
-            waMessage += `*GRAND TOTAL:* *${grandTotal} NLE*\n\n`;
-            
-            const encodedMsg = encodeURIComponent(waMessage);
-            window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodedMsg}`, '_blank');
-            
+            if(!name || !phone || cart.length === 0) return;
+
+            let msg = `*ARISA COLLECTION ORDER*\nCustomer: ${name}\nPhone: ${phone}\nTotal: ${grandTotal} NLE\n\n*Items:*\n`;
+            cart.forEach(i => { msg += `• ${i.name} (${i.chosenColor})\n`; });
+
+            window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`, '_blank');
             cart = [];
             updateCartUI();
-            document.getElementById('floating-cart-btn').style.display = 'none';
             toggleCart();
+            document.getElementById('floating-cart-btn').style.display = 'none';
         };
 
-        window.closeReceipt = () => {
-            document.getElementById('receipt-modal').style.display = 'none';
-            const oldBtn = document.getElementById('dynamic-pdf-download-btn');
-            if (oldBtn) oldBtn.remove();
-            showHome();
+        window.showHome = () => {
+            document.getElementById('home-content').style.display = 'block';
+            document.getElementById('page-content').style.display = 'none';
+            document.getElementById('category-section-bar').style.display = 'flex';
+        };
+        window.showAbout = () => {
+            document.getElementById('home-content').style.display = 'none';
+            document.getElementById('category-section-bar').style.display = 'none';
+            document.getElementById('page-content').style.display = 'block';
+            document.getElementById('page-inner-content').innerHTML = `<h2>ABOUT ARISA</h2><p>Premium live catalog tailored for direct smartphone administration.</p>`;
+        };
+        window.showPolicy = () => {
+            document.getElementById('home-content').style.display = 'none';
+            document.getElementById('category-section-bar').style.display = 'none';
+            document.getElementById('page-content').style.display = 'block';
+            document.getElementById('page-inner-content').innerHTML = `<h2>STORE POLICY</h2><p>All items checked through automated checkout and finalized instantly via WhatsApp delivery lines.</p>`;
         };
     </script>
 </body>
