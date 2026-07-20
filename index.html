@@ -7,6 +7,9 @@
     <!-- PDF Generation Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Firebase SDK v9 (Compat Mode for real-time cloud database sync) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     
     <style>
         :root {
@@ -74,7 +77,6 @@
             box-shadow: 0 0 10px #00d2ff, 0  0 20px #00d2ff;
         }
 
-        /* Positioning 16 dots in a circular path */
         .spinner-dot:nth-child(1) { transform: rotate(0deg) translate(45px); opacity: 0.1; }
         .spinner-dot:nth-child(2) { transform: rotate(22.5deg) translate(45px); opacity: 0.2; }
         .spinner-dot:nth-child(3) { transform: rotate(45deg) translate(45px); opacity: 0.3; }
@@ -175,7 +177,6 @@
             text-transform: uppercase;
         }
 
-        /* Announcement & Trust Bar */
         .trust-bar {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -210,7 +211,6 @@
             color: var(--text-muted);
         }
 
-        /* Category Tab Buttons Bar */
         .category-tabs {
             display: flex;
             gap: 12px;
@@ -269,7 +269,6 @@
             border-color: var(--accent-color);
         }
 
-        /* Product Grid set strictly to TWO columns per row */
         .product-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -409,7 +408,6 @@
             box-shadow: none;
         }
 
-        /* Floating Cart Button */
         .floating-cart-btn {
             position: fixed;
             bottom: 25px;
@@ -434,7 +432,6 @@
             transform: scale(1.05);
         }
 
-        /* Cart Sidebar & Modals */
         .sidebar {
             position: fixed;
             top: 0;
@@ -562,7 +559,7 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.8);
         }
 
-        /* Side-by-Side Admin Panel Layout (Hidden by default) */
+        /* Comprehensive Admin Panel Style */
         .admin-panel {
             background: #161616;
             border: 1px dashed var(--accent-color);
@@ -618,6 +615,33 @@
             color: var(--text-muted);
             letter-spacing: 1px;
             text-transform: uppercase;
+        }
+
+        /* Admin Master Table Styles */
+        .admin-table-container {
+            margin-top: 30px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+            overflow-x: auto;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            text-align: left;
+        }
+
+        .admin-table th, .admin-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .admin-table th {
+            color: var(--accent-color);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 600;
         }
 
         .footer-note {
@@ -687,7 +711,6 @@
             <p>Freetown's Premier Destination for Scents, Body Lotions & Designer Clothing</p>
         </div>
 
-        <!-- Trust & Feature Bar -->
         <div class="trust-bar">
             <div class="trust-item">
                 <span class="icon">✨</span>
@@ -712,18 +735,18 @@
             </div>
         </div>
 
-        <!-- Section Category Tabs Bar -->
         <div class="category-tabs">
             <button class="cat-tab active" id="tab-all" onclick="setMainCategory('all')">All Collections</button>
             <button class="cat-tab" id="tab-perfume" onclick="setMainCategory('perfume')">Perfumes & Body Lotions</button>
             <button class="cat-tab" id="tab-clothing" onclick="setMainCategory('clothing')">Clothing & Apparel</button>
         </div>
 
-        <!-- Admin Control Center Side-by-Side Panel (Hidden by default, prompts with password) -->
+        <!-- Master Admin Control Center Panel -->
         <div id="admin-panel" class="admin-panel">
-            <h3>ADMINISTRATION ENGINE &mdash; LOCAL PRODUCT UPLOAD</h3>
+            <h3 id="admin-panel-title">FIREBASE CLOUD ENGINE &mdash; GLOBAL PRODUCT UPLOAD</h3>
+            <input type="hidden" id="editing-firebase-key" value="">
+            
             <div class="admin-grid-layout">
-                <!-- Left Column: Input Fields -->
                 <div class="admin-column">
                     <div>
                         <label style="font-size:9px; letter-spacing:1px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">Product Title:</label>
@@ -743,7 +766,6 @@
                     </div>
                 </div>
 
-                <!-- Right Column: Categorization, Image Upload & Actions -->
                 <div class="admin-column">
                     <div>
                         <label style="font-size:9px; letter-spacing:1px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">Store Section:</label>
@@ -773,7 +795,6 @@
                 </div>
             </div>
 
-            <!-- Image Preview Box -->
             <div style="margin-top: 15px;">
                 <label style="font-size:9px; letter-spacing:1px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">Live Picture Asset Preview:</label>
                 <div class="image-preview-box" id="preview-container">
@@ -783,12 +804,31 @@
             </div>
 
             <div style="display:flex; gap:10px; margin-top:20px;">
-                <button class="btn" style="background:var(--accent-color); flex:2;" onclick="adminUploadLocal()">UPLOAD PRODUCT LOCALLY</button>
+                <button class="btn" id="admin-submit-btn" style="background:var(--accent-color); flex:2;" onclick="adminSaveProductFirebase()">UPLOAD PRODUCT TO FIREBASE</button>
+                <button class="btn" style="background:#441; color:#fff; flex:1; display:none;" id="admin-cancel-edit-btn" onclick="cancelAdminEdit()">Cancel Edit</button>
                 <button class="btn" style="background:#222; color:#fff; flex:1;" onclick="logoutAdmin()">Close Session</button>
+            </div>
+
+            <!-- Master Management Table inside Admin Panel -->
+            <div class="admin-table-container">
+                <h4 style="font-size:11px; letter-spacing:1px; color:var(--accent-color); margin-bottom:12px; text-transform:uppercase;">Master Inventory Management Table</h4>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-master-table-body">
+                        <!-- Populated dynamically -->
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <!-- Filter & Search Bar -->
         <div class="controls-bar">
             <input type="text" id="search-bar" class="search-input" placeholder="Search collection inventory..." oninput="renderProducts()">
             <select id="category-filter" class="filter-select" onchange="renderProducts()">
@@ -799,12 +839,10 @@
             </select>
         </div>
 
-        <!-- Product Grid Container (Strictly 2 columns per row) -->
         <div id="product-grid" class="product-grid">
-            <!-- Dynamically populated from localStorage -->
+            <!-- Dynamically populated from Firebase Cloud Database -->
         </div>
 
-        <!-- Customer Suggestion Section -->
         <div style="margin-top: 40px; background:var(--card-bg); border:1px solid var(--border-color); padding:20px; border-radius:6px;">
             <h4 style="font-size:11px; letter-spacing:1.5px; color:var(--accent-color); margin-bottom:6px; text-transform:uppercase;">COLLECTION REQUEST / SUGGESTION BOX</h4>
             <p style="font-size:11px; color:var(--text-muted); margin-bottom:12px;">Looking for a specific global designer scent, lotion, or clothing line not currently listed? Drop your recommendation below.</p>
@@ -840,17 +878,13 @@
         </div>
 
         <div style="flex: 1; overflow-y: auto;">
-            <div id="cart-items-list">
-                <!-- Cart rows injected here -->
-            </div>
+            <div id="cart-items-list"></div>
 
-            <!-- Saved For Later Area -->
             <div id="saved-items-container" style="margin-top:20px; display:none;">
                 <h4 style="font-size:10px; letter-spacing:1px; color:var(--text-muted); margin-bottom:8px; border-bottom:1px solid var(--border-color); padding-bottom:4px; text-transform:uppercase;">SAVED FOR LATER</h4>
                 <div id="saved-items-list"></div>
             </div>
 
-            <!-- Pricing Calculation Breakdown -->
             <div style="margin-top: 25px; border-top:1px solid var(--border-color); padding-top:15px; font-size:11px;">
                 <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
                     <span style="color:var(--text-muted);">Subtotal:</span>
@@ -866,7 +900,6 @@
                 </div>
             </div>
 
-            <!-- Checkout Information Fields -->
             <div style="margin-top: 25px; border-top:1px solid var(--border-color); padding-top:20px;">
                 <h4 style="font-size:11px; letter-spacing:1.5px; color:var(--accent-color); margin-bottom:15px; text-transform:uppercase;">CHECKOUT DETAILS</h4>
                 
@@ -922,15 +955,29 @@
         </div>
     </div>
 
-    <!-- Main JavaScript Logic (Local Storage & Hidden Admin Engine) -->
+    <!-- Firebase Real-time Database Integration & App Logic -->
     <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDummyKeyForArisaCollection99281",
+            authDomain: "arisa-collection-db.firebaseapp.com",
+            databaseURL: "https://arisa-collection-db-default-rtdb.firebaseio.com",
+            projectId: "arisa-collection-db",
+            storageBucket: "arisa-collection-db.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abcdef1234567890"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
+
         let perfumes = [];
         let cart = [];
         let savedItems = [];
-        let currentSection = 'all'; // Default tab view
-        const myWhatsAppNumber = "23275000000"; // Replace with operational contact line if required
+        let currentSection = 'all';
+        const myWhatsAppNumber = "23275000000";
 
-        // Default initial items if localStorage is empty
         const defaultPerfumes = [
             {
                 id: 'p1',
@@ -978,35 +1025,35 @@
             }
         ];
 
-        // Initialize Local Storage & Data Fetching on Load
         window.addEventListener('DOMContentLoaded', () => {
             const adminSession = sessionStorage.getItem('isArisaAdmin');
             if (adminSession === 'true') {
                 document.getElementById('admin-panel').style.display = 'block';
             }
             
-            const localData = localStorage.getItem('arisa_perfumes');
-            if (localData) {
-                try {
-                    perfumes = JSON.parse(localData);
-                } catch(e) {
-                    perfumes = defaultPerfumes;
+            db.ref('products').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    perfumes = Object.keys(data).map(key => ({
+                        firebaseKey: key,
+                        ...data[key]
+                    }));
+                } else {
+                    defaultPerfumes.forEach(p => {
+                        db.ref('products').push(p);
+                    });
                 }
-            } else {
-                perfumes = defaultPerfumes;
-                localStorage.setItem('arisa_perfumes', JSON.stringify(perfumes));
-            }
-            renderProducts();
+                renderProducts();
+                renderAdminTable();
 
-            // Hide the custom loading screen smoothly after initialization
-            setTimeout(() => {
-                const loader = document.getElementById('loading-screen');
-                loader.style.opacity = '0';
-                setTimeout(() => loader.style.display = 'none', 400);
-            }, 600);
+                setTimeout(() => {
+                    const loader = document.getElementById('loading-screen');
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.style.display = 'none', 400);
+                }, 500);
+            });
         });
 
-        // Switch Main Section Tabs
         window.setMainCategory = (section) => {
             currentSection = section;
             document.querySelectorAll('.cat-tab').forEach(tab => tab.classList.remove('active'));
@@ -1016,7 +1063,6 @@
             renderProducts();
         };
 
-        // Render Catalog Grid with Section Tabs, Filtering & Search Integration
         function renderProducts() {
             const grid = document.getElementById('product-grid');
             const searchQuery = document.getElementById('search-bar').value.toLowerCase();
@@ -1069,7 +1115,7 @@
                     : '';
 
                 return `
-                    <div class="product-card" onclick="${sold ? '' : `handleProductTap('${p.id}')`}">
+                    <div class="product-card" onclick="${sold ? '' : `handleProductTap('${p.id || p.firebaseKey}')`}">
                         <span class="status-badge ${p.status}">${p.status.replace('-', ' ')}</span>
                         ${arrivalBadgeHTML}
                         <div class="product-image"><img src="${p.image}"></div>
@@ -1079,17 +1125,35 @@
                         <button class="btn" ${sold ? 'disabled' : ''}>
                             ${sold ? 'SOLD OUT' : 'ADD TO BAG'}
                         </button>
-                        ${isAdmin ? `<div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-top:8px;">
-                                     <button class="btn" style="background:#222; color:#fff; font-size:8px; padding:6px;" onclick="event.stopPropagation(); toggleStatus('${p.id}','${p.status}')">Status</button>
-                                     <button class="btn" style="background:#521; color:#fff; font-size:8px; padding:6px;" onclick="event.stopPropagation(); deleteProduct('${p.id}')">Delete</button>
-                                     <button class="btn" style="background:#134; color:#fff; font-size:8px; padding:6px;" onclick="event.stopPropagation(); quickModifyDiscount('${p.id}','${p.discountPercentage}')">Discount</button>
-                                     <button class="btn" style="background:#443; color:#fff; font-size:8px; padding:6px;" onclick="event.stopPropagation(); quickToggleArrival('${p.id}','${p.isNewArrival}')">Arrival</button>
-                                     </div>` : ''}
                     </div>`;
             }).join('');
         }
 
-        // Live Admin Image Preview
+        // Render Master Table Inside Admin Panel
+        function renderAdminTable() {
+            const tableBody = document.getElementById('admin-master-table-body');
+            if (!tableBody) return;
+
+            if (perfumes.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No products found in database.</td></tr>`;
+                return;
+            }
+
+            tableBody.innerHTML = perfumes.map(p => `
+                <tr>
+                    <td><strong>${p.name}</strong><br><span style="font-size:9px; color:var(--text-muted);">${p.color || ''}</span></td>
+                    <td style="text-transform:uppercase; font-size:10px;">${p.category}</td>
+                    <td>${p.price} NLE</td>
+                    <td><span style="color:${p.status === 'available' ? '#28a745' : '#dc3545'}; text-transform:uppercase; font-weight:700;">${p.status}</span></td>
+                    <td>
+                        <button class="save-btn" style="background:#134; color:#fff;" onclick="startAdminEdit('${p.firebaseKey}')">Edit</button>
+                        <button class="save-btn" style="background:#222; color:#fff;" onclick="toggleStatus('${p.firebaseKey}','${p.status}')">Status</button>
+                        <button class="remove-btn" onclick="deleteProduct('${p.firebaseKey}')">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
         window.previewAdminImage = (event) => {
             const file = event.target.files[0];
             const previewImg = document.getElementById('preview-img');
@@ -1125,12 +1189,12 @@
         };
 
         window.addToCart = (id) => {
-            const existingItem = cart.find(i => i.id === id);
+            const existingItem = cart.find(i => (i.id === id || i.firebaseKey === id));
             if (existingItem) {
                 alert("This item is already added to your selection bag!");
                 return;
             }
-            const item = perfumes.find(p => p.id === id);
+            const item = perfumes.find(p => (p.id === id || p.firebaseKey === id));
             cart.push({ ...item, cartId: Date.now() + Math.random() }); 
             history.pushState(null, null, window.location.pathname);
             updateCartUI();
@@ -1153,7 +1217,7 @@
 
         window.moveToCart = (cartId) => {
             const item = savedItems.find(i => i.cartId === cartId);
-            const duplicateCheck = cart.find(i => i.id === item.id);
+            const duplicateCheck = cart.find(i => (i.id === item.id || i.firebaseKey === item.firebaseKey));
             if (duplicateCheck) {
                 alert("This item is already in your active selection bag.");
                 return;
@@ -1287,9 +1351,7 @@
         window.sendSuggestion = () => {
             const input = document.getElementById('user-suggestion');
             if (!input.value.trim()) return;
-            let suggestions = JSON.parse(localStorage.getItem('arisa_suggestions') || '[]');
-            suggestions.push(input.value.trim());
-            localStorage.setItem('arisa_suggestions', JSON.stringify(suggestions));
+            db.ref('suggestions').push(input.value.trim());
             input.value = '';
             alert("Suggestion securely logged into our system backend. Thank you!");
         };
@@ -1308,46 +1370,68 @@
         window.logoutAdmin = () => {
             sessionStorage.removeItem('isArisaAdmin');
             document.getElementById('admin-panel').style.display = 'none';
+            cancelAdminEdit();
             renderProducts();
         };
 
-        window.toggleStatus = (id, currentStatus) => {
+        window.toggleStatus = (firebaseKey, currentStatus) => {
             const nextStatus = currentStatus === 'available' ? 'sold-out' : 'available';
-            perfumes = perfumes.map(p => p.id === id ? { ...p, status: nextStatus } : p);
-            localStorage.setItem('arisa_perfumes', JSON.stringify(perfumes));
-            renderProducts();
+            db.ref('products/' + firebaseKey).update({ status: nextStatus });
         };
 
-        window.deleteProduct = (id) => {
-            if (confirm("Permanently erase product inventory configuration block from local database storage?")) {
-                perfumes = perfumes.filter(p => p.id !== id);
-                localStorage.setItem('arisa_perfumes', JSON.stringify(perfumes));
-                renderProducts();
+        window.deleteProduct = (firebaseKey) => {
+            if (confirm("Permanently erase product inventory configuration block from Firebase cloud database?")) {
+                db.ref('products/' + firebaseKey).remove();
             }
         };
 
-        window.quickModifyDiscount = (id, currentDiscount) => {
-            const val = prompt("Enter new discount percentage (Enter 0 to clear discount completely):", currentDiscount || "0");
-            if (val === null) return; 
-            const pct = parseFloat(val);
-            if (isNaN(pct) || pct < 0) {
-                alert("Please enter a valid numeric value.");
-                return;
+        // Populate fields in Admin Panel to edit existing product
+        window.startAdminEdit = (firebaseKey) => {
+            const product = perfumes.find(p => p.firebaseKey === firebaseKey);
+            if (!product) return;
+
+            document.getElementById('editing-firebase-key').value = firebaseKey;
+            document.getElementById('admin-p-name').value = product.name;
+            document.getElementById('admin-p-price').value = product.price;
+            document.getElementById('admin-p-discount-percentage').value = product.discountPercentage || '';
+            document.getElementById('admin-p-color').value = product.color || '';
+            document.getElementById('admin-p-category').value = product.category;
+            document.getElementById('admin-p-status').value = product.status;
+            document.getElementById('admin-p-arrival').value = product.isNewArrival || 'no';
+
+            if (product.image) {
+                const previewImg = document.getElementById('preview-img');
+                const previewPlaceholder = document.getElementById('preview-placeholder');
+                previewImg.src = product.image;
+                previewImg.style.display = 'block';
+                previewPlaceholder.style.display = 'none';
             }
-            const updatedPct = pct === 0 ? "" : pct.toString();
-            perfumes = perfumes.map(p => p.id === id ? { ...p, discountPercentage: updatedPct } : p);
-            localStorage.setItem('arisa_perfumes', JSON.stringify(perfumes));
-            renderProducts();
+
+            document.getElementById('admin-panel-title').innerText = "FIREBASE CLOUD ENGINE &mdash; EDIT PRODUCT RECORD";
+            document.getElementById('admin-submit-btn').innerText = "UPDATE PRODUCT RECORD";
+            document.getElementById('admin-cancel-edit-btn').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
-        window.quickToggleArrival = (id, currentArrivalStatus) => {
-            const nextArrival = currentArrivalStatus === 'yes' ? 'no' : 'yes';
-            perfumes = perfumes.map(p => p.id === id ? { ...p, isNewArrival: nextArrival } : p);
-            localStorage.setItem('arisa_perfumes', JSON.stringify(perfumes));
-            renderProducts();
+        window.cancelAdminEdit = () => {
+            document.getElementById('editing-firebase-key').value = '';
+            document.getElementById('admin-p-name').value = '';
+            document.getElementById('admin-p-price').value = '';
+            document.getElementById('admin-p-discount-percentage').value = '';
+            document.getElementById('admin-p-color').value = '';
+            document.getElementById('admin-p-file').value = '';
+            document.getElementById('preview-img').src = '';
+            document.getElementById('preview-img').style.display = 'none';
+            document.getElementById('preview-placeholder').style.display = 'block';
+
+            document.getElementById('admin-panel-title').innerText = "FIREBASE CLOUD ENGINE &mdash; GLOBAL PRODUCT UPLOAD";
+            document.getElementById('admin-submit-btn').innerText = "UPLOAD PRODUCT TO FIREBASE";
+            document.getElementById('admin-cancel-edit-btn').style.display = 'none';
         };
 
-        window.adminUploadLocal = () => {
+        // Master function handling both creation and editing inside admin panel
+        window.adminSaveProductFirebase = () => {
+            const editingKey = document.getElementById('editing-firebase-key').value;
             const name = document.getElementById('admin-p-name').value;
             const price = document.getElementById('admin-p-price').value;
             const discountPct = document.getElementById('admin-p-discount-percentage').value;
@@ -1357,16 +1441,13 @@
             const isArrival = document.getElementById('admin-p-arrival').value;
             const fileInput = document.getElementById('admin-p-file');
             
-            if (!name || !price || !fileInput.files[0]) {
-                alert("Name, regular base price structure and target image source must be defined.");
+            if (!name || !price) {
+                alert("Product name and base price structure must be specified.");
                 return;
             }
-            
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const imgBase64 = e.target.result;
-                const newProduct = {
-                    id: 'prod_' + Date.now(),
+
+            const executeSave = (imageUrl) => {
+                const productData = {
                     name: name,
                     price: price,
                     discountPercentage: discountPct ? discountPct : "",
@@ -1374,25 +1455,50 @@
                     category: category,
                     status: status,
                     isNewArrival: isArrival,
-                    image: imgBase64
+                    image: imageUrl
                 };
-                
-                perfumes.unshift(newProduct);
-                localStorage.setItem('arisa_perfumes', JSON.stringify(perfumes));
-                renderProducts();
-                
-                alert("Product metadata added successfully to local storage!");
-                document.getElementById('admin-p-name').value = '';
-                document.getElementById('admin-p-price').value = '';
-                document.getElementById('admin-p-discount-percentage').value = '';
-                document.getElementById('admin-p-color').value = '';
-                document.getElementById('admin-p-arrival').value = 'no';
-                fileInput.value = '';
-                document.getElementById('preview-img').src = '';
-                document.getElementById('preview-img').style.display = 'none';
-                document.getElementById('preview-placeholder').style.display = 'block';
+
+                if (editingKey) {
+                    // Update existing node
+                    db.ref('products/' + editingKey).update(productData, (error) => {
+                        if (error) {
+                            alert("Failed to update product in Firebase.");
+                        } else {
+                            alert("Product record successfully updated!");
+                            cancelAdminEdit();
+                        }
+                    });
+                } else {
+                    // Create new node
+                    if (!fileInput.files[0]) {
+                        alert("An image file asset is required for new items.");
+                        return;
+                    }
+                    productData.id = 'prod_' + Date.now();
+                    db.ref('products').push(productData, (error) => {
+                        if (error) {
+                            alert("Failed to sync new product to Firebase.");
+                        } else {
+                            alert("Product successfully added to Firebase cloud database!");
+                            cancelAdminEdit();
+                        }
+                    });
+                }
             };
-            reader.readAsDataURL(fileInput.files[0]);
+
+            if (fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    executeSave(e.target.result);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else if (editingKey) {
+                // Keep existing image if no new file is chosen during edit mode
+                const existingProduct = perfumes.find(p => p.firebaseKey === editingKey);
+                executeSave(existingProduct.image);
+            } else {
+                alert("Please select a picture asset file.");
+            }
         };
 
         window.checkoutWhatsApp = () => {
@@ -1452,8 +1558,7 @@
             document.getElementById('canvas-receipt-details').innerHTML = receiptHTML;
             document.getElementById('receipt-modal').style.display = 'flex';
             
-            let orders = JSON.parse(localStorage.getItem('arisa_orders') || '[]');
-            orders.push({
+            db.ref('orders').push({
                 timestamp: timestamp,
                 customerName: name,
                 customerPhone: phone,
@@ -1463,7 +1568,6 @@
                 grandTotal: grandTotal,
                 items: systemBackupItems
             });
-            localStorage.setItem('arisa_orders', JSON.stringify(orders));
             
             setTimeout(() => {
                 const canvasContainer = document.getElementById('receipt-capture-canvas');
@@ -1516,7 +1620,7 @@
             waMessage += textMessageProducts;
             waMessage += `\n-----------------------------------------\n`;
             waMessage += `*GRAND TOTAL:* *${grandTotal} NLE*\n\n`;
-            waMessage += `_Invoice statement securely registered inside local storage nodes via WhatsApp client redirect synchronization._`;
+            waMessage += `_Invoice statement securely registered inside Firebase cloud database nodes via WhatsApp client redirect synchronization._`;
             
             const encodedNLE = encodeURIComponent(waMessage);
             const waURL = `https://wa.me/${myWhatsAppNumber}?text=${encodedNLE}`;
