@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARISA COLLECTION</title>
+    <title>ARISA COLLECTION | PREMIUM SHOWROOM</title>
     <!-- Firebase App (the core Firebase SDK) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <!-- Firebase Realtime Database SDK -->
@@ -13,53 +13,104 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.bundle.min.js/5.0.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
-            --bg-color: #0b0b0b;
-            --card-bg: #121212;
+            --bg-color: #0c0c0f;
+            --card-bg: #14141a;
             --accent-color: #d4af37;
-            --text-color: #ffffff;
-            --text-muted: #888888;
+            --accent-hover: #f3cf65;
+            --text-color: #f5f5f7;
+            --text-muted: #a0a0ab;
+            --border-color: #23232a;
         }
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
             padding-bottom: 60px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
+        body.loaded {
+            opacity: 1;
+        }
+        
+        /* Premium Preloader Animation Interface */
+        #preloader-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #0c0c0f;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.6s;
+        }
+        .luxury-spinner {
+            width: 50px;
+            height: 50px;
+            border: 2px solid rgba(212, 175, 55, 0.1);
+            border-top: 2px solid var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        .preloader-brand {
+            color: var(--accent-color);
+            font-size: 18px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 300;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; letter-spacing: 6px; }
+        }
+
         header {
-            background: linear-gradient(180deg, #161616 0%, #0b0b0b 100%);
-            padding: 20px;
+            background: linear-gradient(180deg, #14141a 0%, #0c0c0f 100%);
+            padding: 25px 20px;
             text-align: center;
-            border-bottom: 1px solid #1a1a1a;
+            border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
             z-index: 100;
         }
         header h1 {
             color: var(--accent-color);
-            font-size: 20px;
-            letter-spacing: 2px;
+            font-size: 22px;
+            letter-spacing: 3px;
             text-transform: uppercase;
+            font-weight: 400;
+            cursor: pointer;
         }
         nav {
-            margin-top: 15px;
+            margin-top: 18px;
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 25px;
         }
         nav a {
             color: var(--text-muted);
             text-decoration: none;
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             cursor: pointer;
-            transition: color 0.3s;
+            transition: color 0.3s, transform 0.3s;
         }
         nav a:hover, nav a.active {
             color: var(--accent-color);
@@ -67,16 +118,16 @@
         .section-bar {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
             padding: 15px 10px;
-            background: #111;
-            border-bottom: 1px solid #222;
+            background: #111116;
+            border-bottom: 1px solid var(--border-color);
         }
         .sec-btn {
             background: transparent;
-            border: 1px solid #444;
+            border: 1px solid #2d2d37;
             color: var(--text-muted);
-            padding: 8px 16px;
+            padding: 10px 20px;
             font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -86,42 +137,48 @@
         }
         .sec-btn.active {
             background: var(--accent-color);
-            color: black;
+            color: #0c0c0f;
             border-color: var(--accent-color);
-            font-weight: bold;
+            font-weight: 600;
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 15px;
+            padding: 20px 15px;
         }
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 20px;
         }
         .product-card {
             background: var(--card-bg);
-            border: 1px solid #1a1a1a;
+            border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 12px;
+            padding: 15px;
             text-align: center;
             position: relative;
             cursor: pointer;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-4px);
+            border-color: #3e3e4f;
         }
         .product-image {
             width: 100%;
-            height: 150px;
-            background: #1a1a1a;
+            height: 160px;
+            background: #1a1a24;
             border-radius: 6px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 1px solid rgba(255,255,255,0.02);
         }
         .product-image img {
             max-width: 100%;
@@ -130,185 +187,218 @@
         }
         .status-badge {
             position: absolute;
-            top: 5px;
-            left: 5px;
+            top: 8px;
+            left: 8px;
             font-size: 8px;
-            padding: 3px 6px;
+            padding: 4px 8px;
             border-radius: 3px;
             text-transform: uppercase;
-            font-weight: bold;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
-        .status-badge.available { background: #00ff66; color: black; }
-        .status-badge.sold-out { background: red; color: white; }
+        .status-badge.available { background: #10b981; color: white; }
+        .status-badge.sold-out { background: #ef4444; color: white; }
         .color-label {
             font-size: 9px;
             color: var(--text-muted);
             display: block;
             margin: 4px 0;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         .price-box {
-            margin: 8px 0;
+            margin: 10px 0;
         }
         .price {
-            font-weight: bold;
+            font-weight: 600;
             color: var(--text-color);
-            font-size: 13px;
+            font-size: 14px;
+            letter-spacing: 0.5px;
         }
         .old-price-strike {
             text-decoration: line-through;
-            color: #555;
-            font-size: 10px;
-            margin-right: 5px;
+            color: #6e6e77;
+            font-size: 11px;
+            margin-right: 6px;
         }
         .discount-badge {
-            color: #ff4d6d;
-            font-size: 9px;
+            color: #f43f5e;
+            font-size: 10px;
             display: block;
-            margin-top: 2px;
-            font-weight: bold;
+            margin-top: 3px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
         .btn {
             background: transparent;
             border: 1px solid var(--accent-color);
             color: var(--accent-color);
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             font-size: 11px;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             cursor: pointer;
             border-radius: 4px;
             text-transform: uppercase;
             transition: all 0.3s;
+            font-weight: 500;
         }
         .btn:hover:not(:disabled) {
             background: var(--accent-color);
-            color: black;
+            color: #0c0c0f;
         }
         .btn:disabled {
-            border-color: #333;
-            color: #333;
+            border-color: #2d2d37;
+            color: #4e4e5a;
             cursor: not-allowed;
         }
         #floating-cart-btn {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 25px;
+            right: 25px;
             background: var(--accent-color);
-            color: black;
+            color: #0c0c0f;
             border: none;
-            width: 50px;
-            height: 50px;
+            width: 55px;
+            height: 55px;
             border-radius: 50%;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 18px;
             cursor: pointer;
             z-index: 200;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.6);
             display: none;
+            transition: transform 0.2s;
+        }
+        #floating-cart-btn:hover {
+            transform: scale(1.05);
         }
         #floating-cart-counter {
             position: absolute;
-            top: -5px;
-            left: -5px;
-            background: red;
+            top: -4px;
+            left: -4px;
+            background: #ef4444;
             color: white;
             font-size: 10px;
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-weight: 600;
         }
         .sidebar {
             position: fixed;
             top: 0;
             right: 0;
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             height: 100vh;
-            background: #0f0f0f;
-            border-left: 1px solid #1a1a1a;
+            background: #111116;
+            border-left: 1px solid var(--border-color);
             z-index: 300;
             display: none;
             flex-direction: column;
-            padding: 20px;
-            box-shadow: -5px 0 25px rgba(0,0,0,0.8);
+            padding: 25px;
+            box-shadow: -10px 0 35px rgba(0,0,0,0.8);
         }
         .sidebar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #222;
+            border-bottom: 1px solid var(--border-color);
             padding-bottom: 15px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         .sidebar-header h2 {
             font-size: 16px;
             color: var(--accent-color);
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-weight: 400;
         }
         .close-sidebar-btn {
             background: transparent;
             border: none;
             color: white;
-            font-size: 20px;
+            font-size: 24px;
             cursor: pointer;
+            transition: color 0.3s;
+        }
+        .close-sidebar-btn:hover {
+            color: var(--accent-color);
         }
         .cart-scroll-area {
             flex-grow: 1;
             overflow-y: auto;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             padding-right: 5px;
         }
         .checkout-inputs {
-            background: #141414;
-            padding: 12px;
+            background: #14141a;
+            padding: 15px;
             border-radius: 6px;
-            margin-bottom: 15px;
-            border: 1px solid #222;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
         }
         .checkout-inputs input, .checkout-inputs select, .checkout-inputs textarea {
             width: 100%;
-            background: #080808;
-            border: 1px solid #333;
+            background: #0c0c0f;
+            border: 1px solid #2d2d37;
             color: white;
-            padding: 8px;
+            padding: 10px;
             font-size: 12px;
             border-radius: 4px;
-            margin-top: 5px;
-            margin-bottom: 10px;
+            margin-top: 6px;
+            margin-bottom: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .checkout-inputs input:focus, .checkout-inputs select:focus, .checkout-inputs textarea:focus {
+            border-color: var(--accent-color);
         }
         .checkout-inputs label {
             font-size: 10px;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
+            font-weight: 500;
         }
         .summary-row {
             display: flex;
             justify-content: space-between;
-            font-size: 12px;
-            margin-bottom: 5px;
+            font-size: 13px;
+            margin-bottom: 6px;
+            letter-spacing: 0.3px;
         }
         .save-btn {
             background: transparent;
-            border: 1px solid #333;
+            border: 1px solid #3a3a4a;
             color: var(--text-muted);
-            font-size: 8px;
-            padding: 3px 6px;
+            font-size: 9px;
+            padding: 4px 8px;
             border-radius: 3px;
             cursor: pointer;
+            text-transform: uppercase;
+        }
+        .save-btn:hover {
+            border-color: var(--accent-color);
+            color: white;
         }
         .remove-btn {
             background: transparent;
-            border: 1px solid #522;
+            border: 1px solid rgba(239, 68, 68, 0.2);
             color: #ff4d6d;
-            font-size: 8px;
-            padding: 3px 6px;
+            font-size: 9px;
+            padding: 4px 8px;
             border-radius: 3px;
             cursor: pointer;
+            text-transform: uppercase;
+        }
+        .remove-btn:hover {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: #ef4444;
         }
         .modal-overlay {
             position: fixed;
@@ -316,7 +406,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0,0,0,0.85);
+            background: rgba(0,0,0,0.9);
             z-index: 400;
             display: flex;
             align-items: center;
@@ -329,49 +419,68 @@
             width: 100%;
             max-width: 480px;
             border-radius: 8px;
-            padding: 20px;
+            padding: 25px;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
         }
         .receipt-row {
             display: flex;
             justify-content: space-between;
             font-size: 12px;
             border-bottom: 1px dashed #ddd;
-            padding: 6px 0;
+            padding: 8px 0;
         }
         .admin-box {
-            background: #161616;
-            border: 1px solid #333;
+            background: #14141a;
+            border: 1px solid var(--border-color);
             border-radius: 6px;
-            padding: 15px;
+            padding: 20px;
             margin-top: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         .admin-box h2 {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--accent-color);
-            margin-bottom: 10px;
-            letter-spacing: 1px;
+            margin-bottom: 15px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
         }
         .admin-grid-inputs {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 10px;
-            margin-bottom: 10px;
+            gap: 12px;
+            margin-bottom: 12px;
         }
         .admin-grid-inputs input, .admin-grid-inputs select {
-            background: #000;
-            border: 1px solid #444;
+            background: #0c0c0f;
+            border: 1px solid #2d2d37;
             color: white;
-            padding: 6px;
+            padding: 8px;
             font-size: 11px;
             border-radius: 4px;
+            outline: none;
+        }
+        .admin-grid-inputs input:focus, .admin-grid-inputs select:focus {
+            border-color: var(--accent-color);
+        }
+        blockquote {
+            background: #14141a;
+            border-left: 2px solid var(--accent-color);
+            padding: 12px;
+            margin: 15px 0;
+            font-size: 12px;
+            color: var(--text-muted);
         }
     </style>
 </head>
 <body>
+
+    <!-- Premium Animated Preloader Component -->
+    <div id="preloader-screen">
+        <div class="luxury-spinner"></div>
+        <div class="preloader-brand">ARISA COLLECTION</div>
+    </div>
 
     <header>
         <h1 onclick="showHome()">ARISA COLLECTION</h1>
@@ -415,31 +524,31 @@
                         <option value="clothing">Clothing & Apparel</option>
                     </select>
                 </div>
-                <div style="margin-bottom:12px;">
-                    <label style="font-size:10px; color:var(--text-muted); display:block; margin-bottom:4px;">SELECT ITEM CONFIGURATION THUMBNAIL SOURCE IMAGE:</label>
+                <div style="margin-bottom:15px;">
+                    <label style="font-size:10px; color:var(--text-muted); display:block; margin-bottom:5px; letter-spacing:0.5px;">SELECT ITEM CONFIGURATION THUMBNAIL SOURCE IMAGE:</label>
                     <input type="file" id="admin-p-file" accept="image/*" style="font-size:11px; color:#aaa;">
                 </div>
-                <div style="display:flex; gap:10px;">
-                    <button class="btn" style="background:var(--accent-color); color:black;" onclick="adminUpload()">PUSH NEW PRODUCT INTO FIREBASE NODE</button>
-                    <button class="btn" style="background:#444; border-color:#555; color:white;" onclick="logoutAdmin()">LOGOUT SYSTEM KEYS</button>
+                <div style="display:flex; gap:12px;">
+                    <button class="btn" style="background:var(--accent-color); color:#0c0c0f; font-weight:600;" onclick="adminUpload()">PUSH NEW PRODUCT INTO FIREBASE NODE</button>
+                    <button class="btn" style="background:#2d2d37; border-color:#3e3e4f; color:white;" onclick="logoutAdmin()">LOGOUT SYSTEM KEYS</button>
                 </div>
                 
-                <hr style="border:0; border-top:1px solid #222; margin:15px 0;">
+                <hr style="border:0; border-top:1px solid var(--border-color); margin:20px 0;">
                 
                 <!-- Extra Administrative Maintenance Tools Layout Grid -->
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
-                    <div style="background:#0f0f0f; padding:10px; border-radius:4px; border:1px solid #222;">
-                        <span style="font-size:10px; color:var(--accent-color); font-weight:bold; display:block; margin-bottom:5px;">QUICK SPELLING CORRECTION PATCH</span>
-                        <input type="text" id="edit-target-name" placeholder="Exact Current Item Name" style="width:100%; padding:5px; font-size:11px; background:#000; border:1px solid #333; color:white; margin-bottom:5px; border-radius:3px;">
-                        <input type="text" id="edit-new-name" placeholder="Corrected Spelling Output Name" style="width:100%; padding:5px; font-size:11px; background:#000; border:1px solid #333; color:white; margin-bottom:5px; border-radius:3px;">
-                        <button class="btn" style="font-size:9px; padding:4px;" onclick="applySpellingCorrection()">DEPLOY INLINE SPELLING CORRECTION</button>
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:20px;">
+                    <div style="background:#0c0c0f; padding:15px; border-radius:4px; border:1px solid var(--border-color);">
+                        <span style="font-size:10px; color:var(--accent-color); font-weight:bold; display:block; margin-bottom:8px; letter-spacing:0.5px;">QUICK SPELLING CORRECTION PATCH</span>
+                        <input type="text" id="edit-target-name" placeholder="Exact Current Item Name" style="width:100%; padding:8px; font-size:11px; background:#14141a; border:1px solid #2d2d37; color:white; margin-bottom:8px; border-radius:3px; outline:none;">
+                        <input type="text" id="edit-new-name" placeholder="Corrected Spelling Output Name" style="width:100%; padding:8px; font-size:11px; background:#14141a; border:1px solid #2d2d37; color:white; margin-bottom:8px; border-radius:3px; outline:none;">
+                        <button class="btn" style="font-size:9px; padding:6px;" onclick="applySpellingCorrection()">DEPLOY INLINE SPELLING CORRECTION</button>
                     </div>
-                    <div style="background:#0f0f0f; padding:10px; border-radius:4px; border:1px solid #222;">
-                        <span style="font-size:10px; color:var(--accent-color); font-weight:bold; display:block; margin-bottom:5px;">QUICK BULK DISCOUNT / PRICE MODIFICATION ENGINE</span>
-                        <input type="text" id="discount-target-name" placeholder="Target Product Exact Name" style="width:100%; padding:5px; font-size:11px; background:#000; border:1px solid #333; color:white; margin-bottom:5px; border-radius:3px;">
-                        <input type="number" id="discount-new-base-price" placeholder="New Base Price Value (Blank to retain original)" style="width:100%; padding:5px; font-size:11px; background:#000; border:1px solid #333; color:white; margin-bottom:5px; border-radius:3px;">
-                        <input type="number" id="discount-target-percentage" placeholder="New Discount % Setting (0 to wipe discount)" style="width:100%; padding:5px; font-size:11px; background:#000; border:1px solid #333; color:white; margin-bottom:5px; border-radius:3px;">
-                        <button class="btn" style="font-size:9px; padding:4px;" onclick="applyDiscountToExisting()">MUTATE TARGET INVENTORY PRICING DATA</button>
+                    <div style="background:#0c0c0f; padding:15px; border-radius:4px; border:1px solid var(--border-color);">
+                        <span style="font-size:10px; color:var(--accent-color); font-weight:bold; display:block; margin-bottom:8px; letter-spacing:0.5px;">QUICK BULK DISCOUNT / PRICE MODIFICATION ENGINE</span>
+                        <input type="text" id="discount-target-name" placeholder="Target Product Exact Name" style="width:100%; padding:8px; font-size:11px; background:#14141a; border:1px solid #2d2d37; color:white; margin-bottom:8px; border-radius:3px; outline:none;">
+                        <input type="number" id="discount-new-base-price" placeholder="New Base Price Value (Blank to retain original)" style="width:100%; padding:8px; font-size:11px; background:#14141a; border:1px solid #2d2d37; color:white; margin-bottom:8px; border-radius:3px; outline:none;">
+                        <input type="number" id="discount-target-percentage" placeholder="New Discount % Setting (0 to wipe discount)" style="width:100%; padding:8px; font-size:11px; background:#14141a; border:1px solid #2d2d37; color:white; margin-bottom:8px; border-radius:3px; outline:none;">
+                        <button class="btn" style="font-size:9px; padding:6px;" onclick="applyDiscountToExisting()">MUTATE TARGET INVENTORY PRICING DATA</button>
                     </div>
                 </div>
             </div>
@@ -448,22 +557,22 @@
             <div class="product-grid" id="products-catalogue-grid"></div>
             
             <!-- User System Suggestions Input Wrapper Content -->
-            <div style="margin-top:40px; border-top:1px solid #1a1a1a; padding-top:20px; text-align:center;">
-                <p style="font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Have specific inventory requests or optimization thoughts?</p>
-                <div style="max-width:400px; margin:0 auto; display:flex; gap:8px;">
-                    <input type="text" id="user-suggestion" placeholder="Type store collections suggestions here..." style="flex-grow:1; background:#121212; border:1px solid #222; border-radius:4px; color:white; font-size:12px; padding:8px;">
-                    <button class="btn" style="width:auto; padding:0 15px;" onclick="sendSuggestion()">Submit</button>
+            <div style="margin-top:50px; border-top:1px solid var(--border-color); padding-top:25px; text-align:center;">
+                <p style="font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px;">Have specific inventory requests or optimization thoughts?</p>
+                <div style="max-width:400px; margin:0 auto; display:flex; gap:10px;">
+                    <input type="text" id="user-suggestion" placeholder="Type store collections suggestions here..." style="flex-grow:1; background:#14141a; border:1px solid #2d2d37; border-radius:4px; color:white; font-size:12px; padding:10px; outline:none;">
+                    <button class="btn" style="width:auto; padding:0 20px;" onclick="sendSuggestion()">Submit</button>
                 </div>
             </div>
             
             <!-- Technical Administration Access Key Execution Trigger -->
-            <div style="text-align:center; margin-top:30px;">
-                <span style="font-size:9px; color:#222; cursor:pointer;" onclick="loginAdmin()">[SYSTEM AUTHENTICATION CONTROL TERMINAL KEY LOG]</span>
+            <div style="text-align:center; margin-top:40px;">
+                <span style="font-size:11px; color:var(--accent-color); cursor:pointer; text-decoration: underline; letter-spacing: 0.5px;" onclick="loginAdmin()">[CLICK HERE TO OPEN ADMIN PANEL CONTROL TERMINAL]</span>
             </div>
         </div>
 
         <!-- Static Text Pages Wrapper Window -->
-        <div id="page-content" style="display:none; background:var(--card-bg); border:1px solid #1a1a1a; padding:25px; border-radius:8px; margin-top:10px;">
+        <div id="page-content" style="display:none; background:var(--card-bg); border:1px solid var(--border-color); padding:30px; border-radius:8px; margin-top:10px;">
             <div id="page-inner-content"></div>
             <button class="btn" style="margin-top:20px; max-width:150px;" onclick="showHome()">Return Home</button>
         </div>
@@ -487,7 +596,7 @@
             
             <!-- Postponed Deferred Item Configurations Array Section Panel Container -->
             <div id="saved-items-container" style="margin-top:25px; display:none;">
-                <h3 style="font-size:10px; color:var(--accent-color); letter-spacing:1px; border-bottom:1px solid #222; padding-bottom:5px; margin-bottom:8px; text-transform:uppercase;">DEFERRED STOCK ITEMS (SAVED FOR LATER)</h3>
+                <h3 style="font-size:11px; color:var(--accent-color); letter-spacing:1px; border-bottom:1px solid var(--border-color); padding-bottom:6px; margin-bottom:10px; text-transform:uppercase; font-weight:400;">DEFERRED STOCK ITEMS (SAVED FOR LATER)</h3>
                 <div id="saved-items-list"></div>
             </div>
         </div>
@@ -520,22 +629,22 @@
         </div>
 
         <!-- Final Pricing Matrix Summary Computation Results Layout -->
-        <div style="border-top:1px solid #222; padding-top:12px; margin-bottom:15px;">
+        <div style="border-top:1px solid var(--border-color); padding-top:15px; margin-bottom:20px;">
             <div class="summary-row">
-                <span>Aggregated Cart Raw Subtotal:</span>
+                <span style="color:var(--text-muted)">Aggregated Cart Raw Subtotal:</span>
                 <span><span id="cart-subtotal">0.00</span> NLE</span>
             </div>
-            <div class="summary-row" id="discount-row" style="color:#ff4d6d; font-weight:bold; display:none;">
+            <div class="summary-row" id="discount-row" style="color:#f43f5e; font-weight:600; display:none;">
                 <span>Tiered Multi-Item Bundle Discount Reward Applied:</span>
                 <span>-<span id="cart-discount">0.00</span> NLE</span>
             </div>
-            <div class="summary-row" style="font-size:15px; font-weight:bold; color:var(--accent-color); border-top:1px solid #333; margin-top:5px; padding-top:5px;">
+            <div class="summary-row" style="font-size:16px; font-weight:600; color:var(--accent-color); border-top:1px solid #2d2d37; margin-top:8px; padding-top:8px;">
                 <span>Total Computational Settlement Balance:</span>
                 <span><span id="cart-grand-total">0.00</span> NLE</span>
             </div>
         </div>
 
-        <button class="btn" style="background:var(--accent-color); color:black; font-weight:bold; padding:12px;" onclick="checkoutWhatsApp()">EXECUTE REDIRECT SYNCHRONIZED WHATSAPP ORDER</button>
+        <button class="btn" style="background:var(--accent-color); color:#0c0c0f; font-weight:600; padding:14px;" onclick="checkoutWhatsApp()">EXECUTE REDIRECT SYNCHRONIZED WHATSAPP ORDER</button>
     </div>
 
     <!-- Hidden High Fidelity Virtual Node Matrix Container For Image Invoices Rendering Pipeline -->
@@ -578,33 +687,18 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // System state variables variables
+        // System state variables
         const myWhatsAppNumber = "23274646545"; // Store phone channel
         let itemsCollection = []; // Generalized container for all inventory items
         let cart = [];
         let savedItems = [];
         let currentSection = 'perfume'; // Global section state tracking value
-
-        // Fetch realtime tracking changes block directly out from remote firebase configurations database nodes
-        db.ref('perfumes').on('value', (snapshot) => {
-            itemsCollection = [];
-            snapshot.forEach((childSnapshot) => {
-                let data = childSnapshot.val();
-                data.firebaseId = childSnapshot.key;
-                // Safeguard check to assign default category structure if missing in legacy blocks
-                if (!data.category) {
-                    data.category = 'perfume';
-                }
-                itemsCollection.push(data);
-            });
-            renderProducts();
-        });
+        let dataLoaded = false;
 
         // Interactive UI Section Switching Core Method
         function switchSection(sectionName) {
             currentSection = sectionName;
             
-            // Toggle view selector tabs classes
             document.getElementById('sec-perfume').classList.remove('active');
             document.getElementById('sec-clothing').classList.remove('active');
             
@@ -614,17 +708,58 @@
                 document.getElementById('sec-clothing').classList.add('active');
             }
             
-            // Rerender targeted UI filter lists context blocks
             renderProducts();
         }
+
+        // Preloader Exiting Mechanism
+        function clearPreloader() {
+            const preloader = document.getElementById('preloader-screen');
+            if (preloader) {
+                preloader.style.opacity = '0';
+                preloader.style.visibility = 'hidden';
+                document.body.classList.add('loaded');
+            }
+        }
+
+        // Fetch realtime tracking changes block directly out from remote firebase configurations database nodes
+        db.ref('perfumes').on('value', (snapshot) => {
+            itemsCollection = [];
+            snapshot.forEach((childSnapshot) => {
+                let data = childSnapshot.val();
+                data.firebaseId = childSnapshot.key;
+                if (!data.category) {
+                    data.category = 'perfume';
+                }
+                itemsCollection.push(data);
+            });
+            renderProducts();
+            
+            // Dismiss loader immediately following the primary successful data block draw
+            if (!dataLoaded) {
+                dataLoaded = true;
+                setTimeout(clearPreloader, 800); 
+            }
+        }, (error) => {
+            // Safety exit if network context drops completely
+            setTimeout(clearPreloader, 1000);
+        });
+
+        // Automatically run on load to check login state variables
+        window.onload = function() {
+            if (sessionStorage.getItem('isArisaAdmin') === 'true') {
+                document.getElementById('admin-panel').style.display = 'block';
+            }
+            // Fail-safe protection for preloader engine context boundary
+            setTimeout(() => {
+                if (!dataLoaded) clearPreloader();
+            }, 4000);
+        };
 
         function renderProducts() {
             const grid = document.getElementById('products-catalogue-grid');
             grid.innerHTML = '';
 
             const isAdmin = sessionStorage.getItem('isArisaAdmin') === 'true';
-
-            // Filter system elements contextual parameters according to active category scope section selection
             const filteredItems = itemsCollection.filter(item => item.category === currentSection);
 
             if (filteredItems.length === 0) {
@@ -656,7 +791,7 @@
                 }
 
                 const arrivalBadgeHTML = (p.isNewArrival === 'yes') 
-                    ? `<span class="status-badge" style="background:#d4af37; color:black; top: 22px; right: 5px;">NEW ARRIVAL</span>` 
+                    ? `<span class="status-badge" style="background:#d4af37; color:#0c0c0f; top: 32px; right: 8px; left: auto;">NEW ARRIVAL</span>` 
                     : '';
 
                 grid.innerHTML += `
@@ -664,16 +799,17 @@
                         <span class="status-badge ${p.status}">${p.status.replace('-', ' ')}</span>
                         ${arrivalBadgeHTML}
                         <div class="product-image"><img src="${p.image}"></div>
-                        <h3 style="font-size:11px;">${p.name}</h3>
+                        <h3 style="font-size:12px; font-weight:500; letter-spacing:0.3px;">${p.name}</h3>
                         ${p.color ? `<span class="color-label">${p.color}</span>` : ''}
                         ${priceDisplayHTML}
                         <button class="btn" ${sold ? 'disabled' : ''}>
                             ${sold ? 'SOLD OUT' : 'BUY'}
                         </button>
-                        ${isAdmin ? `<button class="btn" style="background:#444; margin-top:5px; font-size:8px;" onclick="event.stopPropagation(); toggleStatus('${p.firebaseId}','${p.status}')">Status</button>
-                                     <button class="btn" style="background:red; margin-top:5px; font-size:8px;" onclick="event.stopPropagation(); deleteProduct('${p.firebaseId}')">Del</button>
-                                     <button class="btn" style="background:#00f2fe; color:black; margin-top:5px; font-size:8px;" onclick="event.stopPropagation(); quickModifyDiscount('${p.firebaseId}','${p.discountPercentage}')">Disc</button>
-                                     <button class="btn" style="background:#fff; color:black; margin-top:5px; font-size:8px;" onclick="event.stopPropagation(); quickToggleArrival('${p.firebaseId}','${p.isNewArrival}')">Arrival</button>` : ''}
+                        ${isAdmin ? `<div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-top:8px;">
+                                     <button class="btn" style="background:#2d2d37; border-color:#3a3a4a; color:white; font-size:8px; padding:4px 0;" onclick="event.stopPropagation(); toggleStatus('${p.firebaseId}','${p.status}')">Status</button>
+                                     <button class="btn" style="background:#ef4444; border-color:#ef4444; color:white; font-size:8px; padding:4px 0;" onclick="event.stopPropagation(); deleteProduct('${p.firebaseId}')">Del</button>
+                                     <button class="btn" style="background:#3b82f6; border-color:#3b82f6; color:white; font-size:8px; padding:4px 0;" onclick="event.stopPropagation(); quickModifyDiscount('${p.firebaseId}','${p.discountPercentage}')">Disc</button>
+                                     <button class="btn" style="background:var(--text-color); border-color:var(--text-color); color:black; font-size:8px; padding:4px 0;" onclick="event.stopPropagation(); quickToggleArrival('${p.firebaseId}','${p.isNewArrival}')">Arrival</button></div>` : ''}
                     </div>`;
             });
         }
@@ -747,22 +883,22 @@
                 if (i.discountPercentage && parseFloat(i.discountPercentage) > 0) {
                     const pct = parseFloat(i.discountPercentage);
                     finalActivePrice = originalPrice - (originalPrice * (pct / 100));
-                    discountTextHTML = `<span style="color:#ff4d6d; font-size:10px; display:block;">-${pct}% Applied (was ${originalPrice.toFixed(2)} NLE)</span>`;
+                    discountTextHTML = `<span style="color:#f43f5e; font-size:10px; display:block;">-${pct}% Applied (was ${originalPrice.toFixed(2)} NLE)</span>`;
                 }
                 
                 subtotal += finalActivePrice;
                 i.calculatedCartPrice = finalActivePrice;
                 
                 return `
-                    <div style="border-bottom:1px solid #222; padding:10px 0; display:flex; justify-content:space-between; align-items:center;">
+                    <div style="border-bottom:1px solid var(--border-color); padding:12px 0; display:flex; justify-content:space-between; align-items:center;">
                         <div style="text-align:left; max-width:65%;">
-                            <h4 style="font-size:12px; color:var(--accent-color); font-weight:normal;">${i.name}</h4>
-                            ${i.color ? `<span style="font-size:9px; color:#666;">VARIANT/COLOR: ${i.color}</span>` : ''}
+                            <h4 style="font-size:12px; color:var(--accent-color); font-weight:normal; letter-spacing:0.3px;">${i.name}</h4>
+                            ${i.color ? `<span style="font-size:9px; color:var(--text-muted);">VARIANT/COLOR: ${i.color}</span>` : ''}
                             ${discountTextHTML}
                         </div>
                         <div style="text-align:right;">
-                            <span style="font-size:12px; font-weight:bold; display:block; margin-bottom:5px;">${finalActivePrice.toFixed(2)} NLE</span>
-                            <div style="display:flex; gap:5px; justify-content:flex-end;">
+                            <span style="font-size:12px; font-weight:600; display:block; margin-bottom:6px;">${finalActivePrice.toFixed(2)} NLE</span>
+                            <div style="display:flex; gap:6px; justify-content:flex-end;">
                                 <button class="save-btn" onclick="saveForLater(${i.cartId})">Save</button>
                                 <button class="remove-btn" onclick="removeFromCart(${i.cartId})">Remove</button>
                             </div>
@@ -773,9 +909,9 @@
             if (savedItems.length > 0) {
                 document.getElementById('saved-items-container').style.display = 'block';
                 savedList.innerHTML = savedItems.map(i => `
-                    <div style="border-bottom:1px dashed #222; padding:8px 0; display:flex; justify-content:space-between; align-items:center; opacity:0.6;">
+                    <div style="border-bottom:1px dashed var(--border-color); padding:10px 0; display:flex; justify-content:space-between; align-items:center; opacity:0.5;">
                         <span style="font-size:11px; text-align:left;">${i.name}</span>
-                        <button class="save-btn" style="color:#fff; border-color:#555;" onclick="moveToCart(${i.cartId})">Move to Cart</button>
+                        <button class="save-btn" style="color:#fff; border-color:#4e4e5a;" onclick="moveToCart(${i.cartId})">Move to Cart</button>
                     </div>`).join('');
             } else {
                 document.getElementById('saved-items-container').style.display = 'none';
@@ -892,7 +1028,7 @@
             document.getElementById('nav-policy').className = '';
             document.getElementById('page-inner-content').innerHTML = `
                 <h2 style="color:var(--accent-color); margin-bottom:15px; font-size:16px;">ABOUT US</h2>
-                <p style="font-size:12px; color:#ccc; line-height:1.8;">Welcome to ARISA COLLECTION, Freetown's ultimate sanctuary for premium, high-fidelity luxury garments, perfumes, and body care assets. We curate world-class aesthetic solutions designed to leave an unforgettable imprint. Each product in our collection is authenticated to meet rigorous standard profiles of continuous projection and unmatched sophistication.</p>
+                <p style="font-size:13px; color:#ccc; line-height:1.8;">Welcome to ARISA COLLECTION, Freetown's ultimate sanctuary for premium, high-fidelity luxury garments, perfumes, and body care assets. We curate world-class aesthetic solutions designed to leave an unforgettable imprint. Each product in our collection is authenticated to meet rigorous standard profiles of continuous projection and unmatched sophistication.</p>
             `;
         };
 
@@ -905,7 +1041,7 @@
             document.getElementById('nav-policy').className = 'active';
             document.getElementById('page-inner-content').innerHTML = `
                 <h2 style="color:var(--accent-color); margin-bottom:15px; font-size:16px;">STORE POLICY</h2>
-                <p style="font-size:12px; color:#ccc; line-height:1.8;"><strong>Logistics & Delivery:</strong> We offer reliable scheduled dispatch coordinates throughout Freetown between 9:00 AM and 6:00 PM daily. Delivery fees are applied contextually based on your pinpointed location boundaries.<br><br><strong>Returns:</strong> Due to security parameters surrounding cosmetics safety benchmarks and clothing quality parameters, all sales executed are definitive. Ensure sizing configurations and testing profiles are confirmed before final payment settlement.</p>
+                <p style="font-size:13px; color:#ccc; line-height:1.8;"><strong>Logistics & Delivery:</strong> We offer reliable scheduled dispatch coordinates throughout Freetown between 9:00 AM and 6:00 PM daily. Delivery fees are applied contextually based on your pinpointed location boundaries.<br><br><strong>Returns:</strong> Due to security parameters surrounding cosmetics safety benchmarks and clothing quality parameters, all sales executed are definitive. Ensure sizing configurations and testing profiles are confirmed before final payment settlement.</p>
             `;
         };
 
@@ -1042,8 +1178,8 @@
             
             const payment = document.getElementById('payment-method').value;
             const receiptHTML = `
-                <p style="font-size:11px; color:#aaa; margin-bottom:10px; text-align:center;">Date: ${timestamp}</p>
-                <div style="margin-bottom:15px; font-size:12px; border-bottom:1px solid #222; padding-bottom:10px;">
+                <p style="font-size:11px; color:#666; margin-bottom:10px; text-align:center;">Date: ${timestamp}</p>
+                <div style="margin-bottom:15px; font-size:12px; border-bottom:1px solid #ddd; padding-bottom:10px;">
                     <p><strong>Customer Name:</strong> ${name}</p>
                     <p><strong>Phone Line:</strong> ${phone}</p>
                     <p><strong>Order System:</strong> ${method}</p>
@@ -1051,11 +1187,11 @@
                     <p><strong>Settlement Mode:</strong> ${payment}</p>
                 </div>
                 <div style="margin-top:10px;">
-                    <p style="font-size:11px; font-weight:bold; color:var(--accent-color); margin-bottom:8px;">PURCHASED ITEMS:</p>
+                    <p style="font-size:11px; font-weight:bold; color:#000; margin-bottom:8px;">PURCHASED ITEMS:</p>
                     ${invoiceItemsHTML}
                 </div>
-                <div style="border-top:1px dashed var(--accent-color); margin-top:15px; padding-top:10px; text-align:right;">
-                    <p style="font-size:16px; font-weight:bold; color:var(--accent-color);">Grand Total: ${grandTotal} NLE</p>
+                <div style="border-top:1px dashed #000; margin-top:15px; padding-top:10px; text-align:right;">
+                    <p style="font-size:16px; font-weight:bold; color:#000;">Grand Total: ${grandTotal} NLE</p>
                 </div>`;
                 
             document.getElementById('receipt-details').innerHTML = receiptHTML;
@@ -1088,8 +1224,8 @@
                     const downloadBtn = document.createElement('button');
                     downloadBtn.className = "btn";
                     downloadBtn.id = "dynamic-pdf-download-btn";
-                    downloadBtn.style.background = "#d4af37";
-                    downloadBtn.style.color = "black";
+                    downloadBtn.style.background = "#000";
+                    downloadBtn.style.color = "white";
                     downloadBtn.style.marginTop = "10px";
                     downloadBtn.innerText = "DOWNLOAD PDF INVOICE RECEIPT";
                     
@@ -1109,7 +1245,7 @@
                 });
             }, 800);
             
-            let waMessage = `*ARISA COLLECTION - NEW ORDER LUXURY INVOICE*\n`;
+            let waMessage = `*ARISA COLLECTION - NEW ORDER* \n`;
             waMessage += `-----------------------------------------\n`;
             waMessage += `*Date:* ${timestamp}\n\n`;
             waMessage += `*Customer Info:*\n`;
