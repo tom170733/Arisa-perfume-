@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +10,7 @@
         :root {
             --bg-color: #f8fafc;
             --card-bg: #ffffff;
-            --accent-primary: #ff6b8b; /* Default Theme Pink */
+            --accent-primary: #ff6b8b; 
             --accent-light: #fff1f2;
             --text-dark: #0f172a;
             --text-muted: #475569;
@@ -121,7 +120,6 @@
             background: var(--accent-primary);
         }
 
-        /* Top Theme Selector Configuration */
         .theme-selector-bar {
             display: flex;
             justify-content: center;
@@ -176,7 +174,6 @@
 
         .container { max-width: 1200px; margin: 0 auto; padding: 16px 8px; }
         
-        /* 2 PRODUCTS PER ROW ON MOBILE MOBILE SYSTEM */
         .product-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -233,10 +230,11 @@
             z-index: 2;
         }
         .product-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .price-container { margin-top: auto; padding-top: 4px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px; margin-bottom: 8px; }
+        .price-container { margin-top: auto; padding-top: 4px; display: flex; flex-direction: column; gap: 2px; margin-bottom: 8px; }
+        .price-row-flex { display: flex; align-items: baseline; gap: 6px; }
         .price-current { font-weight: 800; font-size: 14px; color: var(--text-dark); }
         .price-old { text-decoration: line-through; color: var(--text-muted); font-size: 10px; }
-        .discount-tag { color: var(--accent-primary); font-size: 9px; font-weight: 700; width: 100%; }
+        .discount-tag { color: #dc2626; font-size: 9px; font-weight: 700; text-transform: uppercase; }
         
         .btn {
             background: var(--accent-primary);
@@ -310,16 +308,23 @@
         .checkout-inputs input, .checkout-inputs select, .checkout-inputs textarea { width: 100%; padding: 8px 10px; font-size: 13px; border-radius: 6px; border: 1px solid #cbd5e1; margin-bottom: 10px; outline: none; }
         
         .summary-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
+        .discount-line { color: #2563eb; font-weight: 600; }
         
         .admin-box { background: #ffffff; border: 1px solid var(--text-dark); border-radius: 8px; padding: 16px; margin-bottom: 24px; }
         .admin-box h2 { font-size: 12px; margin-bottom: 12px; font-weight: 800; text-transform: uppercase; border-bottom: 2px solid var(--text-dark); padding-bottom: 6px; }
         .admin-grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin-bottom: 12px; }
         .admin-grid-inputs input, .admin-grid-inputs select { border: 1px solid #cbd5e1; padding: 9px; font-size: 12px; border-radius: 6px; outline: none; }
+        
+        /* Standard Static Layout Profiles */
+        .standard-doc { line-height: 1.8; color: #334155; }
+        .standard-doc h2 { font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dark); margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
+        .standard-doc h3 { font-size: 14px; font-weight: 700; text-transform: uppercase; color: var(--text-dark); margin: 18px 0 6px 0; }
+        .standard-doc p { font-size: 13px; margin-bottom: 14px; }
+        .standard-doc ul { margin-left: 18px; margin-bottom: 14px; font-size: 13px; }
     </style>
 </head>
 <body>
 
-    <!-- Dynamic Neon Preloader Screen -->
     <div id="app-preloader">
         <div class="spinner-container">
             <div class="glow-ring"></div>
@@ -337,7 +342,6 @@
         </nav>
     </header>
 
-    <!-- Global Top Level Screen Customization Panel -->
     <div class="theme-selector-bar">
         <span class="theme-label">SCREEN LAYOUT:</span>
         <div class="theme-dot dot-pink active" id="dot-pink" onclick="changeGlobalTheme('Pink')"></div>
@@ -353,7 +357,6 @@
     <div class="container">
         <div id="home-content">
             
-            <!-- Live Cloud Admin Panel Interface -->
             <div id="admin-panel" class="admin-box" style="display:none;">
                 <h2>LIVE INVENTORY MANAGER (CLOUD SYNC ACTIVE)</h2>
                 <div class="admin-grid-inputs">
@@ -383,7 +386,6 @@
                 </div>
             </div>
 
-            <!-- Product catalog layout: Configured for 2 columns per row -->
             <div class="product-grid" id="products-catalogue-grid"></div>
             
             <div style="text-align:center; margin-top:60px; padding: 20px; opacity: 0.15;" onclick="handleSecretAdminTap()">
@@ -391,9 +393,10 @@
             </div>
         </div>
 
-        <div id="page-content" style="display:none; background:var(--card-bg); border:1px solid var(--border-color); padding:24px; border-radius:8px; margin-top:10px; line-height:1.6;">
-            <div id="page-inner-content"></div>
-            <button class="btn" style="margin-top:20px; max-width:140px; background:var(--text-dark);" onclick="showHome()">Return Home</button>
+        <!-- Standard Document Display Page Container -->
+        <div id="page-content" style="display:none; background:var(--card-bg); border:1px solid var(--border-color); padding:24px; border-radius:8px; margin-top:10px;">
+            <div id="page-inner-content" class="standard-doc"></div>
+            <button class="btn" style="margin-top:24px; max-width:140px; background:var(--text-dark);" onclick="showHome()">Return Home</button>
         </div>
     </div>
 
@@ -431,8 +434,12 @@
 
         <div style="border-top:1px solid var(--border-color); padding-top:12px; margin-bottom:16px;">
             <div class="summary-row">
-                <span style="color:var(--text-muted)">Subtotal:</span>
+                <span style="color:var(--text-muted)">Items Subtotal:</span>
                 <span style="font-weight:600;"><span id="cart-subtotal">0.00</span> NLE</span>
+            </div>
+            <div class="summary-row discount-line" id="bulk-discount-row" style="display:none;">
+                <span>Bulk Savings (<span id="bulk-discount-rate">0</span>%):</span>
+                <span>-<span id="bulk-discount-amount">0.00</span> NLE</span>
             </div>
             <div class="summary-row" style="font-size:15px; font-weight:800; border-top:1px solid var(--border-color); margin-top:8px; padding-top:8px;">
                 <span>Total Due:</span>
@@ -452,7 +459,6 @@
         let secretClickCount = 0;
         let activeTheme = 'Pink';
 
-        // Handles dynamic interface skin switching across screens
         window.changeGlobalTheme = function(themeName) {
             activeTheme = themeName;
             const root = document.documentElement;
@@ -482,7 +488,6 @@
                 root.style.setProperty('--border-color', '#e2e8f0');
             }
             
-            // Re-render components to inherit theme styling rules
             renderProducts();
             updateCartUI();
         };
@@ -559,20 +564,27 @@
                 const originalPrice = parseFloat(p.price);
                 let priceDisplayHTML = '';
 
+                // Calculate custom item price discounts instantly
                 if (p.discountPercentage && parseFloat(p.discountPercentage) > 0) {
                     let pct = parseFloat(p.discountPercentage);
                     let finalPrice = originalPrice - (originalPrice * (pct / 100));
                     priceDisplayHTML = `
                         <div class="price-container">
-                            <span class="price-current">${finalPrice.toFixed(2)} NLE</span>
-                            <span class="price-old">${originalPrice.toFixed(2)} NLE</span>
-                            <span class="discount-tag">${pct}% OFF</span>
+                            <div class="price-row-flex">
+                                <span class="price-current">${finalPrice.toFixed(2)} NLE</span>
+                                <span class="price-old">${originalPrice.toFixed(2)} NLE</span>
+                            </div>
+                            <span class="discount-tag">${pct}% Item Discount</span>
                         </div>`;
                 } else {
-                    priceDisplayHTML = `<div class="price-container"><span class="price-current">${originalPrice.toFixed(2)} NLE</span></div>`;
+                    priceDisplayHTML = `
+                        <div class="price-container">
+                            <div class="price-row-flex">
+                                <span class="price-current">${originalPrice.toFixed(2)} NLE</span>
+                            </div>
+                        </div>`;
                 }
 
-                // Cards are clean, click triggers direct cart allocation
                 grid.innerHTML += `
                     <div class="product-card" onclick="${sold ? '' : `directAddToCart('${p.id}')`}">
                         <span class="status-badge ${p.status}">${p.status}</span>
@@ -584,14 +596,13 @@
                             <button class="btn" ${sold ? 'disabled' : ''}>${sold ? 'OUT OF STOCK' : 'ADD TO CART'}</button>
                         </div>
                         ${isAdmin ? `<div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-top:8px; border-top:1px solid #e2e8f0; padding-top:6px;">
-                            <button class="btn" style="background:#dc2626; font-size:9px; padding:4px 0;" onclick="event.stopPropagation(); deleteProductLive('${p.id}')">Delete</button>
-                            <button class="btn" style="background:#2563eb; font-size:9px; padding:4px 0;" onclick="event.stopPropagation(); toggleStatusLive('${p.id}')">Toggle</button>
+                            <button class="btn" style="background:#dc2626; font-size:9px; padding:6px 0;" onclick="event.stopPropagation(); deleteProductLive('${p.id}')">Delete</button>
+                            <button class="btn" style="background:#2563eb; font-size:9px; padding:6px 0;" onclick="event.stopPropagation(); toggleStatusLive('${p.id}')">Toggle</button>
                         </div>` : ''}
                     </div>`;
             });
         }
 
-        // Fast actions - skip selection pop-ups entirely
         window.directAddToCart = (productId) => {
             const item = itemsCollection.find(p => p.id === productId);
             if (!item || item.status === 'sold-out') return;
@@ -601,7 +612,6 @@
             document.getElementById('floating-cart-btn').style.display = 'block';
         };
 
-        // Customer can completely remove target mistakes out of inventory rows
         window.removeCartItem = (cartId) => {
             cart = cart.filter(item => item.cartId !== cartId);
             updateCartUI();
@@ -611,16 +621,17 @@
             }
         };
 
+        // Cart Engine tracking structural individual values and volume discount rules
         function updateCartUI() {
             document.getElementById('cart-counter').innerText = cart.length;
             document.getElementById('floating-cart-counter').innerText = cart.length;
             const list = document.getElementById('cart-items-list');
-            let subtotal = 0;
+            let itemsSubtotal = 0;
 
             list.innerHTML = cart.map(i => {
                 const base = parseFloat(i.price);
                 const final = i.discountPercentage ? (base - (base * (parseFloat(i.discountPercentage)/100))) : base;
-                subtotal += final;
+                itemsSubtotal += final;
                 return `
                     <div class="cart-item-row">
                         <div>
@@ -631,8 +642,29 @@
                     </div>`;
             }).join('');
 
-            document.getElementById('cart-subtotal').innerText = subtotal.toFixed(2);
-            document.getElementById('cart-grand-total').innerText = subtotal.toFixed(2);
+            // Apply global bulk volume discount logic
+            let bulkDiscountRate = 0;
+            if (cart.length === 2) {
+                bulkDiscountRate = 5; 
+            } else if (cart.length >= 3) {
+                bulkDiscountRate = 10;
+            }
+
+            let bulkDiscountAmount = itemsSubtotal * (bulkDiscountRate / 100);
+            let grandTotal = itemsSubtotal - bulkDiscountAmount;
+
+            document.getElementById('cart-subtotal').innerText = itemsSubtotal.toFixed(2);
+            
+            const bulkRow = document.getElementById('bulk-discount-row');
+            if (bulkDiscountRate > 0) {
+                document.getElementById('bulk-discount-rate').innerText = bulkDiscountRate;
+                document.getElementById('bulk-discount-amount').innerText = bulkDiscountAmount.toFixed(2);
+                bulkRow.style.display = 'flex';
+            } else {
+                bulkRow.style.display = 'none';
+            }
+            
+            document.getElementById('cart-grand-total').innerText = grandTotal.toFixed(2);
         }
 
         window.adminUploadLive = function() {
@@ -770,18 +802,65 @@
             document.getElementById('home-content').style.display = 'block';
             document.getElementById('page-content').style.display = 'none';
             document.getElementById('category-section-bar').style.display = 'flex';
+            document.getElementById('nav-home').classList.add('active');
+            document.getElementById('nav-about').classList.remove('active');
+            document.getElementById('nav-policy').classList.remove('active');
         };
+
+        // Standardized Corporate About text layout
         window.showAbout = () => {
             document.getElementById('home-content').style.display = 'none';
             document.getElementById('category-section-bar').style.display = 'none';
             document.getElementById('page-content').style.display = 'block';
-            document.getElementById('page-inner-content').innerHTML = `<h2>ABOUT ARISA</h2><p>Premium live catalog tailored for direct smartphone administration.</p>`;
+            
+            document.getElementById('nav-home').classList.remove('active');
+            document.getElementById('nav-about').classList.add('active');
+            document.getElementById('nav-policy').classList.remove('active');
+
+            document.getElementById('page-inner-content').innerHTML = `
+                <h2>About Arisa Collection</h2>
+                <p>Welcome to <strong>ARISA COLLECTION</strong>, your ultimate destination for luxury fragrances, professional skincare, and premium global fashion trends. We curate standard high-grade alternatives designed to enhance your personal style profile.</p>
+                <h3>Our Core Mission</h3>
+                <p>To deliver authentic, premium-quality cosmetics and curated wardrobe essentials directly to our clients through smart, real-time catalog interfaces. We bypass the complexity of modern multi-layered setups to bring absolute value right to your mobile screens.</p>
+                <h3>Why Shop With Us?</h3>
+                <ul>
+                    <li><strong>Live Updates:</strong> Our showroom updates immediately whenever fresh inventory is introduced.</li>
+                    <li><strong>Fulfillment Options:</strong> Direct doorstep courier service or structured venue pickups.</li>
+                    <li><strong>Instant WhatsApp Ordering:</strong> Secure checkout pipeline routed instantly to dedicated customer representatives.</li>
+                </ul>
+            `;
         };
+
+        // Standardized Corporate Policy text layout
         window.showPolicy = () => {
             document.getElementById('home-content').style.display = 'none';
             document.getElementById('category-section-bar').style.display = 'none';
             document.getElementById('page-content').style.display = 'block';
-            document.getElementById('page-inner-content').innerHTML = `<h2>STORE POLICY</h2><p>All items checked through automated checkout and finalized instantly via WhatsApp delivery lines.</p>`;
+
+            document.getElementById('nav-home').classList.remove('active');
+            document.getElementById('nav-about').classList.remove('active');
+            document.getElementById('nav-policy').classList.add('active');
+
+            document.getElementById('page-inner-content').innerHTML = `
+                <h2>Store Policies & Guidelines</h2>
+                <p>Please read our standard corporate parameters carefully before completing orders. All transactions generated through this mobile portal adhere strictly to the rules below:</p>
+                
+                <h3>1. Order Processing & WhatsApp System</h3>
+                <p>Placing an item in your cart does not hold inventory. Orders are officially prioritized and prepared the moment your details are successfully transmitted and confirmed via our WhatsApp representative terminal.</p>
+                
+                <h3>2. Returns & Exchange Parameters</h3>
+                <p>Due to health and hygiene requirements, perfumes, body care formulations, and specialized apparel items cannot be returned once unsealed or handled outside our presentation hubs. Always inspect your inventory thoroughly upon delivery.</p>
+                
+                <h3>3. Multi-Buy Discount Structure</h3>
+                <p>Our promotional calculation layout automatically grants bulk price tier incentives:</p>
+                <ul>
+                    <li>Purchase exactly <strong>2 items</strong> to unlock a <strong>5% total discount</strong>.</li>
+                    <li>Purchase <strong>3 or more items</strong> to unlock a <strong>10% total discount</strong>.</li>
+                </ul>
+                
+                <h3>4. Logistics & Settlement</h3>
+                <p>We actively accept major mobile capital structures (Orange Money, Afrimoney) along with Cash on Delivery guidelines for localized drop zones. Standard courier processing fees apply depending on specific address vectors.</p>
+            `;
         };
     </script>
 </body>
