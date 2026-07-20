@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ARISA COLLECTION | PREMIUM SHOWROOM</title>
-    <!-- Firebase SDKs -->
+    <!-- Firebase Core and Database SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <!-- Utilities -->
+    <!-- Utilities for Professional PDF / Invoice Export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.bundle.min.js/5.0.1/html2pdf.bundle.min.js"></script>
     <style>
@@ -15,11 +15,14 @@
             --bg-color: #f8fafc;
             --card-bg: #ffffff;
             --accent-pink: #ff6b8b;
-            --accent-blue: #2563eb;
+            --accent-blue: #1e3a8a;
             --accent-blue-light: #eff6ff;
-            --text-dark: #1e293b;
-            --text-muted: #64748b;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
             --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+            --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.03);
         }
         * {
             margin: 0;
@@ -31,7 +34,7 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-dark);
-            padding-bottom: 60px;
+            padding-bottom: 80px;
             opacity: 0;
             transition: opacity 0.4s ease;
         }
@@ -54,70 +57,74 @@
             justify-content: center;
         }
         .luxury-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(255, 255, 255, 0.2);
-            border-top: 4px solid #ffffff;
+            width: 44px;
+            height: 44px;
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            border-top: 3px solid #ffffff;
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-bottom: 20px;
+            animation: spin 0.75s linear infinite;
+            margin-bottom: 24px;
         }
         .preloader-brand {
             color: #ffffff;
-            font-size: 18px;
-            letter-spacing: 4px;
+            font-size: 14px;
+            letter-spacing: 6px;
             text-transform: uppercase;
             font-weight: 700;
-            animation: pulse 1.8s ease-in-out infinite;
+            animation: pulse 2s ease-in-out infinite;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
         @keyframes pulse {
-            0%, 100% { opacity: 0.8; transform: scale(0.98); }
-            50% { opacity: 1; transform: scale(1.02); }
+            0%, 100% { opacity: 0.7; transform: scale(0.97); }
+            50% { opacity: 1; transform: scale(1.03); }
         }
 
-        /* Clean Header Architecture */
+        /* Standard Professional Header Layout */
         header {
             background: #ffffff;
-            padding: 20px 15px;
+            padding: 24px 20px;
             text-align: center;
             border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            box-shadow: var(--shadow-sm);
         }
         header h1 {
             color: var(--text-dark);
-            font-size: 26px;
-            letter-spacing: 3px;
+            font-size: 24px;
+            letter-spacing: 4px;
             text-transform: uppercase;
             font-weight: 800;
             cursor: pointer;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
         header h1 span {
             color: var(--accent-pink);
+            font-weight: 300;
         }
         nav {
             display: flex;
             justify-content: center;
-            gap: 30px;
+            gap: 36px;
         }
         nav a {
             color: var(--text-muted);
             text-decoration: none;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             cursor: pointer;
-            transition: color 0.2s;
+            transition: color 0.2s ease;
             position: relative;
-            padding-bottom: 4px;
+            padding-bottom: 6px;
+        }
+        nav a:hover {
+            color: var(--text-dark);
         }
         nav a.active {
             color: var(--accent-blue);
@@ -126,19 +133,19 @@
             content: '';
             position: absolute;
             bottom: 0;
-            left: 0;
-            width: 100%;
+            left: 15%;
+            width: 70%;
             height: 2px;
             background: var(--accent-blue);
             border-radius: 2px;
         }
         
-        /* Category Navigation Selector */
+        /* Clean Category Subnavigation Selection Bar */
         .section-bar {
             display: flex;
             justify-content: center;
-            gap: 16px;
-            padding: 15px 10px;
+            gap: 12px;
+            padding: 16px;
             background: #ffffff;
             border-bottom: 1px solid var(--border-color);
         }
@@ -146,14 +153,18 @@
             background: var(--bg-color);
             border: 1px solid var(--border-color);
             color: var(--text-muted);
-            padding: 12px 26px;
-            font-size: 13px;
+            padding: 10px 24px;
+            font-size: 12px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             cursor: pointer;
-            border-radius: 30px;
+            border-radius: 20px;
             transition: all 0.2s ease;
+        }
+        .sec-btn:hover {
+            border-color: #cbd5e1;
+            color: var(--text-dark);
         }
         .sec-btn.active {
             background: var(--text-dark);
@@ -164,38 +175,38 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 30px 15px;
+            padding: 32px 20px;
         }
         
-        /* Product Layout Grid */
+        /* Professional Luxury E-commerce Catalog Matrix Grid */
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 30px;
         }
         .product-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
+            border-radius: 12px;
             padding: 16px;
             position: relative;
             cursor: pointer;
             display: flex;
             flex-direction: column;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.01), 0 2px 4px -1px rgba(0,0,0,0.01);
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+            box-shadow: var(--shadow-sm);
         }
         .product-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 20px -3px rgba(0,0,0,0.04), 0 4px 6px -2px rgba(0,0,0,0.02);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
             border-color: #cbd5e1;
         }
         .product-image {
             width: 100%;
-            height: 200px;
+            height: 240px;
             background: #f8fafc;
-            border-radius: 12px;
-            margin-bottom: 14px;
+            border-radius: 8px;
+            margin-bottom: 16px;
             overflow: hidden;
             display: flex;
             align-items: center;
@@ -207,34 +218,35 @@
             object-fit: cover;
         }
         
-        /* Badges & Tags */
+        /* Modern Clean Badges */
         .status-badge {
             position: absolute;
-            top: 12px;
-            left: 12px;
+            top: 24px;
+            left: 24px;
             font-size: 9px;
-            padding: 5px 12px;
-            border-radius: 30px;
+            padding: 4px 10px;
+            border-radius: 4px;
             text-transform: uppercase;
             font-weight: 700;
             letter-spacing: 0.5px;
             z-index: 10;
         }
-        .status-badge.available { background: #dcfce7; color: #166534; }
+        .status-badge.available { background: #e2f8f0; color: #065f46; }
         .status-badge.sold-out { background: #fee2e2; color: #991b1b; }
         
         .new-badge {
             position: absolute;
-            top: 12px;
-            right: 12px;
+            top: 24px;
+            right: 24px;
             font-size: 9px;
-            padding: 5px 12px;
-            border-radius: 30px;
+            padding: 4px 10px;
+            border-radius: 4px;
             text-transform: uppercase;
             font-weight: 700;
             background: var(--accent-pink);
             color: #ffffff;
             z-index: 10;
+            letter-spacing: 0.5px;
         }
 
         .product-info {
@@ -246,22 +258,22 @@
             font-size: 15px;
             font-weight: 700;
             color: var(--text-dark);
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             line-height: 1.4;
         }
         
-        /* Customer-Facing Color Options Dot UI Component */
+        /* Visual Interactive Color Preview Element Dots */
         .color-options-preview {
             display: flex;
             gap: 6px;
-            margin: 6px 0 12px 0;
+            margin: 8px 0 14px 0;
             align-items: center;
         }
         .color-dot {
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
-            border: 1px solid rgba(0,0,0,0.15);
+            border: 1px solid rgba(0,0,0,0.1);
             display: inline-block;
         }
         .color-dot.pink { background-color: #ff6b8b; }
@@ -270,21 +282,21 @@
         
         .price-container {
             margin-top: auto;
-            padding-top: 10px;
+            padding-top: 8px;
             display: flex;
             align-items: baseline;
             gap: 8px;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
         .price-current {
             font-weight: 800;
             color: var(--text-dark);
-            font-size: 17px;
+            font-size: 16px;
         }
         .price-old {
             text-decoration: line-through;
             color: var(--text-muted);
-            font-size: 13px;
+            font-size: 12px;
         }
         .discount-tag {
             color: var(--accent-pink);
@@ -293,56 +305,60 @@
             margin-left: auto;
         }
         
+        /* Core UI Form Input Elements & Action Controllers Buttons Layout */
         .btn {
             background: var(--accent-blue);
             border: none;
             color: #ffffff;
             width: 100%;
-            padding: 12px;
-            font-size: 12px;
+            padding: 12px 16px;
+            font-size: 11px;
             font-weight: 700;
             letter-spacing: 1px;
             cursor: pointer;
-            border-radius: 10px;
+            border-radius: 6px;
             text-transform: uppercase;
-            transition: background 0.2s;
+            transition: background-color 0.15s ease;
         }
         .btn:hover:not(:disabled) {
-            background: #1d4ed8;
+            background: #172554;
         }
         .btn:disabled {
-            background: #e2e8f0;
+            background: #f1f5f9;
             color: #94a3b8;
             cursor: not-allowed;
         }
 
-        /* Fixed Cart Floating Widget Element */
+        /* Fixed Shopping Cart Widget Icon Frame */
         #floating-cart-btn {
             position: fixed;
-            bottom: 25px;
-            right: 25px;
+            bottom: 30px;
+            right: 30px;
             background: var(--text-dark);
             color: #ffffff;
             border: none;
-            width: 60px;
-            height: 60px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
-            font-size: 22px;
+            font-size: 20px;
             cursor: pointer;
             z-index: 200;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             display: none;
-            transition: transform 0.2s;
+            transition: transform 0.2s ease;
+        }
+        #floating-cart-btn:hover {
+            transform: scale(1.05);
         }
         #floating-cart-counter {
             position: absolute;
-            top: -4px;
-            left: -4px;
+            top: -2px;
+            left: -2px;
             background: var(--accent-pink);
             color: white;
-            font-size: 11px;
-            width: 24px;
-            height: 24px;
+            font-size: 10px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -350,32 +366,32 @@
             font-weight: 700;
         }
 
-        /* Sidebar Elements Layout */
+        /* Side View Flyout Checkout Drawer Panels */
         .sidebar {
             position: fixed;
             top: 0;
             right: 0;
             width: 100%;
-            max-width: 440px;
+            max-width: 420px;
             height: 100vh;
             background: #ffffff;
             border-left: 1px solid var(--border-color);
             z-index: 300;
             display: none;
             flex-direction: column;
-            padding: 30px;
-            box-shadow: -10px 0 50px rgba(0,0,0,0.05);
+            padding: 24px;
+            box-shadow: -10px 0 40px rgba(0,0,0,0.03);
         }
         .sidebar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 20px;
+            padding-bottom: 16px;
             margin-bottom: 20px;
         }
         .sidebar-header h2 {
-            font-size: 18px;
+            font-size: 16px;
             color: var(--text-dark);
             text-transform: uppercase;
             font-weight: 800;
@@ -385,24 +401,25 @@
             background: transparent;
             border: none;
             color: var(--text-muted);
-            font-size: 30px;
+            font-size: 28px;
             cursor: pointer;
         }
 
         .cart-scroll-area {
             flex-grow: 1;
             overflow-y: auto;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
+            padding-right: 4px;
         }
         .checkout-inputs {
             background: #f8fafc;
-            padding: 20px;
-            border-radius: 12px;
+            padding: 16px;
+            border-radius: 8px;
             margin-bottom: 20px;
             border: 1px solid var(--border-color);
         }
         .checkout-inputs label {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -415,28 +432,80 @@
             background: #ffffff;
             border: 1px solid #cbd5e1;
             color: var(--text-dark);
-            padding: 12px;
-            font-size: 14px;
-            border-radius: 8px;
-            margin-bottom: 16px;
+            padding: 10px 12px;
+            font-size: 13px;
+            border-radius: 6px;
+            margin-bottom: 14px;
             outline: none;
+            transition: border-color 0.15s ease;
+        }
+        .checkout-inputs input:focus, .checkout-inputs select:focus, .checkout-inputs textarea:focus {
+            border-color: var(--accent-blue);
         }
         
         .summary-row {
             display: flex;
             justify-content: space-between;
-            font-size: 14px;
+            font-size: 13px;
             margin-bottom: 8px;
         }
+        .save-btn, .remove-btn {
+            background: transparent;
+            border: none;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 2px 4px;
+        }
+        .save-btn { color: var(--accent-blue); }
+        .remove-btn { color: #dc2626; margin-left: 8px; }
 
-        /* Variant Option Selector Dialog Popup Layer Container */
+        /* Professional Admin Hub Control Station Panel Configuration Window Block */
+        .admin-box {
+            background: #ffffff;
+            border: 1px solid var(--text-dark);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 36px;
+            box-shadow: var(--shadow-md);
+        }
+        .admin-box h2 {
+            font-size: 14px;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 2px solid var(--text-dark);
+            padding-bottom: 8px;
+        }
+        .admin-grid-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .admin-grid-inputs input, .admin-grid-inputs select {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            padding: 11px;
+            font-size: 13px;
+            border-radius: 6px;
+            outline: none;
+            color: var(--text-dark);
+        }
+        .admin-grid-inputs input:focus, .admin-grid-inputs select:focus {
+            border-color: var(--text-dark);
+        }
+
+        /* Variant Options Window Dialog Screen Elements */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(15, 23, 42, 0.6);
+            background: rgba(15, 23, 42, 0.4);
             backdrop-filter: blur(4px);
             z-index: 400;
             display: flex;
@@ -446,28 +515,29 @@
         }
         .modal-card {
             background: #ffffff;
-            border-radius: 16px;
-            padding: 25px;
+            border-radius: 12px;
+            padding: 24px;
             width: 100%;
-            max-width: 400px;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            max-width: 380px;
+            box-shadow: var(--shadow-lg);
         }
         .variant-pill-box {
             display: flex;
             gap: 10px;
-            margin: 15px 0 25px 0;
+            margin: 16px 0 24px 0;
         }
         .variant-pill {
             flex: 1;
             text-align: center;
-            padding: 12px;
-            border: 2px solid var(--border-color);
-            border-radius: 10px;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
             cursor: pointer;
             font-weight: 700;
-            font-size: 13px;
-            transition: all 0.2s;
+            font-size: 12px;
+            transition: all 0.15s ease;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         .variant-pill.selected {
             border-color: var(--accent-blue);
@@ -479,38 +549,11 @@
             background: #fff;
             color: #000;
             width: 100%;
-            max-width: 480px;
-            border-radius: 12px;
-            padding: 25px;
+            max-width: 460px;
+            border-radius: 8px;
+            padding: 24px;
             max-height: 90vh;
             overflow-y: auto;
-        }
-        .admin-box {
-            background: #ffffff;
-            border: 2px dashed #cbd5e1;
-            border-radius: 16px;
-            padding: 25px;
-            margin-bottom: 30px;
-        }
-        .admin-box h2 {
-            font-size: 15px;
-            color: var(--text-dark);
-            margin-bottom: 15px;
-            font-weight: 800;
-        }
-        .admin-grid-inputs {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-        .admin-grid-inputs input, .admin-grid-inputs select {
-            background: #f8fafc;
-            border: 1px solid #cbd5e1;
-            padding: 10px;
-            font-size: 13px;
-            border-radius: 8px;
-            outline: none;
         }
     </style>
 </head>
@@ -522,6 +565,7 @@
         <div class="preloader-brand">ARISA COLLECTION</div>
     </div>
 
+    <!-- Main Navigation Bar Architecture Header Section -->
     <header>
         <h1 onclick="showHome()">ARISA <span>COLLECTION</span></h1>
         <nav>
@@ -532,6 +576,7 @@
         </nav>
     </header>
 
+    <!-- Interactive Navigation Tab Filters Grid Category Struct -->
     <div class="section-bar" id="category-section-bar">
         <button class="sec-btn active" id="sec-perfume" onclick="switchSection('perfume')">Perfumes & Body Care</button>
         <button class="sec-btn" id="sec-clothing" onclick="switchSection('clothing')">Clothing & Apparel</button>
@@ -540,74 +585,75 @@
     <div class="container">
         <div id="home-content">
             
-            <!-- Store Admin Node Control Board Module Overlay Frame (Completely Hidden From Customers) -->
+            <!-- Store Admin Node Control Board Module Overlay Frame -->
             <div id="admin-panel" class="admin-box" style="display:none;">
                 <h2>STORE INVENTORY SYSTEM CONTROL MODULE</h2>
                 <div class="admin-grid-inputs">
                     <input type="text" id="admin-p-name" placeholder="Product Name">
-                    <input type="number" id="admin-p-price" placeholder="Price (NLE)">
+                    <input type="number" id="admin-p-price" placeholder="Base Price (NLE)">
                     <input type="number" id="admin-p-discount-percentage" placeholder="Discount % (Optional)">
                     <select id="admin-p-status">
-                        <option value="available">Available</option>
-                        <option value="sold-out">Sold Out</option>
+                        <option value="available">Available Stock Status</option>
+                        <option value="sold-out">Sold Out Out-of-Stock</option>
                     </select>
                     <select id="admin-p-arrival">
-                        <option value="no">Regular Inventory</option>
-                        <option value="yes">New Arrival Flag</option>
+                        <option value="no">Regular Inventory Stock</option>
+                        <option value="yes">New Arrival Flag Label</option>
                     </select>
                     <select id="admin-p-category">
-                        <option value="perfume">Perfumes & Body Care</option>
-                        <option value="clothing">Clothing & Apparel</option>
+                        <option value="perfume">Perfumes & Body Care Category</option>
+                        <option value="clothing">Clothing & Apparel Category</option>
                     </select>
                 </div>
-                <div style="margin-bottom:15px;">
-                    <label style="font-size:11px; color:var(--text-muted); display:block; margin-bottom:5px; font-weight:700;">SELECT PRODUCT IMAGE ARCHIVE:</label>
-                    <input type="file" id="admin-p-file" accept="image/*" style="font-size:13px;">
+                <div style="margin-bottom:20px; background:#f8fafc; padding:12px; border-radius:6px; border:1px dashed #cbd5e1;">
+                    <label style="font-size:11px; color:var(--text-muted); display:block; margin-bottom:6px; font-weight:700; text-transform:uppercase;">SELECT PRODUCT IMAGE ARCHIVE SOURCE FILE:</label>
+                    <input type="file" id="admin-p-file" accept="image/*" style="font-size:12px;">
                 </div>
                 <div style="display:flex; gap:12px;">
-                    <button class="btn" style="background:var(--text-dark);" onclick="adminUpload()">SAVE NEW PRODUCT ENTRY</button>
-                    <button class="btn" style="background:#cbd5e1; color:var(--text-dark);" onclick="logoutAdmin()">EXIT SESSION</button>
+                    <button class="btn" id="admin-save-btn" style="background:var(--text-dark); padding:14px;" onclick="adminUpload()">SAVE NEW PRODUCT ENTRY</button>
+                    <button class="btn" style="background:#e2e8f0; color:var(--text-dark); padding:14px; max-width:140px;" onclick="logoutAdmin()">EXIT SESSION</button>
                 </div>
                 
-                <hr style="border:0; border-top:1px solid var(--border-color); margin:20px 0;">
+                <hr style="border:0; border-top:1px solid var(--border-color); margin:24px 0;">
                 
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:20px;">
-                    <div style="background:#f8fafc; padding:15px; border-radius:10px; border:1px solid var(--border-color);">
-                        <span style="font-size:11px; color:var(--accent-blue); font-weight:bold; display:block; margin-bottom:8px;">SPELLING PATCH CORRECTION DATA TOOL</span>
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:16px;">
+                    <div style="background:#f8fafc; padding:16px; border-radius:8px; border:1px solid var(--border-color);">
+                        <span style="font-size:11px; color:var(--accent-blue); font-weight:bold; display:block; margin-bottom:8px; text-transform:uppercase;">SPELLING PATCH CORRECTION DATA TOOL</span>
                         <input type="text" id="edit-target-name" placeholder="Target Exact Product Name" style="width:100%; padding:8px; font-size:13px; border:1px solid #cbd5e1; margin-bottom:8px; border-radius:6px; outline:none;">
                         <input type="text" id="edit-new-name" placeholder="New Corrected Name String" style="width:100%; padding:8px; font-size:13px; border:1px solid #cbd5e1; margin-bottom:8px; border-radius:6px; outline:none;">
-                        <button class="btn" style="font-size:11px; padding:8px; background:var(--text-dark);" onclick="applySpellingCorrection()">COMMIT CORRECTION UPDATE</button>
+                        <button class="btn" style="font-size:10px; padding:10px; background:var(--text-dark);" onclick="applySpellingCorrection()">COMMIT CORRECTION UPDATE</button>
                     </div>
-                    <div style="background:#f8fafc; padding:15px; border-radius:10px; border:1px solid var(--border-color);">
-                        <span style="font-size:11px; color:var(--accent-blue); font-weight:bold; display:block; margin-bottom:8px;">BULK PRICING & INVENTORY DISCOUNT OVERRIDE</span>
+                    <div style="background:#f8fafc; padding:16px; border-radius:8px; border:1px solid var(--border-color);">
+                        <span style="font-size:11px; color:var(--accent-blue); font-weight:bold; display:block; margin-bottom:8px; text-transform:uppercase;">BULK PRICING & INVENTORY DISCOUNT OVERRIDE</span>
                         <input type="text" id="discount-target-name" placeholder="Target Product Name Matching" style="width:100%; padding:8px; font-size:13px; border:1px solid #cbd5e1; margin-bottom:8px; border-radius:6px; outline:none;">
                         <input type="number" id="discount-new-base-price" placeholder="New Base Price Struct" style="width:100%; padding:8px; font-size:13px; border:1px solid #cbd5e1; margin-bottom:8px; border-radius:6px; outline:none;">
                         <input type="number" id="discount-target-percentage" placeholder="New Promo Discount % Value" style="width:100%; padding:8px; font-size:13px; border:1px solid #cbd5e1; margin-bottom:8px; border-radius:6px; outline:none;">
-                        <button class="btn" style="font-size:11px; padding:8px; background:var(--text-dark);" onclick="applyDiscountToExisting()">MUTATE PRICING MATRIX</button>
+                        <button class="btn" style="font-size:10px; padding:10px; background:var(--text-dark);" onclick="applyDiscountToExisting()">MUTATE PRICING MATRIX</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Highly Scannable Luxury Product Exhibition Catalog Grid Map -->
+            <!-- Highly Scannable Product Exhibition Catalog Grid Map -->
             <div class="product-grid" id="products-catalogue-grid"></div>
             
-            <div style="margin-top:60px; border-top:1px solid var(--border-color); padding-top:30px; text-align:center;">
-                <p style="font-size:13px; color:var(--text-muted); font-weight:700; margin-bottom:12px;">Missing a specific perfume line or apparel look? Share with us:</p>
-                <div style="max-width:440px; margin:0 auto; display:flex; gap:10px;">
-                    <input type="text" id="user-suggestion" placeholder="Enter collection request details..." style="flex-grow:1; background:white; border:1px solid #cbd5e1; border-radius:8px; font-size:14px; padding:12px; outline:none;">
-                    <button class="btn" style="width:auto; padding:0 24px; background:var(--text-dark);" onclick="sendSuggestion()">Submit</button>
+            <div style="margin-top:64px; border-top:1px solid var(--border-color); padding-top:32px; text-align:center;">
+                <p style="font-size:12px; color:var(--text-muted); font-weight:700; margin-bottom:12px; text-transform:uppercase; letter-spacing:0.5px;">Missing a specific product configuration line or apparel look? Send feedback:</p>
+                <div style="max-width:460px; margin:0 auto; display:flex; gap:8px;">
+                    <input type="text" id="user-suggestion" placeholder="Enter custom item layout request coordinates..." style="flex-grow:1; background:white; border:1px solid #cbd5e1; border-radius:6px; font-size:13px; padding:10px 12px; outline:none;">
+                    <button class="btn" style="width:auto; padding:0 20px; background:var(--text-dark);" onclick="sendSuggestion()">Submit</button>
                 </div>
             </div>
             
             <!-- Cryptographic Admin Entry Sensor Vector Pad Zone -->
-            <div style="text-align:center; margin-top:50px; opacity: 0.005; cursor: default;" onclick="handleSecretAdminTap()">
-                <span>[NODE ENG KEYPORT TERMINAL ENTRY]</span>
+            <div style="text-align:center; margin-top:60px; padding: 20px; opacity: 0.1; cursor: default;" onclick="handleSecretAdminTap()">
+                <span style="font-size: 10px; color: var(--text-muted);">[ ARISA SYSTEM MANAGEMENT NODE TERMINAL ]</span>
             </div>
         </div>
 
-        <div id="page-content" style="display:none; background:var(--card-bg); border:1px solid var(--border-color); padding:40px; border-radius:16px; margin-top:10px; line-height:1.6;">
+        <!-- System Core Informational Display Screens Base Framework Wrapper -->
+        <div id="page-content" style="display:none; background:var(--card-bg); border:1px solid var(--border-color); padding:32px; border-radius:12px; margin-top:10px; line-height:1.7;">
             <div id="page-inner-content"></div>
-            <button class="btn" style="margin-top:25px; max-width:165px; background:var(--text-dark);" onclick="showHome()">Return Home</button>
+            <button class="btn" style="margin-top:24px; max-width:160px; background:var(--text-dark);" onclick="showHome()">Return Home</button>
         </div>
     </div>
 
@@ -625,8 +671,8 @@
         
         <div class="cart-scroll-area">
             <div id="cart-items-list"></div>
-            <div id="saved-items-container" style="margin-top:30px; display:none;">
-                <h3 style="font-size:12px; color:var(--text-muted); border-bottom:1px solid var(--border-color); padding-bottom:8px; margin-bottom:12px; font-weight:700;">SAVED ITEMS</h3>
+            <div id="saved-items-container" style="margin-top:24px; display:none;">
+                <h3 style="font-size:11px; color:var(--text-muted); border-bottom:1px solid var(--border-color); padding-bottom:6px; margin-bottom:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">SAVED ITEMS</h3>
                 <div id="saved-items-list"></div>
             </div>
         </div>
@@ -646,7 +692,7 @@
             
             <div id="address-input-wrapper">
                 <label>Pinpoint Delivery Address Location Boundaries</label>
-                <textarea id="cust-address" rows="2" placeholder="Street name, junction details, neighborhood markers..." style="width:100%; padding:12px; border:1px solid #cbd5e1; border-radius:8px; outline:none; font-size:14px;"></textarea>
+                <textarea id="cust-address" rows="2" placeholder="Street name, junction details, neighborhood markers..." style="width:100%; padding:10px 12px; border:1px solid #cbd5e1; border-radius:6px; outline:none; font-size:13px; font-family:inherit; resize:none;"></textarea>
             </div>
             
             <label>Order Settlement Gateway Payment Mode</label>
@@ -657,7 +703,7 @@
             </select>
         </div>
 
-        <div style="border-top:1px solid var(--border-color); padding-top:20px; margin-bottom:25px;">
+        <div style="border-top:1px solid var(--border-color); padding-top:16px; margin-bottom:20px;">
             <div class="summary-row">
                 <span style="color:var(--text-muted)">Items Subtotal Balance:</span>
                 <span style="font-weight:600;"><span id="cart-subtotal">0.00</span> NLE</span>
@@ -666,20 +712,20 @@
                 <span>Multi-Item Rewards Promotion Discount:</span>
                 <span>-<span>0.00</span> NLE</span>
             </div>
-            <div class="summary-row" style="font-size:18px; font-weight:800; color:var(--text-dark); border-top:1px solid var(--border-color); margin-top:12px; padding-top:12px;">
+            <div class="summary-row" style="font-size:16px; font-weight:800; color:var(--text-dark); border-top:1px solid var(--border-color); margin-top:10px; padding-top:10px;">
                 <span>Total Due:</span>
                 <span><span id="cart-grand-total">0.00</span> NLE</span>
             </div>
         </div>
 
-        <button class="btn" style="background:var(--accent-blue); padding:16px; font-size:13px;" onclick="checkoutWhatsApp()">COMPLETE PURCHASE VIA WHATSAPP</button>
+        <button class="btn" style="background:var(--accent-blue); padding:14px; font-size:12px;" onclick="checkoutWhatsApp()">COMPLETE PURCHASE VIA WHATSAPP</button>
     </div>
 
     <!-- Color Picker Dialog Overlay Window Matrix Component Frame Modal -->
     <div class="modal-overlay" id="variant-modal" style="display:none;">
         <div class="modal-card">
-            <h3 style="font-size:16px; font-weight:800; margin-bottom:6px; color:var(--text-dark);" id="v-modal-title">SELECT WEBPAGE COLOR CHOICE</h3>
-            <p style="font-size:13px; color:var(--text-muted);">Please confirm your preferred design layout profile tone variation options configuration below:</p>
+            <h3 style="font-size:15px; font-weight:800; margin-bottom:6px; color:var(--text-dark);" id="v-modal-title">SELECT WEBPAGE COLOR CHOICE</h3>
+            <p style="font-size:12px; color:var(--text-muted); line-height:1.5;">Please confirm your preferred design layout profile tone variation options configuration below:</p>
             <div class="variant-pill-box">
                 <div class="variant-pill selected" id="pill-pink" onclick="selectVariantColor('Pink')">Pink</div>
                 <div class="variant-pill" id="pill-blue" onclick="selectVariantColor('Blue')">Blue</div>
@@ -687,7 +733,7 @@
             </div>
             <div style="display:flex; gap:10px;">
                 <button class="btn" onclick="confirmVariantSelection()">ADD SELECTED CHOICE TO BAG</button>
-                <button class="btn" style="background:#cbd5e1; color:var(--text-dark); max-width:90px;" onclick="closeVariantModal()">CANCEL</button>
+                <button class="btn" style="background:#e2e8f0; color:var(--text-dark); max-width:90px;" onclick="closeVariantModal()">CANCEL</button>
             </div>
         </div>
     </div>
@@ -704,17 +750,17 @@
     <!-- Active High Fidelity Invoice Display Node Modal View Screen Popup Window Layout -->
     <div class="modal-overlay" id="receipt-modal" style="display:none;">
         <div class="receipt-container" id="pdf-invoice-area">
-            <h1 style="text-align:center; font-size:22px; color:#000; letter-spacing:1px; font-weight:bold; margin-bottom:2px;">ARISA COLLECTION</h1>
+            <h1 style="text-align:center; font-size:20px; color:#000; letter-spacing:1px; font-weight:bold; margin-bottom:2px;">ARISA COLLECTION</h1>
             <p style="text-align:center; font-size:9px; color:#666; text-transform:uppercase; letter-spacing:1px; margin-bottom:15px; border-bottom:2px solid #000; padding-bottom:10px;">DIGITAL INVOICE MATRIX RECEIPT</p>
             <div id="receipt-details" style="color:#000;"></div>
-            <button class="btn" id="hide-pdf-btn" style="background:#000; color:white; margin-top:10px; border-color:#000;" onclick="closeReceipt()">RETURN HOME</button>
+            <button class="btn" id="hide-pdf-btn" style="background:#000; color:white; margin-top:14px; border-radius:4px;" onclick="closeReceipt()">RETURN HOME</button>
         </div>
     </div>
 
     <script>
-        // --- SECURE REALTIME FIREBASE STORAGE DATA LAYER SETUP INTERFACE ---
+        // --- REALTIME DATABASE INITIALIZATION VARIABLES ---
         const firebaseConfig = {
-            apiKey: "AIzaSyDE-YourActualValidKeyStringHere-ExampleOnly",
+            apiKey: "AIzaSyDE-YourActualValidKeyStringHere-ExampleOnly", 
             databaseURL: "https://testing-c7414-default-rtdb.firebaseio.com/"
         };
         
@@ -729,7 +775,6 @@
         let dataLoaded = false;
         let secretClickCount = 0;
         
-        // Active Tracking State Variant Struct Fields Variables
         let activeTargetProductId = null;
         let activeSelectedColor = 'Pink';
 
@@ -756,6 +801,7 @@
             }
         }
 
+        // Realtime sync: Updates your catalog instantly across all customer phone devices!
         db.ref('perfumes').on('value', (snapshot) => {
             itemsCollection = [];
             snapshot.forEach((childSnapshot) => {
@@ -768,10 +814,10 @@
             
             if (!dataLoaded) {
                 dataLoaded = true;
-                setTimeout(clearPreloader, 1000); 
+                setTimeout(clearPreloader, 800); 
             }
         }, (error) => {
-            setTimeout(clearPreloader, 1200);
+            setTimeout(clearPreloader, 1000);
         });
 
         window.onload = function() {
@@ -780,7 +826,7 @@
             }
             setTimeout(() => {
                 if (!dataLoaded) clearPreloader();
-            }, 4000);
+            }, 3000);
         };
 
         function handleSecretAdminTap() {
@@ -799,7 +845,7 @@
             const filteredItems = itemsCollection.filter(item => item.category === currentSection);
 
             if (filteredItems.length === 0) {
-                grid.innerHTML = `<p style="grid-column: 1/-1; font-size:14px; color:var(--text-muted); text-align:center; padding:50px 0;">No active luxury stock matching this catalog node structure yet.</p>`;
+                grid.innerHTML = `<p style="grid-column: 1/-1; font-size:13px; color:var(--text-muted); text-align:center; padding:64px 0; font-weight:500;">No items active under this showroom category.</p>`;
                 return;
             }
 
@@ -814,14 +860,14 @@
                     priceDisplayHTML = `
                         <div class="price-container">
                             <span class="price-current">${finalPrice.toFixed(2)} NLE</span>
-                            <span class="price-old">${originalPrice} NLE</span>
+                            <span class="price-old">${originalPrice.toFixed(2)} NLE</span>
                             <span class="discount-tag">${pct}% OFF</span>
                         </div>
                     `;
                 } else {
                     priceDisplayHTML = `
                         <div class="price-container">
-                            <span class="price-current">${originalPrice} NLE</span>
+                            <span class="price-current">${originalPrice.toFixed(2)} NLE</span>
                         </div>
                     `;
                 }
@@ -838,9 +884,8 @@
                         <div class="product-info">
                             <h3 class="product-title">${p.name}</h3>
                             
-                            <!-- Customer Color Choice Display Engine -->
                             <div class="color-options-preview">
-                                <span style="font-size:11px; color:var(--text-muted); font-weight:600; margin-right:4px;">Colors:</span>
+                                <span style="font-size:11px; color:var(--text-muted); font-weight:600; margin-right:4px;">Options:</span>
                                 <span class="color-dot pink"></span>
                                 <span class="color-dot blue"></span>
                                 <span class="color-dot white"></span>
@@ -848,7 +893,7 @@
                             
                             ${priceDisplayHTML}
                             <button class="btn" ${sold ? 'disabled' : ''}>
-                                ${sold ? 'SOLD OUT' : 'CHOOSE VARIANT'}
+                                ${sold ? 'OUT OF STOCK' : 'CHOOSE VARIANT'}
                             </button>
                         </div>
                         ${isAdmin ? `<div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-top:12px; border-top:1px solid #e2e8f0; padding-top:8px;">
@@ -860,12 +905,11 @@
             });
         }
 
-        // Customer Variant Interface Modal Operations Logic
         window.openVariantModal = (productId) => {
             activeTargetProductId = productId;
             const item = itemsCollection.find(p => p.firebaseId === productId);
             document.getElementById('v-modal-title').innerText = item.name;
-            selectVariantColor('Pink'); // Default starting point
+            selectVariantColor('Pink'); 
             document.getElementById('variant-modal').style.display = 'flex';
         };
 
@@ -887,7 +931,7 @@
             const duplicateCheck = cart.find(i => i.firebaseId === activeTargetProductId && i.chosenColor === activeSelectedColor);
             
             if (duplicateCheck) {
-                alert("This exact item variant combination matching color choice is already in your bag!");
+                alert("This color option variation has already been added to your shopping bag.");
                 closeVariantModal();
                 return;
             }
@@ -939,7 +983,7 @@
                 if (i.discountPercentage && parseFloat(i.discountPercentage) > 0) {
                     const pct = parseFloat(i.discountPercentage);
                     finalActivePrice = originalPrice - (originalPrice * (pct / 100));
-                    discountTextHTML = `<span style="color:var(--accent-pink); font-size:11px; display:block;">-${pct}% Off Applied (Was ${originalPrice.toFixed(2)} NLE)</span>`;
+                    discountTextHTML = `<span style="color:var(--accent-pink); font-size:11px; display:block; font-weight:600;">-${pct}% Applied (Was ${originalPrice.toFixed(2)} NLE)</span>`;
                 }
                 
                 subtotal += finalActivePrice;
@@ -948,13 +992,13 @@
                 return `
                     <div style="border-bottom:1px solid var(--border-color); padding:14px 0; display:flex; justify-content:space-between; align-items:center;">
                         <div style="text-align:left; max-width:70%;">
-                            <h4 style="font-size:14px; color:var(--text-dark); font-weight:700;">${i.name}</h4>
-                            <span style="font-size:11px; color:var(--accent-blue); background:var(--accent-blue-light); padding:2px 8px; border-radius:4px; display:inline-block; margin-top:4px; font-weight:700; text-transform:uppercase;">Color: ${i.chosenColor}</span>
+                            <h4 style="font-size:13px; color:var(--text-dark); font-weight:700;">${i.name}</h4>
+                            <span style="font-size:11px; color:var(--accent-blue); background:var(--accent-blue-light); padding:2px 8px; border-radius:4px; display:inline-block; margin-top:4px; font-weight:700;">Color: ${i.chosenColor}</span>
                             ${discountTextHTML}
                         </div>
                         <div style="text-align:right;">
-                            <span style="font-size:14px; font-weight:800; color:var(--text-dark); display:block; margin-bottom:6px;">${finalActivePrice.toFixed(2)} NLE</span>
-                            <div style="display:flex; gap:6px; justify-content:flex-end;">
+                            <span style="font-size:13px; font-weight:800; color:var(--text-dark); display:block; margin-bottom:6px;">${finalActivePrice.toFixed(2)} NLE</span>
+                            <div style="display:flex; justify-content:flex-end;">
                                 <button class="save-btn" onclick="saveForLater(${i.cartId})">Save</button>
                                 <button class="remove-btn" onclick="removeFromCart(${i.cartId})">Remove</button>
                             </div>
@@ -966,7 +1010,7 @@
                 document.getElementById('saved-items-container').style.display = 'block';
                 savedList.innerHTML = savedItems.map(i => `
                     <div style="border-bottom:1px dashed var(--border-color); padding:10px 0; display:flex; justify-content:space-between; align-items:center; opacity:0.6;">
-                        <span style="font-size:13px; color:var(--text-dark);">${i.name} (${i.chosenColor})</span>
+                        <span style="font-size:12px; color:var(--text-dark); font-weight:500;">${i.name} (${i.chosenColor})</span>
                         <button class="save-btn" onclick="moveToCart(${i.cartId})">Move to Bag</button>
                     </div>`).join('');
             } else {
@@ -1061,8 +1105,8 @@
             document.getElementById('nav-about').className = 'active';
             document.getElementById('nav-policy').className = '';
             document.getElementById('page-inner-content').innerHTML = `
-                <h2 style="color:var(--text-dark); margin-bottom:15px; font-size:20px; font-weight:800; letter-spacing:0.5px;">ABOUT US</h2>
-                <p style="font-size:15px; color:var(--text-dark); line-height:1.8;">Welcome to ARISA COLLECTION, Freetown's ultimate sanctuary for premium, high-fidelity luxury garments, perfumes, and body care assets. We curate world-class aesthetic solutions designed to leave an unforgettable imprint.</p>
+                <h2 style="color:var(--text-dark); margin-bottom:16px; font-size:16px; font-weight:800; letter-spacing:0.5px;">ABOUT US</h2>
+                <p style="font-size:14px; color:var(--text-dark); line-height:1.8;">Welcome to ARISA COLLECTION, Freetown's ultimate showroom sanctuary for premium quality fragrances, body care luxury, and contemporary style lookbooks.</p>
             `;
         };
 
@@ -1074,8 +1118,8 @@
             document.getElementById('nav-about').className = '';
             document.getElementById('nav-policy').className = 'active';
             document.getElementById('page-inner-content').innerHTML = `
-                <h2 style="color:var(--text-dark); margin-bottom:15px; font-size:20px; font-weight:800; letter-spacing:0.5px;">STORE POLICY</h2>
-                <p style="font-size:15px; color:var(--text-dark); line-height:1.8;"><strong>Logistics & Delivery:</strong> We offer reliable scheduled dispatch coordinates throughout Freetown between 9:00 AM and 6:00 PM daily. Delivery fees are applied contextually based on your pinpointed location boundaries.<br><br><strong>Returns:</strong> All sales executed are definitive. Ensure sizing configurations and testing profiles are confirmed before final payment settlement.</p>
+                <h2 style="color:var(--text-dark); margin-bottom:16px; font-size:16px; font-weight:800; letter-spacing:0.5px;">STORE POLICY</h2>
+                <p style="font-size:14px; color:var(--text-dark); line-height:1.8;"><strong>Logistics Architecture:</strong> Standard secure courier dispatch operates within Freetown boundary limits between 9:00 AM and 6:00 PM daily. Delivery fees are compiled based on location parameters.</p>
             `;
         };
 
@@ -1129,38 +1173,81 @@
             db.ref('perfumes/' + id).update({ isNewArrival: nextArrival });
         };
 
+        // --- Streamlined Phone Camera-to-Store Upload Engine with Compression ---
         window.adminUpload = () => {
-            const name = document.getElementById('admin-p-name').value;
-            const price = document.getElementById('admin-p-price').value;
-            const discountPct = document.getElementById('admin-p-discount-percentage').value;
+            const name = document.getElementById('admin-p-name').value.trim();
+            const price = document.getElementById('admin-p-price').value.trim();
+            const discountPct = document.getElementById('admin-p-discount-percentage').value.trim();
             const status = document.getElementById('admin-p-status').value;
             const isArrival = document.getElementById('admin-p-arrival').value;
             const category = document.getElementById('admin-p-category').value;
             const fileInput = document.getElementById('admin-p-file');
+            const saveBtn = document.getElementById('admin-save-btn');
             
-            if (!name || !price || !fileInput.files[0]) return;
+            if (!name || !price || !fileInput.files[0]) {
+                alert("Please supply a Name, Price value, and an entry layout Image asset.");
+                return;
+            }
+
+            saveBtn.disabled = true;
+            saveBtn.innerText = "COMPRESSING & UPLOADING VIA MOBILE...";
             
             const reader = new FileReader();
             reader.onload = function(e) {
-                const imgBase64 = e.target.result;
-                const newProduct = {
-                    name: name,
-                    price: price,
-                    discountPercentage: discountPct ? discountPct : "",
-                    status: status,
-                    isNewArrival: isArrival,
-                    category: category,
-                    image: imgBase64
-                };
-                db.ref('perfumes').push(newProduct, (err) => {
-                    if (!err) {
-                        document.getElementById('admin-p-name').value = '';
-                        document.getElementById('admin-p-price').value = '';
-                        document.getElementById('admin-p-discount-percentage').value = '';
-                        fileInput.value = '';
-                        alert("Product securely saved to database.");
+                const img = new Image();
+                img.onload = function() {
+                    // Automatically downscales massive mobile camera images down to light web-size
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 450;
+                    const MAX_HEIGHT = 450;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width *= MAX_HEIGHT / height;
+                            height = MAX_HEIGHT;
+                        }
                     }
-                });
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // High efficiency compressed format string
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+
+                    const newProduct = {
+                        name: name,
+                        price: price,
+                        discountPercentage: discountPct ? discountPct : "",
+                        status: status,
+                        isNewArrival: isArrival,
+                        category: category,
+                        image: compressedBase64
+                    };
+                    
+                    db.ref('perfumes').push(newProduct, (err) => {
+                        saveBtn.disabled = false;
+                        saveBtn.innerText = "SAVE NEW PRODUCT ENTRY";
+                        if (!err) {
+                            document.getElementById('admin-p-name').value = '';
+                            document.getElementById('admin-p-price').value = '';
+                            document.getElementById('admin-p-discount-percentage').value = '';
+                            fileInput.value = '';
+                            alert("Success! Item live immediately for all active phone customers.");
+                        } else {
+                            alert("Database error: " + err.message);
+                        }
+                    });
+                };
+                img.src = e.target.result;
             };
             reader.readAsDataURL(fileInput.files[0]);
         };
@@ -1210,7 +1297,7 @@
                     ${invoiceItemsHTML}
                 </div>
                 <div style="border-top:2px solid #000; margin-top:15px; padding-top:10px; text-align:right;">
-                    <p style="font-size:17px; font-weight:bold; color:#000;">Grand Total: ${grandTotal} NLE</p>
+                    <p style="font-size:16px; font-weight:bold; color:#000;">Grand Total: ${grandTotal} NLE</p>
                 </div>`;
                 
             document.getElementById('receipt-details').innerHTML = receiptHTML;
@@ -1244,7 +1331,7 @@
                     downloadBtn.id = "dynamic-pdf-download-btn";
                     downloadBtn.style.background = "#000";
                     downloadBtn.style.color = "white";
-                    downloadBtn.style.marginTop = "10px";
+                    downloadBtn.style.marginTop = "14px";
                     downloadBtn.innerText = "DOWNLOAD PDF RECEIPT";
                     
                     downloadBtn.onclick = function() {
@@ -1263,10 +1350,10 @@
                 });
             }, 800);
             
-            let waMessage = `*ARISA COLLECTION - NEW RECEIPT* \n`;
+            let waMessage = `*ARISA COLLECTION - NEW INVOICE RECEIPT* \n`;
             waMessage += `-----------------------------------------\n`;
             waMessage += `*Date:* ${timestamp}\n\n`;
-            waMessage += `*Customer Details:*\n`;
+            waMessage += `*Customer Info:*\n`;
             waMessage += `Name: ${name}\n`;
             waMessage += `Phone: ${phone}\n`;
             waMessage += `Fulfillment: ${method}\n`;
