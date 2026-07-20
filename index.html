@@ -1,85 +1,77 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ARISA COLLECTION | PRO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARISA COLLECTION | OFFICIAL STORE</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <style>
-        :root { --bg-color: #f8fafc; --text-dark: #0f172a; --accent-primary: #ff6b8b; }
-        body { background-color: var(--bg-color); color: var(--text-dark); transition: background 0.3s; font-family: sans-serif; }
+        :root { --bg: #f8fafc; --text: #0f172a; --accent: #ff6b8b; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; margin: 0; transition: background 0.3s; }
         
-        /* Navigation Line Effect */
-        nav a { position: relative; padding-bottom: 5px; cursor: pointer; }
-        nav a.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: var(--accent-primary); }
-        
-        .admin-controls { background: #fff; padding: 20px; border: 2px solid var(--accent-primary); margin: 20px; }
-        .theme-picker { position: fixed; top: 10px; right: 10px; background: white; padding: 10px; border-radius: 8px; }
+        /* Navigation with Active Line */
+        nav { display: flex; justify-content: center; gap: 30px; padding: 20px; background: white; border-bottom: 2px solid #e2e8f0; }
+        nav a { cursor: pointer; padding-bottom: 5px; position: relative; font-weight: 700; color: #64748b; }
+        nav a.active { color: var(--accent); }
+        nav a.active::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 2px; background: var(--accent); }
+
+        .admin-panel { background: #fff; border: 1px solid #cbd5e1; padding: 20px; margin: 20px auto; max-width: 600px; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        input, textarea { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #cbd5e1; border-radius: 4px; box-sizing: border-box; }
+        button { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: 600; }
     </style>
 </head>
 <body>
 
-    <!-- Theme Picker -->
-    <div class="theme-picker">
-        <label>Theme Color:</label>
-        <input type="color" onchange="document.body.style.backgroundColor = this.value">
+<div style="text-align:right; padding:10px;">
+    <input type="color" onchange="document.body.style.backgroundColor = this.value">
+</div>
+
+<nav id="nav">
+    <a onclick="selectTab(this, 'home')" class="active">HOME</a>
+    <a onclick="selectTab(this, 'about')">ABOUT</a>
+    <a onclick="selectTab(this, 'policy')">POLICY</a>
+</nav>
+
+<div id="app" style="padding:20px;">
+    <!-- Admin Portal -->
+    <div id="admin-portal" class="admin-panel" style="display:none;">
+        <h3>SECURE ADMIN PANEL</h3>
+        <input type="text" id="p-id" placeholder="Product ID">
+        <input type="text" id="p-name" placeholder="Edit Product Name">
+        <button onclick="updateProduct()">SAVE NAME</button>
     </div>
+    <div id="display-area"></div>
+</div>
 
-    <header style="text-align:center; padding:20px;">
-        <h1>ARISA COLLECTION</h1>
-        <nav id="main-nav">
-            <a class="active" onclick="showTab('home', this)">HOME</a>
-            <a onclick="showTab('about', this)">ABOUT</a>
-            <a onclick="showTab('policy', this)">POLICY</a>
-        </nav>
-    </header>
+<script>
+    // Configuration Placeholder
+    const firebaseConfig = { /* YOUR CONFIG */ };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const SEC_KEY = "AMIRA_SECURE_KEY_2026";
 
-    <div id="content-area" style="padding:20px;">
-        <!-- Admin Panel for Editing -->
-        <div id="admin-panel" class="admin-controls" style="display:none;">
-            <h3>ADMIN CONTROL PANEL</h3>
-            <input type="text" id="edit-id" placeholder="Product ID to Edit">
-            <input type="text" id="edit-name" placeholder="New Product Name">
-            <button onclick="updateProduct()">UPDATE NAME</button>
-        </div>
+    // Navigation Logic
+    function selectTab(el, tab) {
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        el.classList.add('active');
+        // Logic to load content from DB
+    }
 
-        <div id="product-grid"></div>
-    </div>
+    // Professional Pricing Engine
+    function calculateTotal(cart) {
+        let sub = cart.reduce((sum, item) => sum + parseFloat(item.price), 0);
+        if (cart.length >= 3) return (sub * 0.90).toFixed(2); // 10% discount
+        if (cart.length >= 2) return (sub * 0.95).toFixed(2); // 5% discount
+        return sub.toFixed(2);
+    }
 
-    <script>
-        const firebaseConfig = { /* PASTE YOUR CONFIG HERE */ };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database().ref('perfumes');
-        const SECURITY_KEY = "AMIRA_SECURE_KEY_2026";
-
-        // ShowTab with Line Indicator
-        function showTab(tab, element) {
-            document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-            element.classList.add('active');
-            // Logic to toggle content divs goes here
-        }
-
-        // Edit Product Name
-        function updateProduct() {
-            const id = document.getElementById('edit-id').value;
-            const newName = document.getElementById('edit-name').value;
-            db.child(id).update({ name: newName, secretAdminKey: SECURITY_KEY });
-        }
-
-        // Discount Logic
-        function calculateTotal(cart) {
-            let subtotal = cart.reduce((sum, item) => sum + parseFloat(item.price), 0);
-            if (cart.length >= 3) return subtotal * 0.90; // 10% off
-            if (cart.length >= 2) return subtotal * 0.95; // 5% off
-            return subtotal;
-        }
-
-        // Listen for data
-        db.on('value', (snap) => {
-            const data = snap.val();
-            // Render grid dynamically...
-        });
-    </script>
+    // Secure Data Management
+    function updateProduct() {
+        const id = document.getElementById('p-id').value;
+        const name = document.getElementById('p-name').value;
+        db.ref('perfumes/' + id).update({ name, secretAdminKey: SEC_KEY });
+    }
+</script>
 </body>
 </html>
