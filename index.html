@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARISA PERFUME STORE</title>
+    <title>ARISA COLLECTION</title>
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -14,30 +13,35 @@
     
     <style>
         :root {
-            --bg-color: #0d0d0d;
+            --bg-color: #0b0b0b;
             --card-bg: #141414;
             --accent-color: #d4af37;
-            --text-color: #f1f1f1;
-            --border-color: #262626;
+            --accent-glow: rgba(212, 175, 55, 0.2);
+            --text-color: #f3f3f3;
+            --text-muted: #888888;
+            --border-color: #222222;
+            --border-hover: #444444;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            padding-bottom: 70px;
+            padding-bottom: 90px;
+            -webkit-font-smoothing: antialiased;
         }
 
         header {
-            background: #000;
+            background: rgba(11, 11, 11, 0.95);
+            backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border-color);
-            padding: 15px 20px;
+            padding: 18px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -48,55 +52,103 @@
 
         .logo {
             font-size: 16px;
-            font-weight: bold;
-            letter-spacing: 2px;
+            font-weight: 700;
+            letter-spacing: 3px;
             color: var(--accent-color);
+            text-transform: uppercase;
         }
 
         .nav-links {
             display: flex;
-            gap: 15px;
-            font-size: 12px;
-            cursor: pointer;
+            gap: 25px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
-        .nav-links span:hover {
+        .nav-links span {
+            cursor: pointer;
+            transition: color 0.2s ease;
+            color: var(--text-muted);
+        }
+
+        .nav-links span:hover, .nav-links span.active {
             color: var(--accent-color);
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 15px;
+            padding: 25px;
         }
 
         .hero-banner {
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1615397349754-cfa2066a298e?auto=format&fit=crop&w=1200&q=80');
+            background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1400&q=80');
             background-size: cover;
             background-position: center;
             border: 1px solid var(--border-color);
-            padding: 30px 20px;
+            padding: 50px 30px;
             text-align: center;
-            margin-bottom: 20px;
-            border-radius: 4px;
+            margin-bottom: 25px;
+            border-radius: 6px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .hero-banner h1 {
-            font-size: 20px;
+            font-size: 24px;
             color: var(--accent-color);
-            margin-bottom: 8px;
-            letter-spacing: 1px;
+            margin-bottom: 10px;
+            letter-spacing: 3px;
+            font-weight: 600;
         }
 
         .hero-banner p {
+            font-size: 12px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Category Tab Buttons Bar */
+        .category-tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .cat-tab {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 10px 20px;
             font-size: 11px;
-            color: #aaa;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 4px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .cat-tab:hover {
+            border-color: var(--border-hover);
+            color: #fff;
+        }
+
+        .cat-tab.active {
+            background: var(--accent-color);
+            color: #0b0b0b;
+            border-color: var(--accent-color);
         }
 
         .controls-bar {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 15px;
+            margin-bottom: 30px;
             flex-wrap: wrap;
         }
 
@@ -104,45 +156,54 @@
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             color: #fff;
-            padding: 10px;
+            padding: 12px 16px;
             font-size: 12px;
             border-radius: 4px;
             outline: none;
             flex: 1;
-            min-width: 150px;
+            min-width: 220px;
+            transition: border-color 0.2s ease;
+        }
+
+        .search-input:focus, .filter-select:focus {
+            border-color: var(--accent-color);
         }
 
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 20px;
         }
 
         .product-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 4px;
-            padding: 10px;
+            border-radius: 6px;
+            padding: 14px;
             display: flex;
             flex-direction: column;
             position: relative;
             cursor: pointer;
-            transition: border-color 0.2s;
+            transition: all 0.25s ease;
         }
 
         .product-card:hover {
-            border-color: var(--accent-color);
+            border-color: var(--border-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
         }
 
         .status-badge {
             position: absolute;
-            top: 10px;
-            left: 10px;
+            top: 14px;
+            left: 14px;
             font-size: 8px;
-            padding: 2px 6px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 3px 8px;
             background: #28a745;
             color: #fff;
-            border-radius: 2px;
+            border-radius: 3px;
             z-index: 2;
             text-transform: uppercase;
         }
@@ -153,11 +214,11 @@
 
         .product-image {
             width: 100%;
-            height: 140px;
-            background: #000;
-            border-radius: 2px;
+            height: 180px;
+            background: #090909;
+            border-radius: 4px;
             overflow: hidden;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -167,82 +228,109 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.03);
+        }
+
+        .product-card h3 {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            color: var(--text-color);
         }
 
         .color-label {
             font-size: 9px;
-            color: #777;
-            margin-bottom: 4px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
         .price-box {
-            margin: 6px 0;
+            margin: 8px 0 12px 0;
         }
 
         .price {
-            font-size: 12px;
-            font-weight: bold;
+            font-size: 13px;
+            font-weight: 700;
             color: var(--accent-color);
         }
 
         .old-price-strike {
             font-size: 10px;
-            color: #666;
+            color: var(--text-muted);
             text-decoration: line-through;
-            margin-right: 5px;
+            margin-right: 6px;
         }
 
         .discount-badge {
             font-size: 9px;
-            background: #ff4d6d;
-            color: white;
-            padding: 1px 4px;
-            border-radius: 2px;
+            font-weight: 600;
+            background: rgba(255, 77, 109, 0.15);
+            color: #ff4d6d;
+            border: 1px solid rgba(255, 77, 109, 0.3);
+            padding: 1px 5px;
+            border-radius: 3px;
             display: inline-block;
-            margin-top: 2px;
+            margin-top: 4px;
         }
 
         .btn {
             background: var(--accent-color);
-            color: #000;
+            color: #0b0b0b;
             border: none;
-            padding: 8px;
+            padding: 10px;
             font-size: 11px;
-            font-weight: bold;
-            border-radius: 2px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 4px;
             cursor: pointer;
             width: 100%;
             text-align: center;
-            transition: opacity 0.2s;
+            transition: all 0.2s ease;
         }
 
         .btn:hover {
-            opacity: 0.9;
+            opacity: 0.95;
+            box-shadow: 0 0 15px var(--accent-glow);
         }
 
         .btn:disabled {
-            background: #333;
-            color: #666;
+            background: #1a1a1a;
+            color: #555;
             cursor: not-allowed;
+            box-shadow: none;
         }
 
         /* Floating Cart Button */
         .floating-cart-btn {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 25px;
+            right: 25px;
             background: var(--accent-color);
-            color: #000;
-            padding: 12px 20px;
-            border-radius: 30px;
-            font-weight: bold;
+            color: #0b0b0b;
+            padding: 14px 24px;
+            border-radius: 40px;
+            font-weight: 700;
             font-size: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.6);
             cursor: pointer;
             z-index: 99;
             display: none;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            transition: transform 0.2s ease;
+        }
+
+        .floating-cart-btn:hover {
+            transform: scale(1.05);
         }
 
         /* Cart Sidebar & Modals */
@@ -251,15 +339,16 @@
             top: 0;
             right: 0;
             width: 100%;
-            max-width: 380px;
+            max-width: 420px;
             height: 100%;
-            background: #111;
+            background: #111111;
             border-left: 1px solid var(--border-color);
             z-index: 1000;
             display: none;
             flex-direction: column;
-            padding: 20px;
+            padding: 25px;
             overflow-y: auto;
+            box-shadow: -10px 0 40px rgba(0,0,0,0.8);
         }
 
         .sidebar-header {
@@ -267,34 +356,47 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 12px;
-            margin-bottom: 15px;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .close-btn {
             background: none;
             border: none;
-            color: #fff;
-            font-size: 18px;
+            color: var(--text-muted);
+            font-size: 20px;
             cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover {
+            color: #fff;
         }
 
         .cart-item-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #222;
-            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 0;
         }
 
         .save-btn, .remove-btn {
             background: none;
-            border: 1px solid #444;
-            color: #aaa;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
             font-size: 9px;
-            padding: 2px 6px;
-            border-radius: 2px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            padding: 3px 8px;
+            border-radius: 3px;
             cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .save-btn:hover {
+            border-color: #666;
+            color: #fff;
         }
 
         .remove-btn:hover {
@@ -303,25 +405,33 @@
         }
 
         .checkout-form-group {
-            margin-bottom: 10px;
+            margin-bottom: 14px;
         }
 
         .checkout-form-group label {
             font-size: 10px;
-            color: #888;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-muted);
             display: block;
-            margin-bottom: 3px;
+            margin-bottom: 5px;
         }
 
         .checkout-input, .checkout-select {
             width: 100%;
-            background: #1a1a1a;
+            background: #181818;
             border: 1px solid var(--border-color);
             color: #fff;
-            padding: 8px;
-            font-size: 11px;
-            border-radius: 2px;
+            padding: 10px 12px;
+            font-size: 12px;
+            border-radius: 4px;
             outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .checkout-input:focus, .checkout-select:focus {
+            border-color: var(--accent-color);
         }
 
         .modal-overlay {
@@ -330,63 +440,78 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(5px);
             z-index: 2000;
             display: none;
             justify-content: center;
             align-items: center;
-            padding: 15px;
+            padding: 20px;
         }
 
         .modal-content {
             background: #141414;
             border: 1px solid var(--border-color);
-            padding: 20px;
+            padding: 25px;
             width: 100%;
-            max-width: 450px;
-            border-radius: 4px;
+            max-width: 480px;
+            border-radius: 6px;
             max-height: 90vh;
             overflow-y: auto;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
         }
 
         .admin-panel {
             background: #161616;
             border: 1px dashed var(--accent-color);
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 6px;
             display: none;
         }
 
         .admin-panel h3 {
             font-size: 13px;
+            letter-spacing: 1.5px;
             color: var(--accent-color);
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
         }
 
         .admin-controls-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 10px;
+            gap: 12px;
+            margin-bottom: 12px;
         }
 
         .footer-note {
             text-align: center;
             font-size: 10px;
-            color: #555;
-            margin-top: 40px;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-top: 50px;
             border-top: 1px solid var(--border-color);
-            padding-top: 15px;
+            padding-top: 20px;
+            text-transform: uppercase;
+        }
+
+        /* Static Page Container Styling */
+        .static-page-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 6px;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">ARISA PERFUME STORE</div>
+        <div class="logo">Arisa Collection</div>
         <div class="nav-links">
-            <span onclick="showHome()">Catalog</span>
+            <span class="active" onclick="showHome()">Catalog</span>
             <span onclick="showAbout()">About</span>
             <span onclick="showPolicy()">Policy</span>
             <span onclick="loginAdmin()" style="color:var(--accent-color);">Admin</span>
@@ -395,40 +520,51 @@
 
     <div class="container" id="home-content">
         <div class="hero-banner">
-            <h1>LUXURY FRAGRANCE ASSETS</h1>
-            <p>Freetown's Premier Destination for High-Fidelity Scents</p>
+            <h1>LUXURY FRAGRANCE & APPAREL</h1>
+            <p>Freetown's Premier Destination for Scents, Body Lotions & Designer Clothing</p>
+        </div>
+
+        <!-- Section Category Tabs Bar -->
+        <div class="category-tabs">
+            <button class="cat-tab active" id="tab-all" onclick="setMainCategory('all')">All Collections</button>
+            <button class="cat-tab" id="tab-perfume" onclick="setMainCategory('perfume')">Perfumes & Body Lotions</button>
+            <button class="cat-tab" id="tab-clothing" onclick="setMainCategory('clothing')">Clothing & Apparel</button>
         </div>
 
         <!-- Admin Control Center Toggle Box -->
         <div id="admin-panel" class="admin-panel">
             <h3>ADMINISTRATION ENGINE</h3>
             <div class="admin-controls-grid">
-                <input type="text" id="admin-p-name" class="checkout-input" placeholder="Perfume Title">
+                <input type="text" id="admin-p-name" class="checkout-input" placeholder="Product Title">
                 <input type="number" id="admin-p-price" class="checkout-input" placeholder="Base Price (NLE)">
                 <input type="number" id="admin-p-discount-percentage" class="checkout-input" placeholder="Discount % (Optional)">
-                <input type="text" id="admin-p-color" class="checkout-input" placeholder="Concentration / Variant">
+                <input type="text" id="admin-p-color" class="checkout-input" placeholder="Variant / Size (e.g., L, 100ml)">
+                <select id="admin-p-category" class="checkout-select">
+                    <option value="perfume">Section: Perfume & Lotion</option>
+                    <option value="clothing">Section: Clothing & Apparel</option>
+                </select>
                 <select id="admin-p-status" class="checkout-select">
                     <option value="available">Status: Available</option>
                     <option value="sold-out">Status: Sold Out</option>
                 </select>
-                <select id="admin-p-arrival" class="checkout-select">
+                <select id="admin-p-arrival" class="checkout-select" style="grid-column: span 2;">
                     <option value="no">New Arrival: No</option>
                     <option value="yes">New Arrival: Yes</option>
                 </select>
             </div>
-            <div style="margin-bottom: 10px;">
-                <label style="font-size:10px; color:#aaa; display:block; margin-bottom:3px;">Select Asset Image File:</label>
-                <input type="file" id="admin-p-file" accept="image/*" class="checkout-input" style="padding:4px;">
+            <div style="margin-bottom: 12px;">
+                <label style="font-size:10px; letter-spacing:1px; color:var(--text-muted); display:block; margin-bottom:5px; text-transform:uppercase;">Select Asset Image File:</label>
+                <input type="file" id="admin-p-file" accept="image/*" class="checkout-input" style="padding:6px;">
             </div>
-            <button class="btn" style="background:#d4af37; margin-bottom:8px;" onclick="adminUpload()">UPLOAD PRODUCT TO INVENTORY</button>
-            <button class="btn" style="background:#333; color:#fff;" onclick="logoutAdmin()">Close Admin Session</button>
+            <button class="btn" style="background:var(--accent-color); margin-bottom:10px;" onclick="adminUpload()">UPLOAD PRODUCT TO INVENTORY</button>
+            <button class="btn" style="background:#222; color:#fff;" onclick="logoutAdmin()">Close Admin Session</button>
         </div>
 
         <!-- Filter & Search Bar -->
         <div class="controls-bar">
-            <input type="text" id="search-bar" class="search-input" placeholder="Search luxury essences..." oninput="renderProducts()">
+            <input type="text" id="search-bar" class="search-input" placeholder="Search collection inventory..." oninput="renderProducts()">
             <select id="category-filter" class="filter-select" onchange="renderProducts()">
-                <option value="all">All Fragrances</option>
+                <option value="all">Filter Status / Attributes</option>
                 <option value="available">Available Only</option>
                 <option value="sale">On Sale / Discount</option>
                 <option value="arrival">New Arrivals</option>
@@ -441,35 +577,37 @@
         </div>
 
         <!-- Customer Suggestion Section -->
-        <div style="margin-top: 30px; background:var(--card-bg); border:1px solid var(--border-color); padding:15px; border-radius:4px;">
-            <h4 style="font-size:12px; color:var(--accent-color); margin-bottom:8px;">FRAGRANCE REQUEST / SUGGESTION BOX</h4>
-            <p style="font-size:10px; color:#888; margin-bottom:10px;">Looking for a specific global designer scent not listed? Drop your recommendation below.</p>
-            <div style="display:flex; gap:8px;">
-                <input type="text" id="user-suggestion" class="checkout-input" placeholder="Enter perfume brand or fragrance line...">
-                <button class="btn" style="width:120px;" onclick="sendSuggestion()">Submit</button>
+        <div style="margin-top: 40px; background:var(--card-bg); border:1px solid var(--border-color); padding:20px; border-radius:6px;">
+            <h4 style="font-size:11px; letter-spacing:1.5px; color:var(--accent-color); margin-bottom:6px; text-transform:uppercase;">COLLECTION REQUEST / SUGGESTION BOX</h4>
+            <p style="font-size:11px; color:var(--text-muted); margin-bottom:12px;">Looking for a specific global designer scent, lotion, or clothing line not currently listed? Drop your recommendation below.</p>
+            <div style="display:flex; gap:10px;">
+                <input type="text" id="user-suggestion" class="checkout-input" placeholder="Enter fragrance or clothing line...">
+                <button class="btn" style="width:140px;" onclick="sendSuggestion()">Submit</button>
             </div>
         </div>
 
         <div class="footer-note">
-            &copy; 2026 ARISA PERFUME STORE &bull; Calaba Town, Freetown, Sierra Leone. All Rights Reserved.
+            &copy; 2026 Arisa Collection &bull; Calaba Town, Freetown, Sierra Leone. All Rights Reserved.
         </div>
     </div>
 
     <!-- Static Pages Container -->
     <div class="container" id="page-content" style="display: none;">
-        <div id="page-inner-content"></div>
-        <button class="btn" style="margin-top:20px; max-width:150px;" onclick="showHome()">Back to Catalog</button>
+        <div class="static-page-box">
+            <div id="page-inner-content"></div>
+        </div>
+        <button class="btn" style="margin-top:20px; max-width:180px;" onclick="showHome()">Back to Catalog</button>
     </div>
 
     <!-- Floating Cart Button -->
     <div id="floating-cart-btn" class="floating-cart-btn" onclick="toggleCart()">
-        🛒 CART (<span id="floating-cart-counter">0</span>)
+        🛒 BAG (<span id="floating-cart-counter">0</span>)
     </div>
 
     <!-- Cart Sidebar & Checkout Drawer -->
     <div id="cart-sidebar" class="sidebar">
         <div class="sidebar-header">
-            <h3 style="font-size:14px; color:var(--accent-color);">YOUR SELECTION BAG</h3>
+            <h3 style="font-size:13px; letter-spacing:1.5px; color:var(--accent-color); text-transform:uppercase;">YOUR SELECTION BAG</h3>
             <button class="close-btn" onclick="toggleCart()">&times;</button>
         </div>
 
@@ -479,30 +617,30 @@
             </div>
 
             <!-- Saved For Later Area -->
-            <div id="saved-items-container" style="margin-top:15px; display:none;">
-                <h4 style="font-size:11px; color:#888; margin-bottom:5px; border-bottom:1px solid #222; padding-bottom:3px;">SAVED FOR LATER</h4>
+            <div id="saved-items-container" style="margin-top:20px; display:none;">
+                <h4 style="font-size:10px; letter-spacing:1px; color:var(--text-muted); margin-bottom:8px; border-bottom:1px solid var(--border-color); padding-bottom:4px; text-transform:uppercase;">SAVED FOR LATER</h4>
                 <div id="saved-items-list"></div>
             </div>
 
             <!-- Pricing Calculation Breakdown -->
-            <div style="margin-top: 20px; border-top:1px solid var(--border-color); padding-top:10px; font-size:11px;">
-                <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                    <span style="color:#888;">Subtotal:</span>
+            <div style="margin-top: 25px; border-top:1px solid var(--border-color); padding-top:15px; font-size:11px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                    <span style="color:var(--text-muted);">Subtotal:</span>
                     <span><span id="cart-subtotal">0.00</span> NLE</span>
                 </div>
-                <div id="discount-row" style="display:flex; justify-content:space-between; margin-bottom:5px; color:#ff4d6d; display:none;">
+                <div id="discount-row" style="display:flex; justify-content:space-between; margin-bottom:6px; color:#ff4d6d; display:none;">
                     <span>Bundle Discount:</span>
                     <span>-<span id="cart-discount">0.00</span> NLE</span>
                 </div>
-                <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:13px; margin-top:8px; color:var(--accent-color);">
+                <div style="display:flex; justify-content:space-between; font-weight:700; font-size:13px; margin-top:10px; color:var(--accent-color);">
                     <span>Grand Total:</span>
                     <span><span id="cart-grand-total">0.00</span> NLE</span>
                 </div>
             </div>
 
             <!-- Checkout Information Fields -->
-            <div style="margin-top: 20px; border-top:1px solid var(--border-color); padding-top:15px;">
-                <h4 style="font-size:12px; color:var(--accent-color); margin-bottom:10px;">CHECKOUT DETAILS</h4>
+            <div style="margin-top: 25px; border-top:1px solid var(--border-color); padding-top:20px;">
+                <h4 style="font-size:11px; letter-spacing:1.5px; color:var(--accent-color); margin-bottom:15px; text-transform:uppercase;">CHECKOUT DETAILS</h4>
                 
                 <div class="checkout-form-group">
                     <label>Full Name:</label>
@@ -515,7 +653,7 @@
                 </div>
 
                 <div class="checkout-form-group">
-                    <label>Fulfillment Fulfillment Method:</label>
+                    <label>Fulfillment Method:</label>
                     <select id="order-method" class="checkout-select" onchange="handleOrderMethodChange()">
                         <option value="Delivery">Freetown Delivery Dispatch</option>
                         <option value="Pick Up">Store Pick Up</option>
@@ -544,14 +682,14 @@
     <!-- Receipt Modal Preview Wrapper -->
     <div id="receipt-modal" class="modal-overlay">
         <div class="modal-content" id="receipt-capture-canvas">
-            <h3 style="font-size:14px; color:var(--accent-color); text-align:center; margin-bottom:5px;">ARISA PERFUME STORE</h3>
-            <p style="font-size:9px; text-align:center; color:#888; margin-bottom:15px;">OFFICIAL SECURE TRANSACTION INVOICE</p>
+            <h3 style="font-size:13px; letter-spacing:2px; color:var(--accent-color); text-align:center; margin-bottom:4px; text-transform:uppercase;">Arisa Collection</h3>
+            <p style="font-size:9px; letter-spacing:1px; text-align:center; color:var(--text-muted); margin-bottom:20px; text-transform:uppercase;">OFFICIAL SECURE TRANSACTION INVOICE</p>
             
             <div id="receipt-details"></div>
 
-            <div id="pdf-invoice-area" style="margin-top:15px;">
+            <div id="pdf-invoice-area" style="margin-top:20px;">
                 <div id="canvas-receipt-details" style="display:none;"></div>
-                <button class="btn" id="hide-pdf-btn" style="background:#444; color:#fff;" onclick="closeReceipt()">Close & Return Home</button>
+                <button class="btn" id="hide-pdf-btn" style="background:#222; color:#fff;" onclick="closeReceipt()">Close & Return Home</button>
             </div>
         </div>
     </div>
@@ -571,6 +709,7 @@
         let perfumes = [];
         let cart = [];
         let savedItems = [];
+        let currentSection = 'all'; // Default tab view
         const myWhatsAppNumber = "23275000000"; // Replace with operational contact line if required
 
         // Initialize Data Fetching on Load
@@ -585,6 +724,7 @@
                 if (data) {
                     perfumes = Object.keys(data).map(key => ({
                         firebaseId: key,
+                        category: data[key].category || 'perfume', // Fallback default category
                         ...data[key]
                     }));
                 } else {
@@ -596,7 +736,17 @@
             });
         });
 
-        // Render Catalog Grid with Filtering & Search Integration
+        // Switch Main Section Tabs
+        window.setMainCategory = (section) => {
+            currentSection = section;
+            document.querySelectorAll('.cat-tab').forEach(tab => tab.classList.remove('active'));
+            if (section === 'all') document.getElementById('tab-all').classList.add('active');
+            if (section === 'perfume') document.getElementById('tab-perfume').classList.add('active');
+            if (section === 'clothing') document.getElementById('tab-clothing').classList.add('active');
+            renderProducts();
+        };
+
+        // Render Catalog Grid with Section Tabs, Filtering & Search Integration
         function renderProducts() {
             const grid = document.getElementById('product-grid');
             const searchQuery = document.getElementById('search-bar').value.toLowerCase();
@@ -604,6 +754,9 @@
             const isAdmin = sessionStorage.getItem('isArisaAdmin') === 'true';
 
             let filtered = perfumes.filter(p => {
+                // Section tab constraint check
+                if (currentSection !== 'all' && p.category !== currentSection) return false;
+
                 const matchesSearch = p.name.toLowerCase().includes(searchQuery) || (p.color && p.color.toLowerCase().includes(searchQuery));
                 if (!matchesSearch) return false;
 
@@ -614,7 +767,7 @@
             });
 
             if (filtered.length === 0) {
-                grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:30px; font-size:11px; color:#666;">No luxury essences match your current query parameter.</div>`;
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px; font-size:11px; letter-spacing:1px; color:var(--text-muted); text-transform:uppercase;">No collection items match your selection parameter.</div>`;
                 return;
             }
 
@@ -630,6 +783,7 @@
                         <div class="price-box">
                             <span class="old-price-strike">${originalPrice} NLE</span>
                             <span class="price">${finalPrice.toFixed(2)} NLE</span>
+                            <br>
                             <span class="discount-badge">${pct}% OFF</span>
                         </div>
                     `;
@@ -642,7 +796,7 @@
                 }
 
                 const arrivalBadgeHTML = (p.isNewArrival === 'yes') 
-                    ? `<span class="status-badge" style="background:#d4af37; color:black; top: 22px; right: 5px;">NEW ARRIVAL</span>` 
+                    ? `<span class="status-badge" style="background:var(--accent-color); color:#0b0b0b; top: 14px; right: 14px; left: auto;">NEW</span>` 
                     : '';
 
                 return `
@@ -650,16 +804,18 @@
                         <span class="status-badge ${p.status}">${p.status.replace('-', ' ')}</span>
                         ${arrivalBadgeHTML}
                         <div class="product-image"><img src="${p.image}"></div>
-                        <h3 style="font-size:11px;">${p.name}</h3>
+                        <h3>${p.name}</h3>
                         ${p.color ? `<span class="color-label">${p.color}</span>` : ''}
                         ${priceDisplayHTML}
                         <button class="btn" ${sold ? 'disabled' : ''}>
-                            ${sold ? 'SOLD OUT' : 'BUY'}
+                            ${sold ? 'SOLD OUT' : 'ADD TO BAG'}
                         </button>
-                        ${isAdmin ? `<button class="btn" style="background:#444; margin-top:5px; font-size:8px;" onclick="event.stopPropagation(); toggleStatus('${p.firebaseId}','${p.status}')">Status</button>
-                                     <button class="btn" style="background:red; margin-top:5px; font-size:8px;" onclick="event.stopPropagation(); deleteProduct('${p.firebaseId}')">Del</button>
-                                     <button class="btn" style="background:#00f2fe; color:black; margin-top:5px; font-size:8px;" onclick="event.stopPropagation(); quickModifyDiscount('${p.firebaseId}','${p.discountPercentage}')">Disc</button>
-                                     <button class="btn" style="background:#fff; color:black; margin-top:5px; font-size:8px;" onclick="event.stopPropagation(); quickToggleArrival('${p.firebaseId}','${p.isNewArrival}')">Arrival</button>` : ''}
+                        ${isAdmin ? `<div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-top:8px;">
+                                     <button class="btn" style="background:#222; color:#fff; font-size:8px; padding:6px;" onclick="event.stopPropagation(); toggleStatus('${p.firebaseId}','${p.status}')">Status</button>
+                                     <button class="btn" style="background:#521; color:#fff; font-size:8px; padding:6px;" onclick="event.stopPropagation(); deleteProduct('${p.firebaseId}')">Delete</button>
+                                     <button class="btn" style="background:#134; color:#fff; font-size:8px; padding:6px;" onclick="event.stopPropagation(); quickModifyDiscount('${p.firebaseId}','${p.discountPercentage}')">Discount</button>
+                                     <button class="btn" style="background:#443; color:#fff; font-size:8px; padding:6px;" onclick="event.stopPropagation(); quickToggleArrival('${p.firebaseId}','${p.isNewArrival}')">Arrival</button>
+                                     </div>` : ''}
                     </div>`;
             }).join('');
         }
@@ -681,7 +837,7 @@
         window.addToCart = (id) => {
             const existingItem = cart.find(i => i.firebaseId === id);
             if (existingItem) {
-                alert("This item is already added to your cart!");
+                alert("This item is already added to your selection bag!");
                 return;
             }
             const item = perfumes.find(p => p.firebaseId === id);
@@ -709,7 +865,7 @@
             const item = savedItems.find(i => i.cartId === cartId);
             const duplicateCheck = cart.find(i => i.firebaseId === item.firebaseId);
             if (duplicateCheck) {
-                alert("This item is already in your active cart panel.");
+                alert("This item is already in your active selection bag.");
                 return;
             }
             cart.push(item);
@@ -743,13 +899,13 @@
                 return `
                     <div class="cart-item-row">
                         <div style="text-align:left; max-width:65%;">
-                            <h4 style="font-size:12px; color:var(--accent-color); font-weight:normal;">${i.name}</h4>
-                            ${i.color ? `<span style="font-size:9px; color:#666;">COLOR: ${i.color}</span>` : ''}
+                            <h4 style="font-size:11px; font-weight:600; color:var(--accent-color); margin-bottom:2px;">${i.name}</h4>
+                            ${i.color ? `<span style="font-size:9px; color:var(--text-muted); text-transform:uppercase;">${i.color}</span><br>` : ''}
                             ${discountTextHTML}
                         </div>
                         <div style="text-align:right;">
-                            <span style="font-size:12px; font-weight:bold; display:block; margin-bottom:5px;">${finalActivePrice.toFixed(2)} NLE</span>
-                            <div style="display:flex; gap:5px; justify-content:flex-end;">
+                            <span style="font-size:12px; font-weight:700; display:block; margin-bottom:6px; color:#fff;">${finalActivePrice.toFixed(2)} NLE</span>
+                            <div style="display:flex; gap:6px; justify-content:flex-end;">
                                 <button class="save-btn" onclick="saveForLater(${i.cartId})">Save</button>
                                 <button class="remove-btn" onclick="removeFromCart(${i.cartId})">Remove</button>
                             </div>
@@ -760,9 +916,9 @@
             if (savedItems.length > 0) {
                 document.getElementById('saved-items-container').style.display = 'block';
                 savedList.innerHTML = savedItems.map(i => `
-                    <div style="border-bottom:1px dashed #222; padding:8px 0; display:flex; justify-content:space-between; align-items:center; opacity:0.6;">
+                    <div style="border-bottom:1px dashed var(--border-color); padding:8px 0; display:flex; justify-content:space-between; align-items:center; opacity:0.7;">
                         <span style="font-size:11px; text-align:left;">${i.name}</span>
-                        <button class="save-btn" style="color:#fff; border-color:#555;" onclick="moveToCart(${i.cartId})">Move to Cart</button>
+                        <button class="save-btn" style="color:#fff; border-color:#444;" onclick="moveToCart(${i.cartId})">Move to Bag</button>
                     </div>`).join('');
             } else {
                 document.getElementById('saved-items-container').style.display = 'none';
@@ -812,23 +968,29 @@
         window.showHome = () => {
             document.getElementById('home-content').style.display = 'block';
             document.getElementById('page-content').style.display = 'none';
+            document.querySelectorAll('.nav-links span').forEach(el => el.classList.remove('active'));
+            document.querySelector('.nav-links span:nth-child(1)').classList.add('active');
         };
 
         window.showAbout = () => {
             document.getElementById('home-content').style.display = 'none';
             document.getElementById('page-content').style.display = 'block';
+            document.querySelectorAll('.nav-links span').forEach(el => el.classList.remove('active'));
+            document.querySelector('.nav-links span:nth-child(2)').classList.add('active');
             document.getElementById('page-inner-content').innerHTML = `
-                <h2 style="color:var(--accent-color); margin-bottom:15px; font-size:16px;">ABOUT US</h2>
-                <p style="font-size:12px; color:#ccc; line-height:1.8;">Welcome to ARISA PERFUME STORE, Freetown's ultimate sanctuary for premium, high-fidelity luxury fragrance assets. We curate world-class aromatic solutions designed to leave an unforgettable imprint. Each product in our collection is authenticated to meet rigorous standard profiles of continuous projection and sophistication.</p>
+                <h2 style="color:var(--accent-color); margin-bottom:15px; font-size:15px; letter-spacing:1px; text-transform:uppercase;">ABOUT ARISA COLLECTION</h2>
+                <p style="font-size:12px; color:#ccc; line-height:1.9;">Welcome to Arisa Collection, Freetown's ultimate sanctuary for premium, high-fidelity luxury fragrances, body lotions, and stylish apparel. We curate world-class lifestyle assets designed to leave an unforgettable imprint. Each product in our collection is authenticated to meet rigorous standard profiles of continuous quality, style, and sophistication.</p>
             `;
         };
 
         window.showPolicy = () => {
             document.getElementById('home-content').style.display = 'none';
             document.getElementById('page-content').style.display = 'block';
+            document.querySelectorAll('.nav-links span').forEach(el => el.classList.remove('active'));
+            document.querySelector('.nav-links span:nth-child(3)').classList.add('active');
             document.getElementById('page-inner-content').innerHTML = `
-                <h2 style="color:var(--accent-color); margin-bottom:15px; font-size:16px;">STORE POLICY</h2>
-                <p style="font-size:12px; color:#ccc; line-height:1.8;"><strong>Logistics & Delivery:</strong> We offer reliable scheduled dispatch coordinates throughout Freetown between 9:00 AM and 6:00 PM daily. Delivery fees are applied contextually based on your pinpointed location boundaries.<br><br><strong>Returns:</strong> Due to security parameters surrounding cosmetics safety benchmarks, all sales executed are definitive. Ensure testing profiles are confirmed before final payment settlement.</p>
+                <h2 style="color:var(--accent-color); margin-bottom:15px; font-size:15px; letter-spacing:1px; text-transform:uppercase;">STORE POLICY</h2>
+                <p style="font-size:12px; color:#ccc; line-height:1.9;"><strong>Logistics & Delivery:</strong> We offer reliable scheduled dispatch coordinates throughout Freetown between 9:00 AM and 6:00 PM daily. Delivery fees are applied contextually based on your pinpointed location boundaries.<br><br><strong>Returns:</strong> Due to security parameters surrounding cosmetics and apparel safety benchmarks, all sales executed are definitive. Ensure testing or sizing profiles are confirmed before final payment settlement.</p>
             `;
         };
 
@@ -890,6 +1052,7 @@
             const price = document.getElementById('admin-p-price').value;
             const discountPct = document.getElementById('admin-p-discount-percentage').value;
             const color = document.getElementById('admin-p-color').value;
+            const category = document.getElementById('admin-p-category').value;
             const status = document.getElementById('admin-p-status').value;
             const isArrival = document.getElementById('admin-p-arrival').value;
             const fileInput = document.getElementById('admin-p-file');
@@ -907,6 +1070,7 @@
                     price: price,
                     discountPercentage: discountPct ? discountPct : "",
                     color: color ? color : "",
+                    category: category,
                     status: status,
                     isNewArrival: isArrival,
                     image: imgBase64
@@ -936,7 +1100,7 @@
                 addr = "Customer Pick Up Option Selected";
             }
             if (!name || !phone || (method === 'Delivery' && !addr) || cart.length === 0) {
-                alert("Please fill your customer details completely and verify your cart before checkout.");
+                alert("Please fill your customer details completely and verify your selection bag before checkout.");
                 return;
             }
             
@@ -949,7 +1113,7 @@
             cart.forEach((itm, index) => {
                 const linePrice = itm.calculatedCartPrice ? itm.calculatedCartPrice : parseFloat(itm.price);
                 invoiceItemsHTML += `
-                    <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-size:11px;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:11px;">
                         <span>${index + 1}. ${itm.name} ${itm.color ? `(${itm.color})` : ''}</span>
                         <strong>${linePrice.toFixed(2)} NLE</strong>
                     </div>`;
@@ -963,8 +1127,8 @@
             
             const payment = document.getElementById('payment-method').value;
             const receiptHTML = `
-                <p style="font-size:11px; color:#aaa; margin-bottom:10px; text-align:center;">Date: ${timestamp}</p>
-                <div style="margin-bottom:15px; font-size:12px; border-bottom:1px solid #222; padding-bottom:10px;">
+                <p style="font-size:11px; color:var(--text-muted); margin-bottom:12px; text-align:center;">Date: ${timestamp}</p>
+                <div style="margin-bottom:15px; font-size:11px; border-bottom:1px solid var(--border-color); padding-bottom:12px; line-height:1.6;">
                     <p><strong>Customer Name:</strong> ${name}</p>
                     <p><strong>Phone Line:</strong> ${phone}</p>
                     <p><strong>Order System:</strong> ${method}</p>
@@ -972,11 +1136,11 @@
                     <p><strong>Settlement Mode:</strong> ${payment}</p>
                 </div>
                 <div style="margin-top:10px;">
-                    <p style="font-size:11px; font-weight:bold; color:var(--accent-color); margin-bottom:8px;">PURCHASED ESSENCES:</p>
+                    <p style="font-size:10px; font-weight:700; letter-spacing:1px; color:var(--accent-color); margin-bottom:8px; text-transform:uppercase;">SELECTED ASSETS:</p>
                     ${invoiceItemsHTML}
                 </div>
-                <div style="border-top:1px dashed var(--accent-color); margin-top:15px; padding-top:10px; text-align:right;">
-                    <p style="font-size:16px; font-weight:bold; color:var(--accent-color);">Grand Total: ${grandTotal} NLE</p>
+                <div style="border-top:1px dashed var(--accent-color); margin-top:15px; padding-top:12px; text-align:right;">
+                    <p style="font-size:15px; font-weight:700; color:var(--accent-color);">Grand Total: ${grandTotal} NLE</p>
                 </div>`;
                 
             document.getElementById('receipt-details').innerHTML = receiptHTML;
@@ -1000,7 +1164,7 @@
                 html2canvas(canvasContainer, { useCORS: true, allowTaint: true, scale: 2 }).then(canvas => {
                     const opt = {
                         margin: 10,
-                        filename: `ARISA-INVOICE-${Date.now()}.pdf`,
+                        filename: `ARISA-COLLECTION-INVOICE-${Date.now()}.pdf`,
                         image: { type: 'jpeg', quality: 0.98 },
                         html2canvas: { scale: 2, useCORS: true },
                         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -1009,8 +1173,8 @@
                     const downloadBtn = document.createElement('button');
                     downloadBtn.className = "btn";
                     downloadBtn.id = "dynamic-pdf-download-btn";
-                    downloadBtn.style.background = "#d4af37";
-                    downloadBtn.style.color = "black";
+                    downloadBtn.style.background = "var(--accent-color)";
+                    downloadBtn.style.color = "#0b0b0b";
                     downloadBtn.style.marginTop = "10px";
                     downloadBtn.innerText = "DOWNLOAD PDF INVOICE RECEIPT";
                     
@@ -1030,7 +1194,7 @@
                 });
             }, 800);
             
-            let waMessage = `*ARISA PERFUME STORE - NEW ORDER LUXURY INVOICE*\n`;
+            let waMessage = `*ARISA COLLECTION - NEW ORDER LUXURY INVOICE*\n`;
             waMessage += `-----------------------------------------\n`;
             waMessage += `*Date:* ${timestamp}\n\n`;
             waMessage += `*Customer Info:*\n`;
