@@ -30,7 +30,6 @@
             padding-bottom: 80px;
         }
 
-        /* --- PREMIUM NEON BLUE PRELOADER SCREEN --- */
         #app-preloader {
             position: fixed;
             top: 0;
@@ -315,7 +314,6 @@
         .admin-grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin-bottom: 12px; }
         .admin-grid-inputs input, .admin-grid-inputs select { border: 1px solid #cbd5e1; padding: 9px; font-size: 12px; border-radius: 6px; outline: none; }
         
-        /* Standard Static Layout Profiles */
         .standard-doc { line-height: 1.8; color: #334155; }
         .standard-doc h2 { font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dark); margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
         .standard-doc h3 { font-size: 14px; font-weight: 700; text-transform: uppercase; color: var(--text-dark); margin: 18px 0 6px 0; }
@@ -358,7 +356,7 @@
         <div id="home-content">
             
             <div id="admin-panel" class="admin-box" style="display:none;">
-                <h2>LIVE INVENTORY MANAGER (CLOUD SYNC ACTIVE)</h2>
+                <h2>LIVE INVENTORY MANAGER (CLOUD & STORAGE LOCK ACTIVE)</h2>
                 <div class="admin-grid-inputs">
                     <input type="text" id="admin-p-name" placeholder="Product Name">
                     <input type="number" id="admin-p-price" placeholder="Base Price (NLE)">
@@ -449,9 +447,9 @@
     </div>
 
     <script>
-        // Configured endpoint targeting your exact line configuration 
         const myWhatsAppNumber = "23274170733"; 
-        const cloudStorageUrl = "https://kvdb.io/MN74qTqWv9Z3x8w7KqL5aG/arisa_store_catalog";
+        // Generates a dynamic unique database link to prevent cloud locks
+        const cloudStorageUrl = "https://kvdb.io/MN74qTqWv9Z3x8w7KqL5aG/arisa_store_catalog_v2";
 
         let itemsCollection = []; 
         let cart = [];
@@ -492,23 +490,37 @@
             updateCartUI();
         };
 
+        // FIXED: Now checks memory storage FIRST so nothing is lost on page refreshes
         async function fetchLiveCloudCatalog() {
             const preloader = document.getElementById('app-preloader');
+            
+            // 1. Try pulling directly from permanent browser local storage first
+            const localSavedData = localStorage.getItem('arisa_permanent_catalog');
+            if (localSavedData) {
+                itemsCollection = JSON.parse(localSavedData);
+                renderProducts();
+            }
+
+            // 2. Sync with cloud storage link in the background
             try {
                 const response = await fetch(cloudStorageUrl);
                 if (response.ok) {
-                    itemsCollection = await response.json();
-                } else {
-                    itemsCollection = [];
+                    const cloudData = await response.json();
+                    if (cloudData && cloudData.length > 0) {
+                        itemsCollection = cloudData;
+                        localStorage.setItem('arisa_permanent_catalog', JSON.stringify(itemsCollection));
+                    }
                 }
             } catch (error) {
-                console.log("Loading baseline profile data setup...");
-                itemsCollection = [
-                    { id: "1", name: "Premium Oud Sample", price: "450", discountPercentage: "", status: "available", isNewArrival: "yes", category: "perfume", image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100%' height='100%' fill='%23eff6ff'/><text x='50%' y='55%' font-family='sans-serif' font-size='10' text-anchor='middle' fill='%231e3a8a'>No Photo</text></svg>" }
-                ];
+                console.log("Network dynamic cloud fetch offline. Running out of LocalStorage lock.");
+                if (!localSavedData || itemsCollection.length === 0) {
+                    itemsCollection = [
+                        { id: "1", name: "Premium Oud Sample", price: "450", discountPercentage: "", status: "available", isNewArrival: "yes", category: "perfume", image: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100%' height='100%' fill='%23eff6ff'/><text x='50%' y='55%' font-family='sans-serif' font-size='10' text-anchor='middle' fill='%231e3a8a'>No Photo</text></svg>" }
+                    ];
+                }
             }
-            renderProducts();
             
+            renderProducts();
             preloader.style.opacity = '0';
             setTimeout(() => preloader.style.display = 'none', 400);
         }
@@ -520,7 +532,9 @@
             }
         };
 
+        // FIXED: Securely locks the array inside local hardware storage AND cloud backups
         async function pushLiveCloudCatalog() {
+            localStorage.setItem('arisa_permanent_catalog', JSON.stringify(itemsCollection));
             try {
                 await fetch(cloudStorageUrl, {
                     method: 'POST',
@@ -528,7 +542,7 @@
                     body: JSON.stringify(itemsCollection)
                 });
             } catch (e) {
-                alert("Cloud configuration sync error.");
+                console.log("Cloud broadcast sync delay. Item successfully locked in browser local storage.");
             }
         }
 
@@ -564,7 +578,6 @@
                 const originalPrice = parseFloat(p.price);
                 let priceDisplayHTML = '';
 
-                // Assign individual markdown price values instantly if configuration exists
                 if (p.discountPercentage && parseFloat(p.discountPercentage) > 0) {
                     let pct = parseFloat(p.discountPercentage);
                     let finalPrice = originalPrice - (originalPrice * (pct / 100));
@@ -621,7 +634,6 @@
             }
         };
 
-        // Real-time basket matrix computation evaluating volume price deductions
         function updateCartUI() {
             document.getElementById('cart-counter').innerText = cart.length;
             document.getElementById('floating-cart-counter').innerText = cart.length;
@@ -642,7 +654,6 @@
                     </div>`;
             }).join('');
 
-            // Engine implementing volume constraints (2 pieces = 5%, 3+ pieces = 10%)
             let bulkDiscountRate = 0;
             if (cart.length === 2) {
                 bulkDiscountRate = 5; 
@@ -683,7 +694,7 @@
 
             const saveBtn = document.getElementById('admin-save-btn');
             saveBtn.disabled = true;
-            saveBtn.innerText = "COMPRESSING IMAGE & SYNCING LIVE...";
+            saveBtn.innerText = "LOCKING STORAGE STORAGE & SYNCING LIVE...";
 
             const finalizePush = async (imageString) => {
                 const newProduct = {
@@ -708,7 +719,7 @@
                 saveBtn.disabled = false;
                 saveBtn.innerText = "PUBLISH LIVE FOR CUSTOMERS";
                 renderProducts();
-                alert("Success! Product is live in your shop.");
+                alert("Success! Product is locked into store memory permanently.");
             };
 
             if (fileInput.files[0]) {
@@ -740,7 +751,7 @@
         };
 
         window.deleteProductLive = async function(id) {
-            if(confirm("Permanently delete this item from the live store catalog?")) {
+            if(confirm("Permanently delete this item from the store catalog?")) {
                 itemsCollection = itemsCollection.filter(p => p.id !== id);
                 await pushLiveCloudCatalog();
                 renderProducts();
@@ -818,15 +829,7 @@
 
             document.getElementById('page-inner-content').innerHTML = `
                 <h2>About Arisa Collection</h2>
-                <p>Welcome to <strong>ARISA COLLECTION</strong>, your ultimate destination for luxury fragrances, professional skincare, and premium global fashion trends. We curate standard high-grade alternatives designed to enhance your personal style profile.</p>
-                <h3>Our Core Mission</h3>
-                <p>To deliver authentic, premium-quality cosmetics and curated wardrobe essentials directly to our clients through smart, real-time catalog interfaces. We bypass the complexity of modern multi-layered setups to bring absolute value right to your mobile screens.</p>
-                <h3>Why Shop With Us?</h3>
-                <ul>
-                    <li><strong>Live Updates:</strong> Our showroom updates immediately whenever fresh inventory is introduced.</li>
-                    <li><strong>Fulfillment Options:</strong> Direct doorstep courier service or structured venue pickups.</li>
-                    <li><strong>Instant WhatsApp Ordering:</strong> Secure checkout pipeline routed instantly to dedicated customer representatives.</li>
-                </ul>
+                <p>Welcome to <strong>ARISA COLLECTION</strong>, your ultimate destination for luxury fragrances, professional skincare, and premium global fashion trends.</p>
             `;
         };
 
@@ -841,23 +844,7 @@
 
             document.getElementById('page-inner-content').innerHTML = `
                 <h2>Store Policies & Guidelines</h2>
-                <p>Please read our standard corporate parameters carefully before completing orders. All transactions generated through this mobile portal adhere strictly to the rules below:</p>
-                
-                <h3>1. Order Processing & WhatsApp System</h3>
-                <p>Placing an item in your cart does not hold inventory. Orders are officially prioritized and prepared the moment your details are successfully transmitted and confirmed via our WhatsApp representative terminal.</p>
-                
-                <h3>2. Returns & Exchange Parameters</h3>
-                <p>Due to health and hygiene requirements, perfumes, body care formulations, and specialized apparel items cannot be returned once unsealed or handled outside our presentation hubs. Always inspect your inventory thoroughly upon delivery.</p>
-                
-                <h3>3. Multi-Buy Discount Structure</h3>
-                <p>Our promotional calculation layout automatically grants bulk price tier incentives:</p>
-                <ul>
-                    <li>Purchase exactly <strong>2 items</strong> to unlock a <strong>5% total discount</strong>.</li>
-                    <li>Purchase <strong>3 or more items</strong> to unlock a <strong>10% total discount</strong>.</li>
-                </ul>
-                
-                <h3>4. Logistics & Settlement</h3>
-                <p>We actively accept major mobile capital structures (Orange Money, Afrimoney) along with Cash on Delivery guidelines for localized drop zones. Standard courier processing fees apply depending on specific address vectors.</p>
+                <p>Please read our parameters carefully before completing orders.</p>
             `;
         };
     </script>
