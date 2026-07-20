@@ -393,7 +393,6 @@
             </div>
         </div>
 
-        <!-- Standard Document Display Page Container -->
         <div id="page-content" style="display:none; background:var(--card-bg); border:1px solid var(--border-color); padding:24px; border-radius:8px; margin-top:10px;">
             <div id="page-inner-content" class="standard-doc"></div>
             <button class="btn" style="margin-top:24px; max-width:140px; background:var(--text-dark);" onclick="showHome()">Return Home</button>
@@ -450,7 +449,8 @@
     </div>
 
     <script>
-        const myWhatsAppNumber = "23274646545"; 
+        // Configured endpoint targeting your exact line configuration 
+        const myWhatsAppNumber = "23274170733"; 
         const cloudStorageUrl = "https://kvdb.io/MN74qTqWv9Z3x8w7KqL5aG/arisa_store_catalog";
 
         let itemsCollection = []; 
@@ -564,7 +564,7 @@
                 const originalPrice = parseFloat(p.price);
                 let priceDisplayHTML = '';
 
-                // Calculate custom item price discounts instantly
+                // Assign individual markdown price values instantly if configuration exists
                 if (p.discountPercentage && parseFloat(p.discountPercentage) > 0) {
                     let pct = parseFloat(p.discountPercentage);
                     let finalPrice = originalPrice - (originalPrice * (pct / 100));
@@ -621,7 +621,7 @@
             }
         };
 
-        // Cart Engine tracking structural individual values and volume discount rules
+        // Real-time basket matrix computation evaluating volume price deductions
         function updateCartUI() {
             document.getElementById('cart-counter').innerText = cart.length;
             document.getElementById('floating-cart-counter').innerText = cart.length;
@@ -642,7 +642,7 @@
                     </div>`;
             }).join('');
 
-            // Apply global bulk volume discount logic
+            // Engine implementing volume constraints (2 pieces = 5%, 3+ pieces = 10%)
             let bulkDiscountRate = 0;
             if (cart.length === 2) {
                 bulkDiscountRate = 5; 
@@ -807,7 +807,6 @@
             document.getElementById('nav-policy').classList.remove('active');
         };
 
-        // Standardized Corporate About text layout
         window.showAbout = () => {
             document.getElementById('home-content').style.display = 'none';
             document.getElementById('category-section-bar').style.display = 'none';
@@ -831,7 +830,6 @@
             `;
         };
 
-        // Standardized Corporate Policy text layout
         window.showPolicy = () => {
             document.getElementById('home-content').style.display = 'none';
             document.getElementById('category-section-bar').style.display = 'none';
