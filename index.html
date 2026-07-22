@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,9 +75,9 @@
             position: absolute;
             width: 8px;
             height: 8px;
-            background: #00d2ff;
+            background: var(--accent-color);
             border-radius: 50%;
-            box-shadow: 0 0 10px #00d2ff, 0 0 20px #00d2ff;
+            box-shadow: 0 0 10px var(--accent-color), 0 0 20px var(--accent-color);
         }
 
         .spinner-dot:nth-child(1) { transform: rotate(0deg) translate(45px); opacity: 0.1; }
@@ -88,7 +89,7 @@
         .spinner-dot:nth-child(7) { transform: rotate(135deg) translate(45px); opacity: 0.7; }
         .spinner-dot:nth-child(8) { transform: rotate(157.5deg) translate(45px); opacity: 0.8; }
         .spinner-dot:nth-child(9) { transform: rotate(180deg) translate(45px); opacity: 0.9; }
-        .spinner-dot:nth-child(10) { transform: rotate(202.5deg) translate(45px); opacity: 1; box-shadow: 0 0 15px #00d2ff, 0 0 30px #00d2ff; }
+        .spinner-dot:nth-child(10) { transform: rotate(202.5deg) translate(45px); opacity: 1; box-shadow: 0 0 15px var(--accent-color), 0 0 30px var(--accent-color); }
         .spinner-dot:nth-child(11) { transform: rotate(225deg) translate(45px); opacity: 1; }
         .spinner-dot:nth-child(12) { transform: rotate(247.5deg) translate(45px); opacity: 0.9; }
         .spinner-dot:nth-child(13) { transform: rotate(270deg) translate(45px); opacity: 0.7; }
@@ -98,11 +99,10 @@
 
         .loading-text {
             margin-top: 25px;
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 700;
-            letter-spacing: 4px;
-            color: #00d2ff;
-            text-shadow: 0 0 10px rgba(0, 210, 255, 0.6);
+            letter-spacing: 3px;
+            color: var(--accent-color);
             text-transform: uppercase;
         }
 
@@ -393,7 +393,6 @@
         .footer-note { text-align: center; font-size: 9px; color: var(--text-muted); margin-top: 30px; border-top: 1px solid var(--border-color); padding-top: 15px; text-transform: uppercase; }
         .static-page-box { background: var(--card-bg); border: 1px solid var(--border-color); padding: 20px; border-radius: 6px; margin-top: 10px; }
 
-        /* Enhanced Admin Tabs & UI Styles */
         .admin-tabs { display: flex; gap: 5px; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; overflow-x: auto; }
         .admin-tab-btn { background: #1a1a1a; border: 1px solid var(--border-color); color: var(--text-muted); padding: 6px 12px; font-size: 9px; font-weight: 700; text-transform: uppercase; border-radius: 3px; cursor: pointer; white-space: nowrap; }
         .admin-tab-btn.active { background: var(--accent-color); color: #0b0b0b; border-color: var(--accent-color); }
@@ -412,7 +411,7 @@
     <!-- Notification Toast -->
     <div id="alert-toast" class="alert-toast"></div>
 
-    <!-- Loading Screen -->
+    <!-- Loading Screen with Instant Cache Open -->
     <div id="loading-screen">
         <div class="spinner-container">
             <div class="spinner-dot"></div><div class="spinner-dot"></div><div class="spinner-dot"></div><div class="spinner-dot"></div>
@@ -420,7 +419,7 @@
             <div class="spinner-dot"></div><div class="spinner-dot"></div><div class="spinner-dot"></div><div class="spinner-dot"></div>
             <div class="spinner-dot"></div><div class="spinner-dot"></div><div class="spinner-dot"></div><div class="spinner-dot"></div>
         </div>
-        <div class="loading-text">CONNECTING DATABASE</div>
+        <div class="loading-text">OPENING ARISA COLLECTION...</div>
     </div>
 
     <header>
@@ -675,7 +674,17 @@
         }
         const db = firebase.database();
 
-        let perfumes = [];
+        // Default local catalog backup for instant opening on customer phones
+        let defaultPerfumes = [
+            { id: 'p1', name: 'Tom Ford Oud Wood', price: '650', salePrice: '580', color: '100ml', category: 'perfume', status: 'available', image: 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=600&q=80' },
+            { id: 'p2', name: 'Dior Sauvage Eau de Parfum', price: '600', salePrice: '', color: '100ml', category: 'perfume', status: 'available', image: 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=600&q=80' },
+            { id: 'p3', name: 'Designer Summer Abaya', price: '450', salePrice: '390', color: 'Size L', category: 'clothing', status: 'available', image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=600&q=80' }
+        ];
+
+        // Load cached items immediately from local storage if available
+        let cachedProducts = localStorage.getItem('arisa_cached_products');
+        let perfumes = cachedProducts ? JSON.parse(cachedProducts) : defaultPerfumes;
+
         let ordersList = [];
         let usersList = [];
         let cart = [];
@@ -691,24 +700,32 @@
             setTimeout(() => { toast.style.display = 'none'; }, 3500);
         }
 
+        let isLoaded = false;
         function hideLoadingScreen() {
+            if (isLoaded) return;
+            isLoaded = true;
             const loader = document.getElementById('loading-screen');
-            if (loader && loader.style.display !== 'none') {
+            if (loader) {
                 loader.style.opacity = '0';
                 setTimeout(() => loader.style.display = 'none', 400);
             }
         }
 
-        // Real-Time Firebase Sync listeners
+        // Instantly render products using local cache so the customer's page opens right away
+        renderProducts();
+        hideLoadingScreen();
+
         window.addEventListener('DOMContentLoaded', () => {
-            // Listen for Products
+            // Background sync with Firebase so customers always get updated products automatically
             db.ref('products').on('value', (snapshot) => {
                 const data = snapshot.val();
-                perfumes = [];
                 if (data) {
+                    perfumes = [];
                     Object.keys(data).forEach(key => {
                         perfumes.push({ id: key, ...data[key] });
                     });
+                    // Save to local device cache for instant next-time loading
+                    localStorage.setItem('arisa_cached_products', JSON.stringify(perfumes));
                 }
                 renderProducts();
                 renderAdminProductList();
@@ -716,10 +733,9 @@
                 hideLoadingScreen();
             }, (error) => {
                 hideLoadingScreen();
-                showToast("Database sync error. Using offline fallback.", true);
             });
 
-            // Listen for Orders
+            // Listen for Orders (Admin use)
             db.ref('orders').on('value', (snapshot) => {
                 const data = snapshot.val();
                 ordersList = [];
@@ -732,7 +748,7 @@
                 updateStats();
             });
 
-            // Listen for Users
+            // Listen for Users (Admin use)
             db.ref('users').on('value', (snapshot) => {
                 const data = snapshot.val();
                 usersList = [];
@@ -757,8 +773,11 @@
 
         function renderProducts() {
             const grid = document.getElementById('product-grid');
-            const searchQuery = document.getElementById('search-bar').value.toLowerCase();
-            const filterVal = document.getElementById('category-filter').value;
+            if (!grid) return;
+            const searchBar = document.getElementById('search-bar');
+            const categoryFilter = document.getElementById('category-filter');
+            const searchQuery = searchBar ? searchBar.value.toLowerCase() : '';
+            const filterVal = categoryFilter ? categoryFilter.value : 'all';
 
             let filtered = perfumes.filter(p => {
                 if (currentSection !== 'all' && p.category !== currentSection) return false;
@@ -782,7 +801,7 @@
 
                 return `
                     <div class="product-card" onclick="${sold ? '' : `addToCart('${p.id}')`}">
-                        <span class="status-badge ${p.status}">${p.status.replace('-', ' ')}</span>
+                        <span class="status-badge ${p.status}">${(p.status || 'available').replace('-', ' ')}</span>
                         ${hasSale ? `<span class="status-badge sale-badge">SALE</span>` : ''}
                         <div class="product-image"><img src="${p.image}" alt="${p.name}"></div>
                         <h3>${p.name}</h3>
@@ -798,6 +817,7 @@
 
         function renderAdminProductList() {
             const listEl = document.getElementById('admin-product-management-list');
+            if (!listEl) return;
             if (!perfumes || perfumes.length === 0) {
                 listEl.innerHTML = `<p style="font-size:10px; color:var(--text-muted); text-align:center; padding:10px;">No products in inventory.</p>`;
                 return;
@@ -811,7 +831,7 @@
                             <img src="${p.image}" style="width:30px; height:30px; object-fit:cover; border-radius:3px;">
                             <div>
                                 <strong style="color:var(--text-color);">${p.name}</strong><br>
-                                <span style="color:var(--accent-color);">${priceToShow} NLE</span> &bull; Status: ${p.status}
+                                <span style="color:var(--accent-color);">${priceToShow} NLE</span> &bull; Status: ${p.status || 'available'}
                             </div>
                         </div>
                         <div style="display:flex; gap:5px;">
@@ -824,6 +844,7 @@
 
         function renderAdminOrdersList() {
             const listEl = document.getElementById('admin-orders-list');
+            if (!listEl) return;
             if (!ordersList || ordersList.length === 0) {
                 listEl.innerHTML = `<p style="font-size:10px; color:var(--text-muted); text-align:center; padding:10px;">No incoming order logs yet.</p>`;
                 return;
@@ -852,6 +873,7 @@
 
         function renderAdminUsersList() {
             const listEl = document.getElementById('admin-users-list');
+            if (!listEl) return;
             if (!usersList || usersList.length === 0) {
                 listEl.innerHTML = `<p style="font-size:10px; color:var(--text-muted); text-align:center; padding:10px;">No registered user accounts found.</p>`;
                 return;
@@ -869,9 +891,12 @@
         }
 
         function updateStats() {
-            document.getElementById('stat-products').innerText = perfumes.length;
-            document.getElementById('stat-orders').innerText = ordersList.length;
-            document.getElementById('stat-customers').innerText = usersList.length;
+            const prodEl = document.getElementById('stat-products');
+            if (prodEl) prodEl.innerText = perfumes.length;
+            const ordEl = document.getElementById('stat-orders');
+            if (ordEl) ordEl.innerText = ordersList.length;
+            const usrEl = document.getElementById('stat-customers');
+            if (usrEl) usrEl.innerText = usersList.length;
 
             let totalRev = 0;
             ordersList.forEach(o => {
@@ -880,7 +905,8 @@
                     totalRev += cleanNum;
                 }
             });
-            document.getElementById('stat-revenue').innerText = totalRev.toFixed(2) + " NLE";
+            const revEl = document.getElementById('stat-revenue');
+            if (revEl) revEl.innerText = totalRev.toFixed(2) + " NLE";
         }
 
         window.updateOrderStatus = (orderId, newStatus) => {
@@ -923,8 +949,6 @@
             document.getElementById('form-mode-title').innerText = "✏️ Edit Existing Product";
             document.getElementById('save-product-btn').innerText = "UPDATE FIREBASE RECORD";
             document.getElementById('cancel-edit-btn').style.display = 'block';
-            
-            // Scroll modal to top of form
             document.querySelector('.modal-content').scrollTop = 0;
         };
 
@@ -1150,7 +1174,6 @@
             
             let waMessage = `*ARISA COLLECTION - NEW ORDER*\nCustomer: ${name}\nPhone: ${phone}\nTotal: *${grandTotal} NLE*\n\nProducts:\n${textMessageProducts}`;
             
-            // Push order to Firebase
             db.ref('orders').push({
                 name: name,
                 phone: phone,
@@ -1161,7 +1184,6 @@
                 timestamp: new Date().toLocaleString()
             });
 
-            // Push customer account to Firebase if not existing
             db.ref('users').push({
                 name: name,
                 phone: phone,
