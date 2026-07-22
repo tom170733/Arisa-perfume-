@@ -302,8 +302,6 @@
         .color-label { font-size: 9px; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; }
         .price-box { margin: 8px 0 12px 0; }
         .price { font-size: 13px; font-weight: 700; color: var(--accent-color); }
-        .old-price-strike { font-size: 10px; color: var(--text-muted); text-decoration: line-through; margin-right: 6px; }
-        .discount-badge { font-size: 9px; font-weight: 600; background: rgba(255, 77, 109, 0.15); color: #ff4d6d; border: 1px solid rgba(255, 77, 109, 0.3); padding: 1px 5px; border-radius: 3px; display: inline-block; margin-top: 4px; }
 
         .btn {
             background: var(--accent-color);
@@ -319,8 +317,6 @@
             width: 100%;
             text-align: center;
         }
-
-        .btn:disabled { background: #1a1a1a; color: #555; cursor: not-allowed; }
 
         .floating-cart-btn {
             position: fixed;
@@ -356,33 +352,29 @@
         .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 20px; }
         .close-btn { background: none; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; }
         .cart-item-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding: 12px 0; }
-        .save-btn, .remove-btn { background: none; border: 1px solid var(--border-color); color: var(--text-muted); font-size: 9px; padding: 3px 8px; border-radius: 3px; cursor: pointer; }
+        .remove-btn { background: none; border: 1px solid var(--border-color); color: var(--text-muted); font-size: 9px; padding: 3px 8px; border-radius: 3px; cursor: pointer; }
 
         .checkout-form-group { margin-bottom: 14px; }
         .checkout-form-group label { font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 5px; }
         .checkout-input, .checkout-select { width: 100%; background: #181818; border: 1px solid var(--border-color); color: #fff; padding: 10px 12px; font-size: 12px; border-radius: 4px; outline: none; }
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: #141414; border: 1px solid var(--border-color); padding: 25px; width: 100%; max-width: 480px; border-radius: 6px; max-height: 90vh; overflow-y: auto; }
+        .modal-content { background: #141414; border: 1px solid var(--border-color); padding: 25px; width: 100%; max-width: 520px; border-radius: 6px; max-height: 90vh; overflow-y: auto; }
 
-        .admin-panel { background: #161616; border: 1px dashed var(--accent-color); padding: 25px; margin-bottom: 30px; border-radius: 6px; display: none; }
-        .admin-grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .admin-column { display: flex; flex-direction: column; gap: 12px; }
-        .image-preview-box { width: 100%; height: 160px; background: #0d0d0d; border: 1px dashed var(--border-color); border-radius: 4px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .upload-section { background: #161616; border: 1px solid var(--accent-color); padding: 25px; margin-bottom: 30px; border-radius: 6px; }
+        .upload-grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .upload-column { display: flex; flex-direction: column; gap: 12px; }
+        .image-preview-box { width: 100%; height: 140px; background: #0d0d0d; border: 1px dashed var(--border-color); border-radius: 4px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
         .image-preview-box img { width: 100%; height: 100%; object-fit: cover; display: none; }
-        .admin-table-container { margin-top: 30px; border-top: 1px solid var(--border-color); padding-top: 20px; overflow-x: auto; }
-        .admin-table { width: 100%; border-collapse: collapse; font-size: 11px; text-align: left; }
-        .admin-table th, .admin-table td { padding: 10px 12px; border-bottom: 1px solid var(--border-color); }
-        .admin-table th { color: var(--accent-color); text-transform: uppercase; }
 
         .footer-note { text-align: center; font-size: 10px; color: var(--text-muted); margin-top: 50px; border-top: 1px solid var(--border-color); padding-top: 20px; text-transform: uppercase; }
         .static-page-box { background: var(--card-bg); border: 1px solid var(--border-color); padding: 30px; border-radius: 6px; margin-top: 10px; }
-        @media(max-width: 768px) { .admin-grid-layout { grid-template-columns: 1fr; } }
+        @media(max-width: 768px) { .upload-grid-layout { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-    <!-- Loading Screen with Safety Timeout -->
+    <!-- Loading Screen -->
     <div id="loading-screen">
         <div class="spinner-container">
             <div class="spinner-dot"></div><div class="spinner-dot"></div><div class="spinner-dot"></div><div class="spinner-dot"></div>
@@ -390,7 +382,7 @@
             <div class="spinner-dot"></div><div class="spinner-dot"></div><div class="spinner-dot"></div><div class="spinner-dot"></div>
             <div class="spinner-dot"></div><div class="spinner-dot"></div><div class="spinner-dot"></div><div class="spinner-dot"></div>
         </div>
-        <div class="loading-text">LOADING</div>
+        <div class="loading-text">LOADING CATALOG</div>
     </div>
 
     <header>
@@ -399,7 +391,7 @@
             <span class="active" onclick="showHome()">Catalog</span>
             <span onclick="showAbout()">About</span>
             <span onclick="showPolicy()">Policy</span>
-            <span onclick="loginAdmin()" style="color:var(--accent-color);">Admin</span>
+            <span onclick="openAdminModal()" style="color:var(--accent-color); font-weight:700;">⚙️ Admin Panel</span>
         </div>
     </header>
 
@@ -421,105 +413,16 @@
             <button class="cat-tab" id="tab-clothing" onclick="setMainCategory('clothing')">Clothing & Apparel</button>
         </div>
 
-        <!-- Master Admin Control Center Panel -->
-        <div id="admin-panel" class="admin-panel">
-            <h3 id="admin-panel-title">FIREBASE CLOUD ENGINE &mdash; GLOBAL PRODUCT UPLOAD</h3>
-            <input type="hidden" id="editing-firebase-key" value="">
-            
-            <div class="admin-grid-layout">
-                <div class="admin-column">
-                    <div>
-                        <label style="font-size:9px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">Product Title:</label>
-                        <input type="text" id="admin-p-name" class="checkout-input" placeholder="e.g., Tom Ford Oud Wood">
-                    </div>
-                    <div>
-                        <label style="font-size:9px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">Base Price (NLE):</label>
-                        <input type="number" id="admin-p-price" class="checkout-input" placeholder="0.00">
-                    </div>
-                    <div>
-                        <label style="font-size:9px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">Discount % (Optional):</label>
-                        <input type="number" id="admin-p-discount-percentage" class="checkout-input" placeholder="e.g. 10">
-                    </div>
-                    <div>
-                        <label style="font-size:9px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">Variant / Size / Volume:</label>
-                        <input type="text" id="admin-p-color" class="checkout-input" placeholder="e.g., 100ml / Size L">
-                    </div>
-                </div>
-
-                <div class="admin-column">
-                    <div>
-                        <label style="font-size:9px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">Store Section:</label>
-                        <select id="admin-p-category" class="checkout-select">
-                            <option value="perfume">Perfume & Body Lotion</option>
-                            <option value="clothing">Clothing & Apparel</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label style="font-size:9px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">Inventory Status:</label>
-                        <select id="admin-p-status" class="checkout-select">
-                            <option value="available">Status: Available</option>
-                            <option value="sold-out">Status: Sold Out</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label style="font-size:9px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">New Arrival Tag:</label>
-                        <select id="admin-p-arrival" class="checkout-select">
-                            <option value="no">New Arrival: No</option>
-                            <option value="yes">New Arrival: Yes</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label style="font-size:9px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">Select Picture Asset File:</label>
-                        <input type="file" id="admin-p-file" accept="image/*" class="checkout-input" style="padding:6px;" onchange="previewAdminImage(event)">
-                    </div>
-                </div>
-            </div>
-
-            <div style="margin-top: 15px;">
-                <label style="font-size:9px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">Live Picture Asset Preview:</label>
-                <div class="image-preview-box" id="preview-container">
-                    <span id="preview-placeholder">No image selected</span>
-                    <img id="preview-img" src="" alt="Preview">
-                </div>
-            </div>
-
-            <div style="display:flex; gap:10px; margin-top:20px;">
-                <button class="btn" id="admin-submit-btn" style="background:var(--accent-color); flex:2;" onclick="adminSaveProductFirebase()">UPLOAD PRODUCT TO DATABASE</button>
-                <button class="btn" style="background:#441; color:#fff; flex:1; display:none;" id="admin-cancel-edit-btn" onclick="cancelAdminEdit()">Cancel Edit</button>
-                <button class="btn" style="background:#222; color:#fff; flex:1;" onclick="logoutAdmin()">Close Session</button>
-            </div>
-
-            <div class="admin-table-container">
-                <h4 style="font-size:11px; color:var(--accent-color); margin-bottom:12px; text-transform:uppercase;">Master Inventory Management Table</h4>
-                <table class="admin-table">
-                    <thead>
-                        <tr><th>Item Name</th><th>Category</th><th>Price</th><th>Status</th><th>Actions</th></tr>
-                    </thead>
-                    <tbody id="admin-master-table-body"></tbody>
-                </table>
-            </div>
-        </div>
-
         <div class="controls-bar">
             <input type="text" id="search-bar" class="search-input" placeholder="Search collection inventory..." oninput="renderProducts()">
             <select id="category-filter" class="filter-select" onchange="renderProducts()">
                 <option value="all">Filter Status / Attributes</option>
                 <option value="available">Available Only</option>
                 <option value="sale">On Sale / Discount</option>
-                <option value="arrival">New Arrivals</option>
             </select>
         </div>
 
         <div id="product-grid" class="product-grid"></div>
-
-        <div style="margin-top: 40px; background:var(--card-bg); border:1px solid var(--border-color); padding:20px; border-radius:6px;">
-            <h4 style="font-size:11px; color:var(--accent-color); margin-bottom:6px; text-transform:uppercase;">COLLECTION REQUEST / SUGGESTION BOX</h4>
-            <p style="font-size:11px; color:var(--text-muted); margin-bottom:12px;">Looking for a specific global designer scent or clothing line?</p>
-            <div style="display:flex; gap:10px;">
-                <input type="text" id="user-suggestion" class="checkout-input" placeholder="Enter fragrance or clothing line...">
-                <button class="btn" style="width:140px;" onclick="sendSuggestion()">Submit</button>
-            </div>
-        </div>
 
         <div class="footer-note">&copy; 2026 Arisa Collection &bull; Calaba Town, Freetown, Sierra Leone. All Rights Reserved.</div>
     </div>
@@ -531,6 +434,83 @@
 
     <div id="floating-cart-btn" class="floating-cart-btn" onclick="toggleCart()">🛒 BAG (<span id="floating-cart-counter">0</span>)</div>
 
+    <!-- Admin Panel Modal -->
+    <div id="admin-modal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 700px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:12px; margin-bottom:20px;">
+                <h3 style="font-size:14px; color:var(--accent-color); text-transform:uppercase;">🔐 Arisa Collection Admin Control Panel</h3>
+                <button class="close-btn" onclick="closeAdminModal()">&times;</button>
+            </div>
+
+            <!-- Login View -->
+            <div id="admin-login-view">
+                <p style="font-size:11px; color:var(--text-muted); margin-bottom:15px;">Enter administrator password to access product uploading and customer order tracking:</p>
+                <input type="password" id="admin-password-input" class="checkout-input" placeholder="Enter Admin Password" style="margin-bottom:15px;">
+                <button class="btn" onclick="verifyAdminPassword()">LOGIN TO ADMIN DASHBOARD</button>
+            </div>
+
+            <!-- Dashboard View -->
+            <div id="admin-dashboard-view" style="display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                    <span style="font-size:11px; color:#28a745; font-weight:700;">🟢 SECURE SESSION ACTIVE</span>
+                    <button class="remove-btn" onclick="logoutAdmin()">Lock Admin</button>
+                </div>
+
+                <!-- Product & Picture Upload Section -->
+                <div class="upload-section" style="margin-bottom:25px;">
+                    <h4 style="font-size:12px; color:var(--accent-color); margin-bottom:15px; text-transform:uppercase; letter-spacing:1px;">✨ Upload Product & Picture Live to Customers</h4>
+                    <div class="upload-grid-layout">
+                        <div class="upload-column">
+                            <div>
+                                <label style="font-size:9px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">Product Name:</label>
+                                <input type="text" id="up-name" class="checkout-input" placeholder="e.g., Tom Ford Oud Wood">
+                            </div>
+                            <div>
+                                <label style="font-size:9px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">Price (NLE):</label>
+                                <input type="number" id="up-price" class="checkout-input" placeholder="0.00">
+                            </div>
+                            <div>
+                                <label style="font-size:9px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">Size / Volume / Variant:</label>
+                                <input type="text" id="up-color" class="checkout-input" placeholder="e.g., 100ml / Size L">
+                            </div>
+                        </div>
+
+                        <div class="upload-column">
+                            <div>
+                                <label style="font-size:9px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">Category:</label>
+                                <select id="up-category" class="checkout-select">
+                                    <option value="perfume">Perfume & Body Lotion</option>
+                                    <option value="clothing">Clothing & Apparel</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="font-size:9px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">Select Picture File:</label>
+                                <input type="file" id="up-file" accept="image/*" class="checkout-input" style="padding:5px;" onchange="previewUploadImage(event)">
+                            </div>
+                            <div>
+                                <label style="font-size:9px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">Picture Preview:</label>
+                                <div class="image-preview-box" id="preview-container">
+                                    <span id="preview-placeholder" style="font-size:9px; color:var(--text-muted);">No picture chosen</span>
+                                    <img id="preview-img" src="" alt="Preview">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn" style="margin-top:18px; background:var(--accent-color);" onclick="publishProductDirectly()">PUBLISH LIVE FOR CUSTOMERS</button>
+                </div>
+
+                <!-- Customer Orders & Management Section -->
+                <div style="background:#161616; border:1px solid var(--border-color); padding:20px; border-radius:6px;">
+                    <h4 style="font-size:12px; color:var(--accent-color); margin-bottom:12px; text-transform:uppercase;">📦 Customer Orders Tracker</h4>
+                    <p style="font-size:11px; color:var(--text-muted); margin-bottom:15px;">Review customer order entries saved from WhatsApp checkouts:</p>
+                    <div id="admin-orders-list" style="max-height:220px; overflow-y:auto;">
+                        <p style="font-size:11px; color:var(--text-muted); text-align:center; padding:15px;">No incoming order logs yet.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="cart-sidebar" class="sidebar">
         <div class="sidebar-header">
             <h3 style="font-size:13px; color:var(--accent-color); text-transform:uppercase;">YOUR SELECTION BAG</h3>
@@ -538,10 +518,6 @@
         </div>
         <div style="flex: 1; overflow-y: auto;">
             <div id="cart-items-list"></div>
-            <div id="saved-items-container" style="margin-top:20px; display:none;">
-                <h4 style="font-size:10px; color:var(--text-muted); margin-bottom:8px; border-bottom:1px solid var(--border-color); padding-bottom:4px; text-transform:uppercase;">SAVED FOR LATER</h4>
-                <div id="saved-items-list"></div>
-            </div>
             <div style="margin-top: 25px; border-top:1px solid var(--border-color); padding-top:15px; font-size:11px;">
                 <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="color:var(--text-muted);">Subtotal:</span><span><span id="cart-subtotal">0.00</span> NLE</span></div>
                 <div id="discount-row" style="display:flex; justify-content:space-between; margin-bottom:6px; color:#ff4d6d; display:none;"><span>Bundle Discount:</span><span>-<span id="cart-discount">0.00</span> NLE</span></div>
@@ -572,18 +548,6 @@
         </div>
     </div>
 
-    <div id="receipt-modal" class="modal-overlay">
-        <div class="modal-content" id="receipt-capture-canvas">
-            <h3 style="font-size:13px; color:var(--accent-color); text-align:center; margin-bottom:4px; text-transform:uppercase;">Arisa Collection</h3>
-            <p style="font-size:9px; text-align:center; color:var(--text-muted); margin-bottom:20px; text-transform:uppercase;">OFFICIAL SECURE TRANSACTION INVOICE</P>
-            <div id="receipt-details"></div>
-            <div id="pdf-invoice-area" style="margin-top:20px;">
-                <div id="canvas-receipt-details" style="display:none;"></div>
-                <button class="btn" id="hide-pdf-btn" style="background:#222; color:#fff;" onclick="closeReceipt()">Close & Return Home</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         const firebaseConfig = {
             apiKey: "AIzaSyDummyKeyForArisaCollection99281",
@@ -602,15 +566,14 @@
 
         let perfumes = [];
         let cart = [];
-        let savedItems = [];
         let currentSection = 'all';
         const myWhatsAppNumber = "23275000000";
+        const adminSecretPassword = "ARISA2026";
 
         const defaultPerfumes = [
-            { id: 'p1', name: 'Tom Ford Oud Wood', price: '1850', discountPercentage: '10', color: '100ml', category: 'perfume', status: 'available', isNewArrival: 'yes', image: 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=600&q=80' },
-            { id: 'p2', name: 'Chanel Bleu de Chanel', price: '2100', discountPercentage: '', color: '150ml', category: 'perfume', status: 'available', isNewArrival: 'no', image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=600&q=80' },
-            { id: 'p3', name: 'Designer Silk Evening Dress', price: '1450', discountPercentage: '15', color: 'Size M / Black', category: 'clothing', status: 'available', isNewArrival: 'yes', image: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=600&q=80' },
-            { id: 'p4', name: 'Luxury Velvet Blazer', price: '2500', discountPercentage: '', color: 'Size L / Navy', category: 'clothing', status: 'available', isNewArrival: 'no', image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=80' }
+            { id: 'p1', name: 'Tom Ford Oud Wood', price: '1850', color: '100ml', category: 'perfume', status: 'available', image: 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=600&q=80' },
+            { id: 'p2', name: 'Chanel Bleu de Chanel', price: '2100', color: '150ml', category: 'perfume', status: 'available', image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=600&q=80' },
+            { id: 'p3', name: 'Designer Silk Evening Dress', price: '1450', color: 'Size M / Black', category: 'clothing', status: 'available', image: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=600&q=80' }
         ];
 
         function hideLoadingScreen() {
@@ -622,17 +585,10 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            const adminSession = sessionStorage.getItem('isArisaAdmin');
-            if (adminSession === 'true') {
-                document.getElementById('admin-panel').style.display = 'block';
-            }
-
-            // Safety timeout: hides loader and loads local fallback if Firebase takes too long
             const safetyTimeout = setTimeout(() => {
                 if (perfumes.length === 0) {
                     perfumes = defaultPerfumes;
                     renderProducts();
-                    renderAdminTable();
                 }
                 hideLoadingScreen();
             }, 1500);
@@ -653,21 +609,34 @@
                         });
                     }
                     renderProducts();
-                    renderAdminTable();
                     hideLoadingScreen();
                 }, (error) => {
-                    // Fallback on permission error or offline state
                     clearTimeout(safetyTimeout);
                     perfumes = defaultPerfumes;
                     renderProducts();
-                    renderAdminTable();
                     hideLoadingScreen();
+                });
+
+                // Listen for orders
+                db.ref('orders').on('value', (snapshot) => {
+                    const orderData = snapshot.val();
+                    const ordersListEl = document.getElementById('admin-orders-list');
+                    if (orderData) {
+                        const orderKeys = Object.keys(orderData).reverse();
+                        ordersListEl.innerHTML = orderKeys.map(k => {
+                            const ord = orderData[k];
+                            return `<div style="border-bottom:1px solid var(--border-color); padding:10px 0; font-size:11px;">
+                                <strong style="color:var(--accent-color);">${ord.name}</strong> (${ord.phone})<br>
+                                Total: <b>${ord.total} NLE</b> | Method: ${ord.method}<br>
+                                <span style="color:var(--text-muted); font-size:9px;">${ord.timestamp}</span>
+                            </div>`;
+                        }).join('');
+                    }
                 });
             } catch (e) {
                 clearTimeout(safetyTimeout);
                 perfumes = defaultPerfumes;
                 renderProducts();
-                renderAdminTable();
                 hideLoadingScreen();
             }
         });
@@ -691,69 +660,55 @@
                 const matchesSearch = p.name.toLowerCase().includes(searchQuery) || (p.color && p.color.toLowerCase().includes(searchQuery));
                 if (!matchesSearch) return false;
                 if (filterVal === 'available') return p.status === 'available';
-                if (filterVal === 'sale') return p.discountPercentage && parseFloat(p.discountPercentage) > 0;
-                if (filterVal === 'arrival') return p.isNewArrival === 'yes';
                 return true;
             });
 
             if (filtered.length === 0) {
-                grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px; font-size:11px; color:var(--text-muted); text-transform:uppercase;">No collection items match your selection parameter.</div>`;
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px; font-size:11px; color:var(--text-muted); text-transform:uppercase;">No items found.</div>`;
                 return;
             }
 
             grid.innerHTML = filtered.map(p => {
                 const sold = p.status === 'sold-out';
                 const originalPrice = parseFloat(p.price);
-                let priceDisplayHTML = '';
-
-                if (p.discountPercentage && parseFloat(p.discountPercentage) > 0) {
-                    let pct = parseFloat(p.discountPercentage);
-                    let finalPrice = originalPrice - (originalPrice * (pct / 100));
-                    priceDisplayHTML = `<div class="price-box"><span class="old-price-strike">${originalPrice} NLE</span><span class="price">${finalPrice.toFixed(2)} NLE</span><br><span class="discount-badge">${pct}% OFF</span></div>`;
-                } else {
-                    priceDisplayHTML = `<div class="price-box"><span class="price">${originalPrice} NLE</span></div>`;
-                }
-
-                const arrivalBadgeHTML = (p.isNewArrival === 'yes') ? `<span class="status-badge" style="background:var(--accent-color); color:#0b0b0b; top: 14px; right: 14px; left: auto;">NEW</span>` : '';
 
                 return `
-                    <div class="product-card" onclick="${sold ? '' : `handleProductTap('${p.id || p.firebaseKey}')`}">
+                    <div class="product-card" onclick="${sold ? '' : `addToCart('${p.id || p.firebaseKey}')`}">
                         <span class="status-badge ${p.status}">${p.status.replace('-', ' ')}</span>
-                        ${arrivalBadgeHTML}
                         <div class="product-image"><img src="${p.image}" alt="${p.name}"></div>
                         <h3>${p.name}</h3>
                         ${p.color ? `<span class="color-label">${p.color}</span>` : ''}
-                        ${priceDisplayHTML}
+                        <div class="price-box"><span class="price">${originalPrice} NLE</span></div>
                         <button class="btn" ${sold ? 'disabled' : ''}>${sold ? 'SOLD OUT' : 'ADD TO BAG'}</button>
                     </div>`;
             }).join('');
         }
 
-        function renderAdminTable() {
-            const tableBody = document.getElementById('admin-master-table-body');
-            if (!tableBody) return;
+        window.openAdminModal = () => {
+            document.getElementById('admin-modal').style.display = 'flex';
+        };
 
-            if (perfumes.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No products found.</td></tr>`;
-                return;
+        window.closeAdminModal = () => {
+            document.getElementById('admin-modal').style.display = 'none';
+        };
+
+        window.verifyAdminPassword = () => {
+            const val = document.getElementById('admin-password-input').value;
+            if (val === adminSecretPassword) {
+                document.getElementById('admin-login-view').style.display = 'none';
+                document.getElementById('admin-dashboard-view').style.display = 'block';
+                document.getElementById('admin-password-input').value = '';
+            } else {
+                alert("Incorrect Admin Password.");
             }
+        };
 
-            tableBody.innerHTML = perfumes.map(p => `
-                <tr>
-                    <td><strong>${p.name}</strong><br><span style="font-size:9px; color:var(--text-muted);">${p.color || ''}</span></td>
-                    <td style="text-transform:uppercase; font-size:10px;">${p.category}</td>
-                    <td>${p.price} NLE</td>
-                    <td><span style="color:${p.status === 'available' ? '#28a745' : '#dc3545'}; text-transform:uppercase; font-weight:700;">${p.status}</span></td>
-                    <td>
-                        <button class="save-btn" style="background:#134; color:#fff;" onclick="startAdminEdit('${p.firebaseKey || p.id}')">Edit</button>
-                        <button class="save-btn" style="background:#222; color:#fff;" onclick="toggleStatus('${p.firebaseKey || p.id}','${p.status}')">Status</button>
-                        <button class="remove-btn" onclick="deleteProduct('${p.firebaseKey || p.id}')">Delete</button>
-                    </td>
-                </tr>
-            `).join('');
-        }
+        window.logoutAdmin = () => {
+            document.getElementById('admin-dashboard-view').style.display = 'none';
+            document.getElementById('admin-login-view').style.display = 'block';
+        };
 
-        window.previewAdminImage = (event) => {
+        window.previewUploadImage = (event) => {
             const file = event.target.files[0];
             const previewImg = document.getElementById('preview-img');
             const previewPlaceholder = document.getElementById('preview-placeholder');
@@ -768,14 +723,53 @@
             }
         };
 
-        let tapTimer = null;
-        window.handleProductTap = (id) => {
-            if (tapTimer === null) {
-                tapTimer = setTimeout(() => { addToCart(id); tapTimer = null; }, 300);
+        window.publishProductDirectly = () => {
+            const name = document.getElementById('up-name').value.trim();
+            const price = document.getElementById('up-price').value.trim();
+            const color = document.getElementById('up-color').value.trim();
+            const category = document.getElementById('up-category').value;
+            const fileInput = document.getElementById('up-file');
+
+            if (!name || !price) {
+                alert("Please enter both the product name and price.");
+                return;
+            }
+
+            const pushToCloud = (imageUrl) => {
+                const newProduct = {
+                    id: 'prod_' + Date.now(),
+                    name: name,
+                    price: price,
+                    color: color || '',
+                    category: category,
+                    status: 'available',
+                    image: imageUrl || 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=600&q=80'
+                };
+
+                try {
+                    db.ref('products').push(newProduct);
+                } catch(e) {}
+
+                alert("Success! Product uploaded from admin panel and is now live for all customers.");
+
+                // Reset fields
+                document.getElementById('up-name').value = '';
+                document.getElementById('up-price').value = '';
+                document.getElementById('up-color').value = '';
+                document.getElementById('up-file').value = '';
+                document.getElementById('preview-img').src = '';
+                document.getElementById('preview-img').style.display = 'none';
+                document.getElementById('preview-placeholder').style.display = 'block';
+            };
+
+            if (fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    pushToCloud(e.target.result);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
             } else {
-                clearTimeout(tapTimer);
-                tapTimer = null;
-                addToCart(id);
+                pushToCloud('');
             }
         };
 
@@ -784,7 +778,7 @@
             if (!item) return;
             const existingItem = cart.find(i => (i.id === id || i.firebaseKey === id));
             if (existingItem) {
-                alert("This item is already added to your selection bag!");
+                alert("This item is already added to your bag!");
                 return;
             }
             cart.push({ ...item, cartId: Date.now() + Math.random() });
@@ -798,37 +792,14 @@
             if (cart.length === 0) document.getElementById('floating-cart-btn').style.display = 'none';
         };
 
-        window.saveForLater = (cartId) => {
-            const item = cart.find(i => i.cartId === cartId);
-            savedItems.push(item);
-            cart = cart.filter(i => i.cartId !== cartId);
-            updateCartUI();
-            if (cart.length === 0) document.getElementById('floating-cart-btn').style.display = 'none';
-        };
-
-        window.moveToCart = (cartId) => {
-            const item = savedItems.find(i => i.cartId === cartId);
-            cart.push(item);
-            savedItems = savedItems.filter(i => i.cartId !== cartId);
-            updateCartUI();
-            document.getElementById('floating-cart-btn').style.display = 'flex';
-        };
-
         function updateCartUI() {
             document.getElementById('floating-cart-counter').innerText = cart.length;
             const list = document.getElementById('cart-items-list');
-            const savedList = document.getElementById('saved-items-list');
             let subtotal = 0;
 
             list.innerHTML = cart.map(i => {
-                const originalPrice = parseFloat(i.price);
-                let finalActivePrice = originalPrice;
-                if (i.discountPercentage && parseFloat(i.discountPercentage) > 0) {
-                    const pct = parseFloat(i.discountPercentage);
-                    finalActivePrice = originalPrice - (originalPrice * (pct / 100));
-                }
-                subtotal += finalActivePrice;
-                i.calculatedCartPrice = finalActivePrice;
+                const priceVal = parseFloat(i.price);
+                subtotal += priceVal;
                 return `
                     <div class="cart-item-row">
                         <div style="text-align:left; max-width:65%;">
@@ -836,25 +807,11 @@
                             ${i.color ? `<span style="font-size:9px; color:var(--text-muted); text-transform:uppercase;">${i.color}</span>` : ''}
                         </div>
                         <div style="text-align:right;">
-                            <span style="font-size:12px; font-weight:700; display:block; margin-bottom:6px; color:#fff;">${finalActivePrice.toFixed(2)} NLE</span>
-                            <div style="display:flex; gap:6px; justify-content:flex-end;">
-                                <button class="save-btn" onclick="saveForLater(${i.cartId})">Save</button>
-                                <button class="remove-btn" onclick="removeFromCart(${i.cartId})">Remove</button>
-                            </div>
+                            <span style="font-size:12px; font-weight:700; display:block; margin-bottom:6px; color:#fff;">${priceVal.toFixed(2)} NLE</span>
+                            <button class="remove-btn" onclick="removeFromCart(${i.cartId})">Remove</button>
                         </div>
                     </div>`;
             }).join('');
-
-            if (savedItems.length > 0) {
-                document.getElementById('saved-items-container').style.display = 'block';
-                savedList.innerHTML = savedItems.map(i => `
-                    <div style="border-bottom:1px dashed var(--border-color); padding:8px 0; display:flex; justify-content:space-between; align-items:center;">
-                        <span style="font-size:11px;">${i.name}</span>
-                        <button class="save-btn" style="color:#fff;" onclick="moveToCart(${i.cartId})">Move to Bag</button>
-                    </div>`).join('');
-            } else {
-                document.getElementById('saved-items-container').style.display = 'none';
-            }
 
             let rewardDiscount = 0;
             if (cart.length === 2) rewardDiscount = subtotal * 0.10;
@@ -899,145 +856,6 @@
             document.getElementById('page-inner-content').innerHTML = `<h2 style="color:var(--accent-color); margin-bottom:15px; font-size:15px; text-transform:uppercase;">STORE POLICY</h2><p style="font-size:12px; color:#ccc; line-height:1.9;">Reliable scheduled dispatch throughout Freetown. All sales are definitive.</p>`;
         };
 
-        window.sendSuggestion = () => {
-            const input = document.getElementById('user-suggestion');
-            if (!input.value.trim()) return;
-            try { db.ref('suggestions').push(input.value.trim()); } catch(e){}
-            input.value = '';
-            alert("Suggestion logged. Thank you!");
-        };
-
-        window.loginAdmin = () => {
-            const password = prompt("Enter Administration Verification Password:");
-            if (password === "ARISA2026") {
-                sessionStorage.setItem('isArisaAdmin', 'true');
-                document.getElementById('admin-panel').style.display = 'block';
-                renderProducts();
-            } else {
-                alert("Authorization Denied.");
-            }
-        };
-
-        window.logoutAdmin = () => {
-            sessionStorage.removeItem('isArisaAdmin');
-            document.getElementById('admin-panel').style.display = 'none';
-            cancelAdminEdit();
-            renderProducts();
-        };
-
-        window.toggleStatus = (key, currentStatus) => {
-            const nextStatus = currentStatus === 'available' ? 'sold-out' : 'available';
-            const item = perfumes.find(p => (p.firebaseKey === key || p.id === key));
-            if(item) item.status = nextStatus;
-            try { db.ref('products/' + key).update({ status: nextStatus }); } catch(e){}
-            renderProducts();
-            renderAdminTable();
-        };
-
-        window.deleteProduct = (key) => {
-            if (confirm("Permanently erase product?")) {
-                perfumes = perfumes.filter(p => p.firebaseKey !== key && p.id !== key);
-                try { db.ref('products/' + key).remove(); } catch(e){}
-                renderProducts();
-                renderAdminTable();
-            }
-        };
-
-        window.startAdminEdit = (key) => {
-            const product = perfumes.find(p => p.firebaseKey === key || p.id === key);
-            if (!product) return;
-            document.getElementById('editing-firebase-key').value = key;
-            document.getElementById('admin-p-name').value = product.name;
-            document.getElementById('admin-p-price').value = product.price;
-            document.getElementById('admin-p-discount-percentage').value = product.discountPercentage || '';
-            document.getElementById('admin-p-color').value = product.color || '';
-            document.getElementById('admin-p-category').value = product.category;
-            document.getElementById('admin-p-status').value = product.status;
-            document.getElementById('admin-p-arrival').value = product.isNewArrival || 'no';
-
-            if (product.image) {
-                const previewImg = document.getElementById('preview-img');
-                const previewPlaceholder = document.getElementById('preview-placeholder');
-                previewImg.src = product.image;
-                previewImg.style.display = 'block';
-                previewPlaceholder.style.display = 'none';
-            }
-            document.getElementById('admin-panel-title').innerText = "EDIT PRODUCT RECORD";
-            document.getElementById('admin-submit-btn').innerText = "UPDATE PRODUCT RECORD";
-            document.getElementById('admin-cancel-edit-btn').style.display = 'block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
-
-        window.cancelAdminEdit = () => {
-            document.getElementById('editing-firebase-key').value = '';
-            document.getElementById('admin-p-name').value = '';
-            document.getElementById('admin-p-price').value = '';
-            document.getElementById('admin-p-discount-percentage').value = '';
-            document.getElementById('admin-p-color').value = '';
-            document.getElementById('admin-p-file').value = '';
-            document.getElementById('preview-img').src = '';
-            document.getElementById('preview-img').style.display = 'none';
-            document.getElementById('preview-placeholder').style.display = 'block';
-            document.getElementById('admin-panel-title').innerText = "FIREBASE CLOUD ENGINE &mdash; GLOBAL PRODUCT UPLOAD";
-            document.getElementById('admin-submit-btn').innerText = "UPLOAD PRODUCT TO DATABASE";
-            document.getElementById('admin-cancel-edit-btn').style.display = 'none';
-        };
-
-        window.adminSaveProductFirebase = () => {
-            const editingKey = document.getElementById('editing-firebase-key').value;
-            const name = document.getElementById('admin-p-name').value;
-            const price = document.getElementById('admin-p-price').value;
-            const discountPct = document.getElementById('admin-p-discount-percentage').value;
-            const color = document.getElementById('admin-p-color').value;
-            const category = document.getElementById('admin-p-category').value;
-            const status = document.getElementById('admin-p-status').value;
-            const isArrival = document.getElementById('admin-p-arrival').value;
-            const fileInput = document.getElementById('admin-p-file');
-            
-            if (!name || !price) {
-                alert("Product name and base price must be specified.");
-                return;
-            }
-
-            const executeSave = (imageUrl) => {
-                const productData = {
-                    name, price,
-                    discountPercentage: discountPct || "",
-                    color: color || "",
-                    category, status,
-                    isNewArrival: isArrival,
-                    image: imageUrl
-                };
-
-                if (editingKey) {
-                    productData.id = editingKey;
-                    const idx = perfumes.findIndex(p => p.firebaseKey === editingKey || p.id === editingKey);
-                    if (idx !== -1) perfumes[idx] = { ...perfumes[idx], ...productData };
-                    try { db.ref('products/' + editingKey).update(productData); } catch(e){}
-                    alert("Product record successfully updated!");
-                } else {
-                    productData.id = 'prod_' + Date.now();
-                    perfumes.push(productData);
-                    try { db.ref('products').push(productData); } catch(e){}
-                    alert("Product successfully added!");
-                }
-                cancelAdminEdit();
-                renderProducts();
-                renderAdminTable();
-            };
-
-            if (fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) { executeSave(e.target.result); };
-                reader.readAsDataURL(fileInput.files[0]);
-            } else if (editingKey) {
-                const existingProduct = perfumes.find(p => p.firebaseKey === editingKey || p.id === editingKey);
-                executeSave(existingProduct ? existingProduct.image : '');
-            } else {
-                alert("Please select a picture asset file.");
-            }
-        };
-
         window.checkoutWhatsApp = () => {
             const name = document.getElementById('cust-name').value.trim();
             const phone = document.getElementById('cust-phone').value.trim();
@@ -1046,39 +864,30 @@
             if (method === 'Pick Up') addr = "Customer Pick Up Selected";
 
             if (!name || !phone || (method === 'Delivery' && !addr) || cart.length === 0) {
-                alert("Please fill your customer details completely and verify your selection bag.");
+                alert("Please fill your customer details completely and verify your bag.");
                 return;
             }
             
-            const timestamp = new Date().toLocaleString();
             const grandTotal = document.getElementById('cart-grand-total').innerText;
-            let invoiceItemsHTML = '';
             let textMessageProducts = '';
-            
-            cart.forEach((itm, index) => {
-                const linePrice = itm.calculatedCartPrice ? itm.calculatedCartPrice : parseFloat(itm.price);
-                invoiceItemsHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:11px;"><span>${index + 1}. ${itm.name}</span><strong>${linePrice.toFixed(2)} NLE</strong></div>`;
-                textMessageProducts += `• *${itm.name}* - ${linePrice.toFixed(2)} NLE\n`;
+            cart.forEach((itm) => {
+                textMessageProducts += `• *${itm.name}* - ${itm.price} NLE\n`;
             });
             
-            const payment = document.getElementById('payment-method').value;
-            const receiptHTML = `
-                <p style="font-size:11px; color:var(--text-muted); margin-bottom:12px; text-align:center;">Date: ${timestamp}</p>
-                <div style="margin-bottom:15px; font-size:11px; border-bottom:1px solid var(--border-color); padding-bottom:12px;">
-                    <p><strong>Customer Name:</strong> ${name}</p>
-                    <p><strong>Phone Line:</strong> ${phone}</p>
-                    <p><strong>Fulfillment:</strong> ${method}</p>
-                    <p><strong>Payment:</strong> ${payment}</p>
-                </div>
-                <div>${invoiceItemsHTML}</div>
-                <div style="border-top:1px dashed var(--accent-color); margin-top:15px; padding-top:12px; text-align:right;">
-                    <p style="font-size:15px; font-weight:700; color:var(--accent-color);">Grand Total: ${grandTotal} NLE</p>
-                </div>`;
-                
-            document.getElementById('receipt-details').innerHTML = receiptHTML;
-            document.getElementById('receipt-modal').style.display = 'flex';
-            
             let waMessage = `*ARISA COLLECTION - NEW ORDER*\nCustomer: ${name}\nPhone: ${phone}\nTotal: *${grandTotal} NLE*\n\nProducts:\n${textMessageProducts}`;
+            
+            // Save order to Firebase so it appears in the admin panel
+            try {
+                db.ref('orders').push({
+                    name: name,
+                    phone: phone,
+                    method: method,
+                    address: addr,
+                    total: grandTotal,
+                    timestamp: new Date().toLocaleString()
+                });
+            } catch(e) {}
+
             const waURL = `https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(waMessage)}`;
             
             cart = [];
@@ -1086,11 +895,6 @@
             document.getElementById('floating-cart-btn').style.display = 'none';
             toggleCart();
             window.open(waURL, '_blank');
-        };
-
-        window.closeReceipt = () => {
-            document.getElementById('receipt-modal').style.display = 'none';
-            showHome();
         };
     </script>
 </body>
