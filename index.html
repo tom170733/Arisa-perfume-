@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ARISA COLLECTION</title>
     <!-- PDF Generation Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -35,6 +35,7 @@
             color: var(--text-color);
             padding-bottom: 90px;
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
         #loading-screen {
@@ -107,7 +108,7 @@
             background: rgba(11, 11, 11, 0.95);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border-color);
-            padding: 18px 30px;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -117,20 +118,21 @@
         }
 
         .logo {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 700;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             color: var(--accent-color);
             text-transform: uppercase;
         }
 
         .nav-links {
             display: flex;
-            gap: 25px;
-            font-size: 11px;
+            gap: 15px;
+            font-size: 10px;
             font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
+            align-items: center;
         }
 
         .nav-links span {
@@ -144,9 +146,9 @@
         }
 
         .container {
-            max-width: 1280px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 25px;
+            padding: 15px;
         }
 
         .hero-banner {
@@ -154,22 +156,22 @@
             background-size: cover;
             background-position: center;
             border: 1px solid var(--border-color);
-            padding: 50px 30px;
+            padding: 35px 20px;
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             border-radius: 6px;
         }
 
         .hero-banner h1 {
-            font-size: 24px;
+            font-size: 20px;
             color: var(--accent-color);
-            margin-bottom: 10px;
-            letter-spacing: 3px;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
             font-weight: 600;
         }
 
         .hero-banner p {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
             letter-spacing: 1px;
             text-transform: uppercase;
@@ -177,39 +179,40 @@
 
         .trust-bar {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .trust-item {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            padding: 15px;
+            padding: 12px;
             border-radius: 6px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
-        .trust-item span.icon { font-size: 20px; }
-        .trust-item h4 { font-size: 11px; letter-spacing: 1px; color: var(--accent-color); margin-bottom: 2px; text-transform: uppercase; }
-        .trust-item p { font-size: 10px; color: var(--text-muted); }
+        .trust-item span.icon { font-size: 18px; }
+        .trust-item h4 { font-size: 10px; letter-spacing: 1px; color: var(--accent-color); margin-bottom: 2px; text-transform: uppercase; }
+        .trust-item p { font-size: 9px; color: var(--text-muted); }
 
         .category-tabs {
             display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 8px;
+            margin-bottom: 15px;
             overflow-x: auto;
             padding-bottom: 5px;
+            -webkit-overflow-scrolling: touch;
         }
 
         .cat-tab {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             color: var(--text-muted);
-            padding: 10px 20px;
-            font-size: 11px;
+            padding: 8px 14px;
+            font-size: 10px;
             font-weight: 700;
             letter-spacing: 1px;
             text-transform: uppercase;
@@ -224,8 +227,8 @@
 
         .controls-bar {
             display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
+            gap: 10px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
         }
 
@@ -233,12 +236,12 @@
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             color: #fff;
-            padding: 12px 16px;
-            font-size: 12px;
+            padding: 10px 14px;
+            font-size: 11px;
             border-radius: 4px;
             outline: none;
             flex: 1;
-            min-width: 220px;
+            min-width: 180px;
         }
 
         .search-input:focus, .filter-select:focus { border-color: var(--accent-color); }
@@ -246,14 +249,22 @@
         .product-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            gap: 12px;
+        }
+
+        @media(min-width: 768px) {
+            .product-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        }
+
+        @media(min-width: 1024px) {
+            .product-grid { grid-template-columns: repeat(4, 1fr); }
         }
 
         .product-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 6px;
-            padding: 14px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             position: relative;
@@ -263,18 +274,18 @@
 
         .product-card:hover {
             border-color: var(--border-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
         }
 
         .status-badge {
             position: absolute;
-            top: 14px;
-            left: 14px;
-            font-size: 8px;
+            top: 10px;
+            left: 10px;
+            font-size: 7px;
             font-weight: 700;
             letter-spacing: 1px;
-            padding: 3px 8px;
+            padding: 3px 6px;
             background: #28a745;
             color: #fff;
             border-radius: 3px;
@@ -283,32 +294,38 @@
         }
 
         .status-badge.sold-out { background: #dc3545; }
+        .status-badge.sale-badge { background: #ff4d6d; left: auto; right: 10px; }
 
         .product-image {
             width: 100%;
-            height: 180px;
+            height: 150px;
             background: #090909;
             border-radius: 4px;
             overflow: hidden;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
+        @media(min-width: 768px) {
+            .product-image { height: 180px; }
+        }
+
         .product-image img { width: 100%; height: 100%; object-fit: cover; }
 
-        .product-card h3 { font-size: 12px; font-weight: 600; margin-bottom: 4px; color: var(--text-color); }
-        .color-label { font-size: 9px; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; }
-        .price-box { margin: 8px 0 12px 0; }
-        .price { font-size: 13px; font-weight: 700; color: var(--accent-color); }
+        .product-card h3 { font-size: 11px; font-weight: 600; margin-bottom: 3px; color: var(--text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .color-label { font-size: 8px; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; }
+        .price-box { margin: 6px 0 10px 0; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+        .price { font-size: 12px; font-weight: 700; color: var(--accent-color); }
+        .old-price { font-size: 10px; color: var(--text-muted); text-decoration: line-through; }
 
         .btn {
             background: var(--accent-color);
             color: #0b0b0b;
             border: none;
-            padding: 10px;
-            font-size: 11px;
+            padding: 8px;
+            font-size: 10px;
             font-weight: 700;
             letter-spacing: 1px;
             text-transform: uppercase;
@@ -320,56 +337,59 @@
 
         .floating-cart-btn {
             position: fixed;
-            bottom: 25px;
-            right: 25px;
+            bottom: 20px;
+            right: 20px;
             background: var(--accent-color);
             color: #0b0b0b;
-            padding: 14px 24px;
-            border-radius: 40px;
+            padding: 12px 20px;
+            border-radius: 30px;
             font-weight: 700;
-            font-size: 12px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+            font-size: 11px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.6);
             cursor: pointer;
             z-index: 99;
             display: none;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .sidebar {
             position: fixed;
             top: 0; right: 0;
-            width: 100%; max-width: 420px; height: 100%;
+            width: 100%; max-width: 380px; height: 100%;
             background: #111111;
             border-left: 1px solid var(--border-color);
             z-index: 1000;
             display: none;
             flex-direction: column;
-            padding: 25px;
+            padding: 20px;
             overflow-y: auto;
         }
 
-        .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 20px; }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 15px; }
         .close-btn { background: none; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; }
-        .cart-item-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding: 12px 0; }
-        .remove-btn { background: none; border: 1px solid var(--border-color); color: var(--text-muted); font-size: 9px; padding: 3px 8px; border-radius: 3px; cursor: pointer; }
+        .cart-item-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding: 10px 0; }
+        .remove-btn { background: none; border: 1px solid var(--border-color); color: var(--text-muted); font-size: 8px; padding: 3px 6px; border-radius: 3px; cursor: pointer; }
 
-        .checkout-form-group { margin-bottom: 14px; }
-        .checkout-form-group label { font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 5px; }
-        .checkout-input, .checkout-select { width: 100%; background: #181818; border: 1px solid var(--border-color); color: #fff; padding: 10px 12px; font-size: 12px; border-radius: 4px; outline: none; }
+        .checkout-form-group { margin-bottom: 12px; }
+        .checkout-form-group label { font-size: 9px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 4px; }
+        .checkout-input, .checkout-select { width: 100%; background: #181818; border: 1px solid var(--border-color); color: #fff; padding: 9px 10px; font-size: 11px; border-radius: 4px; outline: none; }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: #141414; border: 1px solid var(--border-color); padding: 25px; width: 100%; max-width: 520px; border-radius: 6px; max-height: 90vh; overflow-y: auto; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 15px; }
+        .modal-content { background: #141414; border: 1px solid var(--border-color); padding: 20px; width: 100%; max-width: 600px; border-radius: 6px; max-height: 90vh; overflow-y: auto; }
 
-        .upload-section { background: #161616; border: 1px solid var(--accent-color); padding: 25px; margin-bottom: 30px; border-radius: 6px; }
-        .upload-grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .upload-column { display: flex; flex-direction: column; gap: 12px; }
-        .image-preview-box { width: 100%; height: 140px; background: #0d0d0d; border: 1px dashed var(--border-color); border-radius: 4px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+        .upload-section { background: #161616; border: 1px solid var(--accent-color); padding: 15px; margin-bottom: 20px; border-radius: 6px; }
+        .upload-grid-layout { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        @media(min-width: 600px) { .upload-grid-layout { grid-template-columns: 1fr 1fr; } }
+        
+        .upload-column { display: flex; flex-direction: column; gap: 10px; }
+        .image-preview-box { width: 100%; height: 110px; background: #0d0d0d; border: 1px dashed var(--border-color); border-radius: 4px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
         .image-preview-box img { width: 100%; height: 100%; object-fit: cover; display: none; }
 
-        .footer-note { text-align: center; font-size: 10px; color: var(--text-muted); margin-top: 50px; border-top: 1px solid var(--border-color); padding-top: 20px; text-transform: uppercase; }
-        .static-page-box { background: var(--card-bg); border: 1px solid var(--border-color); padding: 30px; border-radius: 6px; margin-top: 10px; }
-        @media(max-width: 768px) { .upload-grid-layout { grid-template-columns: 1fr; } }
+        .admin-product-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding: 8px 0; font-size: 10px; }
+
+        .footer-note { text-align: center; font-size: 9px; color: var(--text-muted); margin-top: 30px; border-top: 1px solid var(--border-color); padding-top: 15px; text-transform: uppercase; }
+        .static-page-box { background: var(--card-bg); border: 1px solid var(--border-color); padding: 20px; border-radius: 6px; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -391,7 +411,7 @@
             <span class="active" onclick="showHome()">Catalog</span>
             <span onclick="showAbout()">About</span>
             <span onclick="showPolicy()">Policy</span>
-            <span onclick="openAdminModal()" style="color:var(--accent-color); font-weight:700;">⚙️ Admin Panel</span>
+            <span onclick="openAdminModal()" style="color:var(--accent-color); font-weight:700;">⚙️ Admin</span>
         </div>
     </header>
 
@@ -409,7 +429,7 @@
 
         <div class="category-tabs">
             <button class="cat-tab active" id="tab-all" onclick="setMainCategory('all')">All Collections</button>
-            <button class="cat-tab" id="tab-perfume" onclick="setMainCategory('perfume')">Perfumes & Body Lotions</button>
+            <button class="cat-tab" id="tab-perfume" onclick="setMainCategory('perfume')">Perfumes & Lotions</button>
             <button class="cat-tab" id="tab-clothing" onclick="setMainCategory('clothing')">Clothing & Apparel</button>
         </div>
 
@@ -429,82 +449,94 @@
 
     <div class="container" id="page-content" style="display: none;">
         <div class="static-page-box"><div id="page-inner-content"></div></div>
-        <button class="btn" style="margin-top:20px; max-width:180px;" onclick="showHome()">Back to Catalog</button>
+        <button class="btn" style="margin-top:15px; max-width:150px;" onclick="showHome()">Back to Catalog</button>
     </div>
 
     <div id="floating-cart-btn" class="floating-cart-btn" onclick="toggleCart()">🛒 BAG (<span id="floating-cart-counter">0</span>)</div>
 
     <!-- Admin Panel Modal -->
     <div id="admin-modal" class="modal-overlay">
-        <div class="modal-content" style="max-width: 700px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:12px; margin-bottom:20px;">
-                <h3 style="font-size:14px; color:var(--accent-color); text-transform:uppercase;">🔐 Arisa Collection Admin Control Panel</h3>
+        <div class="modal-content" style="max-width: 600px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:10px; margin-bottom:15px;">
+                <h3 style="font-size:12px; color:var(--accent-color); text-transform:uppercase;">🔐 Arisa Collection Admin Control Panel</h3>
                 <button class="close-btn" onclick="closeAdminModal()">&times;</button>
             </div>
 
             <!-- Login View -->
             <div id="admin-login-view">
-                <p style="font-size:11px; color:var(--text-muted); margin-bottom:15px;">Enter administrator password to access product uploading and customer order tracking:</p>
-                <input type="password" id="admin-password-input" class="checkout-input" placeholder="Enter Admin Password" style="margin-bottom:15px;">
+                <p style="font-size:10px; color:var(--text-muted); margin-bottom:12px;">Enter administrator password to access product uploading, discount control, deletion, and customer order tracking:</p>
+                <input type="password" id="admin-password-input" class="checkout-input" placeholder="Enter Admin Password" style="margin-bottom:12px;">
                 <button class="btn" onclick="verifyAdminPassword()">LOGIN TO ADMIN DASHBOARD</button>
             </div>
 
             <!-- Dashboard View -->
             <div id="admin-dashboard-view" style="display:none;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                    <span style="font-size:11px; color:#28a745; font-weight:700;">🟢 SECURE SESSION ACTIVE</span>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <span style="font-size:10px; color:#28a745; font-weight:700;">🟢 SECURE SESSION ACTIVE</span>
                     <button class="remove-btn" onclick="logoutAdmin()">Lock Admin</button>
                 </div>
 
                 <!-- Product & Picture Upload Section -->
-                <div class="upload-section" style="margin-bottom:25px;">
-                    <h4 style="font-size:12px; color:var(--accent-color); margin-bottom:15px; text-transform:uppercase; letter-spacing:1px;">✨ Upload Product & Picture Live to Customers</h4>
+                <div class="upload-section" style="margin-bottom:20px;">
+                    <h4 style="font-size:11px; color:var(--accent-color); margin-bottom:12px; text-transform:uppercase; letter-spacing:1px;">✨ Add Product & Set Discount Live</h4>
                     <div class="upload-grid-layout">
                         <div class="upload-column">
                             <div>
-                                <label style="font-size:9px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">Product Name:</label>
+                                <label style="font-size:8px; color:var(--text-muted); display:block; margin-bottom:3px; text-transform:uppercase;">Product Name:</label>
                                 <input type="text" id="up-name" class="checkout-input" placeholder="e.g., Tom Ford Oud Wood">
                             </div>
                             <div>
-                                <label style="font-size:9px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">Price (NLE):</label>
+                                <label style="font-size:8px; color:var(--text-muted); display:block; margin-bottom:3px; text-transform:uppercase;">Regular Price (NLE):</label>
                                 <input type="number" id="up-price" class="checkout-input" placeholder="0.00">
                             </div>
                             <div>
-                                <label style="font-size:9px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">Size / Volume / Variant:</label>
+                                <label style="font-size:8px; color:var(--text-muted); display:block; margin-bottom:3px; text-transform:uppercase;">Sale Price (Optional Discounted Price):</label>
+                                <input type="number" id="up-sale-price" class="checkout-input" placeholder="Leave blank if no discount">
+                            </div>
+                            <div>
+                                <label style="font-size:8px; color:var(--text-muted); display:block; margin-bottom:3px; text-transform:uppercase;">Size / Volume / Variant:</label>
                                 <input type="text" id="up-color" class="checkout-input" placeholder="e.g., 100ml / Size L">
                             </div>
                         </div>
 
                         <div class="upload-column">
                             <div>
-                                <label style="font-size:9px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">Category:</label>
+                                <label style="font-size:8px; color:var(--text-muted); display:block; margin-bottom:3px; text-transform:uppercase;">Category:</label>
                                 <select id="up-category" class="checkout-select">
-                                    <option value="perfume">Perfume & Body Lotion</option>
+                                    <option value="perfume">Perfume & Lotion</option>
                                     <option value="clothing">Clothing & Apparel</option>
                                 </select>
                             </div>
                             <div>
-                                <label style="font-size:9px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">Select Picture File:</label>
-                                <input type="file" id="up-file" accept="image/*" class="checkout-input" style="padding:5px;" onchange="previewUploadImage(event)">
+                                <label style="font-size:8px; color:var(--text-muted); display:block; margin-bottom:3px; text-transform:uppercase;">Select Picture File:</label>
+                                <input type="file" id="up-file" accept="image/*" class="checkout-input" style="padding:4px;" onchange="previewUploadImage(event)">
                             </div>
                             <div>
-                                <label style="font-size:9px; color:var(--text-muted); display:block; margin-bottom:4px; text-transform:uppercase;">Picture Preview:</label>
+                                <label style="font-size:8px; color:var(--text-muted); display:block; margin-bottom:3px; text-transform:uppercase;">Picture Preview:</label>
                                 <div class="image-preview-box" id="preview-container">
-                                    <span id="preview-placeholder" style="font-size:9px; color:var(--text-muted);">No picture chosen</span>
+                                    <span id="preview-placeholder" style="font-size:8px; color:var(--text-muted);">No picture chosen</span>
                                     <img id="preview-img" src="" alt="Preview">
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <button class="btn" style="margin-top:18px; background:var(--accent-color);" onclick="publishProductDirectly()">PUBLISH LIVE FOR CUSTOMERS</button>
+                    <button class="btn" style="margin-top:15px; background:var(--accent-color);" onclick="publishProductDirectly()">PUBLISH LIVE FOR CUSTOMERS</button>
+                </div>
+
+                <!-- Manage / Delete Products Section -->
+                <div style="background:#161616; border:1px solid var(--border-color); padding:15px; border-radius:6px; margin-bottom:20px;">
+                    <h4 style="font-size:11px; color:var(--accent-color); margin-bottom:10px; text-transform:uppercase;">🗑️ Manage / Delete Products</h4>
+                    <p style="font-size:10px; color:var(--text-muted); margin-bottom:10px;">Delete or clear products from your active storefront inventory:</p>
+                    <div id="admin-product-management-list" style="max-height:160px; overflow-y:auto;">
+                        <p style="font-size:10px; color:var(--text-muted); text-align:center; padding:10px;">Loading catalog inventory...</p>
+                    </div>
                 </div>
 
                 <!-- Customer Orders & Management Section -->
-                <div style="background:#161616; border:1px solid var(--border-color); padding:20px; border-radius:6px;">
-                    <h4 style="font-size:12px; color:var(--accent-color); margin-bottom:12px; text-transform:uppercase;">📦 Customer Orders Tracker</h4>
-                    <p style="font-size:11px; color:var(--text-muted); margin-bottom:15px;">Review customer order entries saved from WhatsApp checkouts:</p>
-                    <div id="admin-orders-list" style="max-height:220px; overflow-y:auto;">
-                        <p style="font-size:11px; color:var(--text-muted); text-align:center; padding:15px;">No incoming order logs yet.</p>
+                <div style="background:#161616; border:1px solid var(--border-color); padding:15px; border-radius:6px;">
+                    <h4 style="font-size:11px; color:var(--accent-color); margin-bottom:10px; text-transform:uppercase;">📦 Customer Orders Tracker</h4>
+                    <div id="admin-orders-list" style="max-height:160px; overflow-y:auto;">
+                        <p style="font-size:10px; color:var(--text-muted); text-align:center; padding:10px;">No incoming order logs yet.</p>
                     </div>
                 </div>
             </div>
@@ -513,18 +545,18 @@
 
     <div id="cart-sidebar" class="sidebar">
         <div class="sidebar-header">
-            <h3 style="font-size:13px; color:var(--accent-color); text-transform:uppercase;">YOUR SELECTION BAG</h3>
+            <h3 style="font-size:12px; color:var(--accent-color); text-transform:uppercase;">YOUR SELECTION BAG</h3>
             <button class="close-btn" onclick="toggleCart()">&times;</button>
         </div>
         <div style="flex: 1; overflow-y: auto;">
             <div id="cart-items-list"></div>
-            <div style="margin-top: 25px; border-top:1px solid var(--border-color); padding-top:15px; font-size:11px;">
-                <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="color:var(--text-muted);">Subtotal:</span><span><span id="cart-subtotal">0.00</span> NLE</span></div>
-                <div id="discount-row" style="display:flex; justify-content:space-between; margin-bottom:6px; color:#ff4d6d; display:none;"><span>Bundle Discount:</span><span>-<span id="cart-discount">0.00</span> NLE</span></div>
-                <div style="display:flex; justify-content:space-between; font-weight:700; font-size:13px; margin-top:10px; color:var(--accent-color);"><span>Grand Total:</span><span><span id="cart-grand-total">0.00</span> NLE</span></div>
+            <div style="margin-top: 20px; border-top:1px solid var(--border-color); padding-top:12px; font-size:10px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="color:var(--text-muted);">Subtotal:</span><span><span id="cart-subtotal">0.00</span> NLE</span></div>
+                <div id="discount-row" style="display:flex; justify-content:space-between; margin-bottom:5px; color:#ff4d6d; display:none;"><span>Bundle Discount:</span><span>-<span id="cart-discount">0.00</span> NLE</span></div>
+                <div style="display:flex; justify-content:space-between; font-weight:700; font-size:12px; margin-top:8px; color:var(--accent-color);"><span>Grand Total:</span><span><span id="cart-grand-total">0.00</span> NLE</span></div>
             </div>
-            <div style="margin-top: 25px; border-top:1px solid var(--border-color); padding-top:20px;">
-                <h4 style="font-size:11px; color:var(--accent-color); margin-bottom:15px; text-transform:uppercase;">CHECKOUT DETAILS</h4>
+            <div style="margin-top: 20px; border-top:1px solid var(--border-color); padding-top:15px;">
+                <h4 style="font-size:10px; color:var(--accent-color); margin-bottom:12px; text-transform:uppercase;">CHECKOUT DETAILS</h4>
                 <div class="checkout-form-group"><label>Full Name:</label><input type="text" id="cust-name" class="checkout-input" placeholder="Enter your full name"></div>
                 <div class="checkout-form-group"><label>Phone Number (WhatsApp Line):</label><input type="text" id="cust-phone" class="checkout-input" placeholder="+232 ..."></div>
                 <div class="checkout-form-group">
@@ -543,7 +575,7 @@
                         <option value="Cash on Delivery / Pickup">Cash Settlement</option>
                     </select>
                 </div>
-                <button class="btn" style="background:#28a745; color:#fff; margin-top:10px;" onclick="checkoutWhatsApp()">COMPLETE & SEND TO WHATSAPP</button>
+                <button class="btn" style="background:#28a745; color:#fff; margin-top:8px;" onclick="checkoutWhatsApp()">COMPLETE & SEND TO WHATSAPP</button>
             </div>
         </div>
     </div>
@@ -571,9 +603,9 @@
         const adminSecretPassword = "ARISA2026";
 
         const defaultPerfumes = [
-            { id: 'p1', name: 'Tom Ford Oud Wood', price: '1850', color: '100ml', category: 'perfume', status: 'available', image: 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=600&q=80' },
-            { id: 'p2', name: 'Chanel Bleu de Chanel', price: '2100', color: '150ml', category: 'perfume', status: 'available', image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=600&q=80' },
-            { id: 'p3', name: 'Designer Silk Evening Dress', price: '1450', color: 'Size M / Black', category: 'clothing', status: 'available', image: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=600&q=80' }
+            { id: 'p1', name: 'Tom Ford Oud Wood', price: '1850', salePrice: '', color: '100ml', category: 'perfume', status: 'available', image: 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=600&q=80' },
+            { id: 'p2', name: 'Chanel Bleu de Chanel', price: '2100', salePrice: '1900', color: '150ml', category: 'perfume', status: 'available', image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=600&q=80' },
+            { id: 'p3', name: 'Designer Silk Evening Dress', price: '1450', salePrice: '', color: 'Size M / Black', category: 'clothing', status: 'available', image: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=600&q=80' }
         ];
 
         function hideLoadingScreen() {
@@ -609,11 +641,13 @@
                         });
                     }
                     renderProducts();
+                    renderAdminProductList();
                     hideLoadingScreen();
                 }, (error) => {
                     clearTimeout(safetyTimeout);
                     perfumes = defaultPerfumes;
                     renderProducts();
+                    renderAdminProductList();
                     hideLoadingScreen();
                 });
 
@@ -625,10 +659,10 @@
                         const orderKeys = Object.keys(orderData).reverse();
                         ordersListEl.innerHTML = orderKeys.map(k => {
                             const ord = orderData[k];
-                            return `<div style="border-bottom:1px solid var(--border-color); padding:10px 0; font-size:11px;">
+                            return `<div style="border-bottom:1px solid var(--border-color); padding:8px 0; font-size:10px;">
                                 <strong style="color:var(--accent-color);">${ord.name}</strong> (${ord.phone})<br>
                                 Total: <b>${ord.total} NLE</b> | Method: ${ord.method}<br>
-                                <span style="color:var(--text-muted); font-size:9px;">${ord.timestamp}</span>
+                                <span style="color:var(--text-muted); font-size:8px;">${ord.timestamp}</span>
                             </div>`;
                         }).join('');
                     }
@@ -637,6 +671,7 @@
                 clearTimeout(safetyTimeout);
                 perfumes = defaultPerfumes;
                 renderProducts();
+                renderAdminProductList();
                 hideLoadingScreen();
             }
         });
@@ -660,29 +695,73 @@
                 const matchesSearch = p.name.toLowerCase().includes(searchQuery) || (p.color && p.color.toLowerCase().includes(searchQuery));
                 if (!matchesSearch) return false;
                 if (filterVal === 'available') return p.status === 'available';
+                if (filterVal === 'sale') return p.salePrice && parseFloat(p.salePrice) > 0;
                 return true;
             });
 
             if (filtered.length === 0) {
-                grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:40px; font-size:11px; color:var(--text-muted); text-transform:uppercase;">No items found.</div>`;
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:30px; font-size:10px; color:var(--text-muted); text-transform:uppercase;">No items found.</div>`;
                 return;
             }
 
             grid.innerHTML = filtered.map(p => {
                 const sold = p.status === 'sold-out';
+                const hasSale = p.salePrice && parseFloat(p.salePrice) > 0;
+                const displayPrice = hasSale ? parseFloat(p.salePrice) : parseFloat(p.price);
                 const originalPrice = parseFloat(p.price);
 
                 return `
                     <div class="product-card" onclick="${sold ? '' : `addToCart('${p.id || p.firebaseKey}')`}">
                         <span class="status-badge ${p.status}">${p.status.replace('-', ' ')}</span>
+                        ${hasSale ? `<span class="status-badge sale-badge">SALE</span>` : ''}
                         <div class="product-image"><img src="${p.image}" alt="${p.name}"></div>
                         <h3>${p.name}</h3>
                         ${p.color ? `<span class="color-label">${p.color}</span>` : ''}
-                        <div class="price-box"><span class="price">${originalPrice} NLE</span></div>
+                        <div class="price-box">
+                            <span class="price">${displayPrice.toFixed(2)} NLE</span>
+                            ${hasSale ? `<span class="old-price">${originalPrice.toFixed(2)} NLE</span>` : ''}
+                        </div>
                         <button class="btn" ${sold ? 'disabled' : ''}>${sold ? 'SOLD OUT' : 'ADD TO BAG'}</button>
                     </div>`;
             }).join('');
         }
+
+        function renderAdminProductList() {
+            const listEl = document.getElementById('admin-product-management-list');
+            if (!perfumes || perfumes.length === 0) {
+                listEl.innerHTML = `<p style="font-size:10px; color:var(--text-muted); text-align:center; padding:10px;">No products in inventory.</p>`;
+                return;
+            }
+
+            listEl.innerHTML = perfumes.map(p => {
+                const key = p.firebaseKey || p.id;
+                const priceToShow = p.salePrice && parseFloat(p.salePrice) > 0 ? p.salePrice : p.price;
+                return `
+                    <div class="admin-product-row">
+                        <div>
+                            <strong style="color:var(--text-color);">${p.name}</strong><br>
+                            <span style="color:var(--accent-color);">${priceToShow} NLE</span> (${p.category})
+                        </div>
+                        <button class="remove-btn" style="background:#dc3545; color:#fff; border:none;" onclick="deleteProductFromAdmin('${key}')">Delete</button>
+                    </div>`;
+            }).join('');
+        }
+
+        window.deleteProductFromAdmin = (key) => {
+            if (confirm("Are you sure you want to delete this product from the live catalog?")) {
+                try {
+                    const matchItem = perfumes.find(p => (p.firebaseKey === key || p.id === key));
+                    if (matchItem && matchItem.firebaseKey) {
+                        db.ref('products').child(matchItem.firebaseKey).remove();
+                    } else if (matchItem && matchItem.id) {
+                        db.ref('products').child(matchItem.id).remove();
+                    }
+                    alert("Product successfully deleted.");
+                } catch(e) {
+                    alert("Error removing item.");
+                }
+            }
+        };
 
         window.openAdminModal = () => {
             document.getElementById('admin-modal').style.display = 'flex';
@@ -698,6 +777,7 @@
                 document.getElementById('admin-login-view').style.display = 'none';
                 document.getElementById('admin-dashboard-view').style.display = 'block';
                 document.getElementById('admin-password-input').value = '';
+                renderAdminProductList();
             } else {
                 alert("Incorrect Admin Password.");
             }
@@ -726,20 +806,23 @@
         window.publishProductDirectly = () => {
             const name = document.getElementById('up-name').value.trim();
             const price = document.getElementById('up-price').value.trim();
+            const salePrice = document.getElementById('up-sale-price').value.trim();
             const color = document.getElementById('up-color').value.trim();
             const category = document.getElementById('up-category').value;
             const fileInput = document.getElementById('up-file');
 
             if (!name || !price) {
-                alert("Please enter both the product name and price.");
+                alert("Please enter both the product name and regular price.");
                 return;
             }
 
             const pushToCloud = (imageUrl) => {
+                const uniqueKey = 'prod_' + Date.now();
                 const newProduct = {
-                    id: 'prod_' + Date.now(),
+                    id: uniqueKey,
                     name: name,
                     price: price,
+                    salePrice: salePrice || '',
                     color: color || '',
                     category: category,
                     status: 'available',
@@ -747,14 +830,21 @@
                 };
 
                 try {
-                    db.ref('products').push(newProduct);
-                } catch(e) {}
+                    // Push directly using uniqueKey as child to ensure immediate and reliable synchronization
+                    db.ref('products').child(uniqueKey).set(newProduct);
+                } catch(e) {
+                    // Fallback to local array sync if offline
+                    perfumes.push({ firebaseKey: uniqueKey, ...newProduct });
+                    renderProducts();
+                    renderAdminProductList();
+                }
 
-                alert("Success! Product uploaded from admin panel and is now live for all customers.");
+                alert("Success! Product uploaded live to customers.");
 
                 // Reset fields
                 document.getElementById('up-name').value = '';
                 document.getElementById('up-price').value = '';
+                document.getElementById('up-sale-price').value = '';
                 document.getElementById('up-color').value = '';
                 document.getElementById('up-file').value = '';
                 document.getElementById('preview-img').src = '';
@@ -798,16 +888,16 @@
             let subtotal = 0;
 
             list.innerHTML = cart.map(i => {
-                const priceVal = parseFloat(i.price);
+                const priceVal = i.salePrice && parseFloat(i.salePrice) > 0 ? parseFloat(i.salePrice) : parseFloat(i.price);
                 subtotal += priceVal;
                 return `
                     <div class="cart-item-row">
                         <div style="text-align:left; max-width:65%;">
-                            <h4 style="font-size:11px; font-weight:600; color:var(--accent-color); margin-bottom:2px;">${i.name}</h4>
-                            ${i.color ? `<span style="font-size:9px; color:var(--text-muted); text-transform:uppercase;">${i.color}</span>` : ''}
+                            <h4 style="font-size:10px; font-weight:600; color:var(--accent-color); margin-bottom:2px;">${i.name}</h4>
+                            ${i.color ? `<span style="font-size:8px; color:var(--text-muted); text-transform:uppercase;">${i.color}</span>` : ''}
                         </div>
                         <div style="text-align:right;">
-                            <span style="font-size:12px; font-weight:700; display:block; margin-bottom:6px; color:#fff;">${priceVal.toFixed(2)} NLE</span>
+                            <span style="font-size:11px; font-weight:700; display:block; margin-bottom:5px; color:#fff;">${priceVal.toFixed(2)} NLE</span>
                             <button class="remove-btn" onclick="removeFromCart(${i.cartId})">Remove</button>
                         </div>
                     </div>`;
@@ -847,13 +937,13 @@
         window.showAbout = () => {
             document.getElementById('home-content').style.display = 'none';
             document.getElementById('page-content').style.display = 'block';
-            document.getElementById('page-inner-content').innerHTML = `<h2 style="color:var(--accent-color); margin-bottom:15px; font-size:15px; text-transform:uppercase;">ABOUT ARISA COLLECTION</h2><p style="font-size:12px; color:#ccc; line-height:1.9;">Welcome to Arisa Collection, Freetown's ultimate sanctuary for luxury fragrances, body lotions, and stylish apparel.</p>`;
+            document.getElementById('page-inner-content').innerHTML = `<h2 style="color:var(--accent-color); margin-bottom:12px; font-size:13px; text-transform:uppercase;">ABOUT ARISA COLLECTION</h2><p style="font-size:11px; color:#ccc; line-height:1.8;">Welcome to Arisa Collection, Freetown's ultimate sanctuary for luxury fragrances, body lotions, and stylish apparel.</p>`;
         };
 
         window.showPolicy = () => {
             document.getElementById('home-content').style.display = 'none';
             document.getElementById('page-content').style.display = 'block';
-            document.getElementById('page-inner-content').innerHTML = `<h2 style="color:var(--accent-color); margin-bottom:15px; font-size:15px; text-transform:uppercase;">STORE POLICY</h2><p style="font-size:12px; color:#ccc; line-height:1.9;">Reliable scheduled dispatch throughout Freetown. All sales are definitive.</p>`;
+            document.getElementById('page-inner-content').innerHTML = `<h2 style="color:var(--accent-color); margin-bottom:12px; font-size:13px; text-transform:uppercase;">STORE POLICY</h2><p style="font-size:11px; color:#ccc; line-height:1.8;">Reliable scheduled dispatch throughout Freetown. All sales are definitive.</p>`;
         };
 
         window.checkoutWhatsApp = () => {
@@ -871,12 +961,12 @@
             const grandTotal = document.getElementById('cart-grand-total').innerText;
             let textMessageProducts = '';
             cart.forEach((itm) => {
-                textMessageProducts += `• *${itm.name}* - ${itm.price} NLE\n`;
+                const itemPrice = itm.salePrice && parseFloat(itm.salePrice) > 0 ? itm.salePrice : itm.price;
+                textMessageProducts += `• *${itm.name}* - ${itemPrice} NLE\n`;
             });
             
             let waMessage = `*ARISA COLLECTION - NEW ORDER*\nCustomer: ${name}\nPhone: ${phone}\nTotal: *${grandTotal} NLE*\n\nProducts:\n${textMessageProducts}`;
             
-            // Save order to Firebase so it appears in the admin panel
             try {
                 db.ref('orders').push({
                     name: name,
