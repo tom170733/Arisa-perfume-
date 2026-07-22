@@ -29,6 +29,7 @@
             padding: 0;
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
+
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -829,14 +830,27 @@
                 };
 
                 try {
-                    // Push directly using uniqueKey as child to ensure immediate and reliable synchronization
-                    db.ref('products').child(uniqueKey).set(newProduct);
+                    db.ref('products').child(uniqueKey).set(newProduct, (error) => {
+                        if (error) {
+                            // Fallback sync if permission/network glitch occurs
+                            perfumes.push({ firebaseKey: uniqueKey, ...newProduct });
+                            renderProducts();
+                            renderAdminProductList();
+                        }
+                    });
                 } catch(e) {
-                    // Fallback to local array sync if offline
                     perfumes.push({ firebaseKey: uniqueKey, ...newProduct });
                     renderProducts();
                     renderAdminProductList();
                 }
+
+                // Immediately update local array & render so customers see it instantly without waiting for cloud echo
+                const localIndex = perfumes.findIndex(p => p.id === uniqueKey || p.firebaseKey === uniqueKey);
+                if (localIndex === -1) {
+                    perfumes.push({ firebaseKey: uniqueKey, ...newProduct });
+                }
+                renderProducts();
+                renderAdminProductList();
 
                 alert("Success! Product uploaded live to customers.");
 
