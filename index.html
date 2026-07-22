@@ -602,12 +602,6 @@
         const myWhatsAppNumber = "23275000000";
         const adminSecretPassword = "ARISA2026";
 
-        const defaultPerfumes = [
-            { id: 'p1', name: 'Tom Ford Oud Wood', price: '1850', salePrice: '', color: '100ml', category: 'perfume', status: 'available', image: 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=600&q=80' },
-            { id: 'p2', name: 'Chanel Bleu de Chanel', price: '2100', salePrice: '1900', color: '150ml', category: 'perfume', status: 'available', image: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=600&q=80' },
-            { id: 'p3', name: 'Designer Silk Evening Dress', price: '1450', salePrice: '', color: 'Size M / Black', category: 'clothing', status: 'available', image: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=600&q=80' }
-        ];
-
         function hideLoadingScreen() {
             const loader = document.getElementById('loading-screen');
             if (loader && loader.style.display !== 'none') {
@@ -619,7 +613,6 @@
         window.addEventListener('DOMContentLoaded', () => {
             const safetyTimeout = setTimeout(() => {
                 if (perfumes.length === 0) {
-                    perfumes = defaultPerfumes;
                     renderProducts();
                 }
                 hideLoadingScreen();
@@ -635,17 +628,14 @@
                             ...data[key]
                         }));
                     } else {
-                        perfumes = defaultPerfumes;
-                        defaultPerfumes.forEach(p => {
-                            db.ref('products').child(p.id).set(p);
-                        });
+                        perfumes = [];
                     }
                     renderProducts();
                     renderAdminProductList();
                     hideLoadingScreen();
                 }, (error) => {
                     clearTimeout(safetyTimeout);
-                    perfumes = defaultPerfumes;
+                    perfumes = [];
                     renderProducts();
                     renderAdminProductList();
                     hideLoadingScreen();
@@ -665,11 +655,13 @@
                                 <span style="color:var(--text-muted); font-size:8px;">${ord.timestamp}</span>
                             </div>`;
                         }).join('');
+                    } else {
+                        ordersListEl.innerHTML = `<p style="font-size:10px; color:var(--text-muted); text-align:center; padding:10px;">No incoming order logs yet.</p>`;
                     }
                 });
             } catch (e) {
                 clearTimeout(safetyTimeout);
-                perfumes = defaultPerfumes;
+                perfumes = [];
                 renderProducts();
                 renderAdminProductList();
                 hideLoadingScreen();
@@ -748,15 +740,24 @@
         }
 
         window.deleteProductFromAdmin = (key) => {
-            if (confirm("Are you sure you want to delete this product from the live catalog?")) {
+            if (confirm("Are you sure you want to delete this product permanently?")) {
                 try {
                     const matchItem = perfumes.find(p => (p.firebaseKey === key || p.id === key));
                     if (matchItem && matchItem.firebaseKey) {
-                        db.ref('products').child(matchItem.firebaseKey).remove();
+                        db.ref('products').child(matchItem.firebaseKey).remove().then(() => {
+                            perfumes = perfumes.filter(p => p.firebaseKey !== key && p.id !== key);
+                            renderProducts();
+                            renderAdminProductList();
+                            alert("Product permanently deleted.");
+                        });
                     } else if (matchItem && matchItem.id) {
-                        db.ref('products').child(matchItem.id).remove();
+                        db.ref('products').child(matchItem.id).remove().then(() => {
+                            perfumes = perfumes.filter(p => p.firebaseKey !== key && p.id !== key);
+                            renderProducts();
+                            renderAdminProductList();
+                            alert("Product permanently deleted.");
+                        });
                     }
-                    alert("Product successfully deleted.");
                 } catch(e) {
                     alert("Error removing item.");
                 }
@@ -829,30 +830,15 @@
                     image: imageUrl || 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=600&q=80'
                 };
 
-                try {
-                    db.ref('products').child(uniqueKey).set(newProduct, (error) => {
-                        if (error) {
-                            // Fallback sync if permission/network glitch occurs
-                            perfumes.push({ firebaseKey: uniqueKey, ...newProduct });
-                            renderProducts();
-                            renderAdminProductList();
-                        }
-                    });
-                } catch(e) {
-                    perfumes.push({ firebaseKey: uniqueKey, ...newProduct });
-                    renderProducts();
-                    renderAdminProductList();
-                }
+                db.ref('products').child(uniqueKey).set(newProduct).then(() => {
+                    alert("Success! Product saved permanently to database.");
+                }).catch((error) => {
+                    alert("Saved locally, but check database sync.");
+                });
 
-                // Immediately update local array & render so customers see it instantly without waiting for cloud echo
-                const localIndex = perfumes.findIndex(p => p.id === uniqueKey || p.firebaseKey === uniqueKey);
-                if (localIndex === -1) {
-                    perfumes.push({ firebaseKey: uniqueKey, ...newProduct });
-                }
+                perfumes.push({ firebaseKey: uniqueKey, ...newProduct });
                 renderProducts();
                 renderAdminProductList();
-
-                alert("Success! Product uploaded live to customers.");
 
                 // Reset fields
                 document.getElementById('up-name').value = '';
