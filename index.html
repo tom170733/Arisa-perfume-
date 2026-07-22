@@ -7,9 +7,6 @@
     <!-- PDF Generation Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <!-- Firebase SDK v9 (Compat Mode) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     
     <style>
         :root {
@@ -581,21 +578,6 @@
     </div>
 
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyDummyKeyForArisaCollection99281",
-            authDomain: "arisa-collection-db.firebaseapp.com",
-            databaseURL: "https://arisa-collection-db-default-rtdb.firebaseio.com",
-            projectId: "arisa-collection-db",
-            storageBucket: "arisa-collection-db.appspot.com",
-            messagingSenderId: "123456789012",
-            appId: "1:123456789012:web:abcdef1234567890"
-        };
-
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        const db = firebase.database();
-
         let perfumes = [];
         let cart = [];
         let currentSection = 'all';
@@ -611,62 +593,42 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            const safetyTimeout = setTimeout(() => {
-                if (perfumes.length === 0) {
-                    renderProducts();
-                }
-                hideLoadingScreen();
-            }, 1500);
-
             try {
-                db.ref('products').on('value', (snapshot) => {
-                    clearTimeout(safetyTimeout);
-                    const data = snapshot.val();
-                    if (data) {
-                        perfumes = Object.keys(data).map(key => ({
-                            firebaseKey: key,
-                            ...data[key]
-                        }));
-                    } else {
-                        perfumes = [];
-                    }
-                    renderProducts();
-                    renderAdminProductList();
-                    hideLoadingScreen();
-                }, (error) => {
-                    clearTimeout(safetyTimeout);
+                const savedProducts = localStorage.getItem('arisa_local_products');
+                if (savedProducts) {
+                    perfumes = JSON.parse(savedProducts);
+                } else {
                     perfumes = [];
-                    renderProducts();
-                    renderAdminProductList();
-                    hideLoadingScreen();
-                });
+                }
 
-                // Listen for orders
-                db.ref('orders').on('value', (snapshot) => {
-                    const orderData = snapshot.val();
+                const savedOrders = localStorage.getItem('arisa_local_orders');
+                if (savedOrders) {
+                    const orderData = JSON.parse(savedOrders);
                     const ordersListEl = document.getElementById('admin-orders-list');
-                    if (orderData) {
-                        const orderKeys = Object.keys(orderData).reverse();
-                        ordersListEl.innerHTML = orderKeys.map(k => {
-                            const ord = orderData[k];
+                    if (orderData && orderData.length > 0) {
+                        ordersListEl.innerHTML = orderData.slice().reverse().map(ord => {
                             return `<div style="border-bottom:1px solid var(--border-color); padding:8px 0; font-size:10px;">
                                 <strong style="color:var(--accent-color);">${ord.name}</strong> (${ord.phone})<br>
                                 Total: <b>${ord.total} NLE</b> | Method: ${ord.method}<br>
                                 <span style="color:var(--text-muted); font-size:8px;">${ord.timestamp}</span>
                             </div>`;
                         }).join('');
-                    } else {
-                        ordersListEl.innerHTML = `<p style="font-size:10px; color:var(--text-muted); text-align:center; padding:10px;">No incoming order logs yet.</p>`;
                     }
-                });
+                }
             } catch (e) {
-                clearTimeout(safetyTimeout);
                 perfumes = [];
-                renderProducts();
-                renderAdminProductList();
-                hideLoadingScreen();
             }
+
+            renderProducts();
+            renderAdminProductList();
+            hideLoadingScreen();
         });
+
+        function saveToLocalStore() {
+            try {
+                localStorage.setItem('arisa_local_products', JSON.stringify(perfumes));
+            } catch(e) {}
+        }
 
         window.setMainCategory = (section) => {
             currentSection = section;
@@ -703,7 +665,7 @@
                 const originalPrice = parseFloat(p.price);
 
                 return `
-                    <div class="product-card" onclick="${sold ? '' : `addToCart('${p.id || p.firebaseKey}')`}">
+                    <div class="product-card" onclick="${sold ? '' : `addToCart('${p.id}')`}">
                         <span class="status-badge ${p.status}">${p.status.replace('-', ' ')}</span>
                         ${hasSale ? `<span class="status-badge sale-badge">SALE</span>` : ''}
                         <div class="product-image"><img src="${p.image}" alt="${p.name}"></div>
@@ -726,7 +688,6 @@
             }
 
             listEl.innerHTML = perfumes.map(p => {
-                const key = p.firebaseKey || p.id;
                 const priceToShow = p.salePrice && parseFloat(p.salePrice) > 0 ? p.salePrice : p.price;
                 return `
                     <div class="admin-product-row">
@@ -734,33 +695,18 @@
                             <strong style="color:var(--text-color);">${p.name}</strong><br>
                             <span style="color:var(--accent-color);">${priceToShow} NLE</span> (${p.category})
                         </div>
-                        <button class="remove-btn" style="background:#dc3545; color:#fff; border:none;" onclick="deleteProductFromAdmin('${key}')">Delete</button>
+                        <button class="remove-btn" style="background:#dc3545; color:#fff; border:none;" onclick="deleteProductFromAdmin('${p.id}')">Delete</button>
                     </div>`;
             }).join('');
         }
 
-        window.deleteProductFromAdmin = (key) => {
+        window.deleteProductFromAdmin = (id) => {
             if (confirm("Are you sure you want to delete this product permanently?")) {
-                try {
-                    const matchItem = perfumes.find(p => (p.firebaseKey === key || p.id === key));
-                    if (matchItem && matchItem.firebaseKey) {
-                        db.ref('products').child(matchItem.firebaseKey).remove().then(() => {
-                            perfumes = perfumes.filter(p => p.firebaseKey !== key && p.id !== key);
-                            renderProducts();
-                            renderAdminProductList();
-                            alert("Product permanently deleted.");
-                        });
-                    } else if (matchItem && matchItem.id) {
-                        db.ref('products').child(matchItem.id).remove().then(() => {
-                            perfumes = perfumes.filter(p => p.firebaseKey !== key && p.id !== key);
-                            renderProducts();
-                            renderAdminProductList();
-                            alert("Product permanently deleted.");
-                        });
-                    }
-                } catch(e) {
-                    alert("Error removing item.");
-                }
+                perfumes = perfumes.filter(p => p.id !== id);
+                saveToLocalStore();
+                renderProducts();
+                renderAdminProductList();
+                alert("Product permanently deleted.");
             }
         };
 
@@ -817,7 +763,7 @@
                 return;
             }
 
-            const pushToCloud = (imageUrl) => {
+            const finalizeSave = (imageUrl) => {
                 const uniqueKey = 'prod_' + Date.now();
                 const newProduct = {
                     id: uniqueKey,
@@ -830,17 +776,13 @@
                     image: imageUrl || 'https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=600&q=80'
                 };
 
-                db.ref('products').child(uniqueKey).set(newProduct).then(() => {
-                    alert("Success! Product saved permanently to database.");
-                }).catch((error) => {
-                    alert("Saved locally, but check database sync.");
-                });
-
-                perfumes.push({ firebaseKey: uniqueKey, ...newProduct });
+                perfumes.push(newProduct);
+                saveToLocalStore();
                 renderProducts();
                 renderAdminProductList();
 
-                // Reset fields
+                alert("Success! Product saved permanently.");
+
                 document.getElementById('up-name').value = '';
                 document.getElementById('up-price').value = '';
                 document.getElementById('up-sale-price').value = '';
@@ -854,18 +796,18 @@
             if (fileInput.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    pushToCloud(e.target.result);
+                    finalizeSave(e.target.result);
                 };
                 reader.readAsDataURL(fileInput.files[0]);
             } else {
-                pushToCloud('');
+                finalizeSave('');
             }
         };
 
         window.addToCart = (id) => {
-            const item = perfumes.find(p => (p.id === id || p.firebaseKey === id));
+            const item = perfumes.find(p => p.id === id);
             if (!item) return;
-            const existingItem = cart.find(i => (i.id === id || i.firebaseKey === id));
+            const existingItem = cart.find(i => i.id === id);
             if (existingItem) {
                 alert("This item is already added to your bag!");
                 return;
@@ -967,7 +909,8 @@
             let waMessage = `*ARISA COLLECTION - NEW ORDER*\nCustomer: ${name}\nPhone: ${phone}\nTotal: *${grandTotal} NLE*\n\nProducts:\n${textMessageProducts}`;
             
             try {
-                db.ref('orders').push({
+                let existingOrders = JSON.parse(localStorage.getItem('arisa_local_orders') || '[]');
+                existingOrders.push({
                     name: name,
                     phone: phone,
                     method: method,
@@ -975,6 +918,7 @@
                     total: grandTotal,
                     timestamp: new Date().toLocaleString()
                 });
+                localStorage.setItem('arisa_local_orders', JSON.stringify(existingOrders));
             } catch(e) {}
 
             const waURL = `https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(waMessage)}`;
