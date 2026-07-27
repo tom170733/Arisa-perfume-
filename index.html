@@ -20,6 +20,18 @@
             --border-color: #e2e8f0;
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
         }
+
+        [data-theme="dark"] {
+            --bg-color: #0b0f19;
+            --card-bg: #1e293b;
+            --accent-primary: #ff6b8b;
+            --accent-light: #33141b;
+            --text-dark: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -31,7 +43,9 @@
             background-color: var(--bg-color);
             color: var(--text-dark);
             padding-bottom: 80px;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            width: 100%;
+            overflow-x: hidden;
         }
 
         #app-preloader {
@@ -80,7 +94,7 @@
         }
 
         header {
-            background: #ffffff;
+            background: var(--card-bg);
             padding: 20px;
             text-align: center;
             border-bottom: 1px solid var(--border-color);
@@ -88,10 +102,11 @@
             top: 0;
             z-index: 100;
             box-shadow: var(--shadow-sm);
+            width: 100%;
         }
         header h1 {
             color: var(--text-dark);
-            font-size: 22px;
+            font-size: clamp(18px, 4vw, 22px);
             letter-spacing: 4px;
             text-transform: uppercase;
             font-weight: 800;
@@ -101,7 +116,7 @@
         header h1 span { color: var(--accent-primary); }
         
         /* Navigation with Active Line Indicator */
-        nav { display: flex; justify-content: center; gap: 24px; }
+        nav { display: flex; justify-content: center; gap: clamp(12px, 3vw, 24px); flex-wrap: wrap; }
         nav a {
             color: var(--text-muted);
             text-decoration: none;
@@ -130,8 +145,9 @@
             justify-content: center;
             gap: 8px;
             padding: 12px;
-            background: #ffffff;
+            background: var(--card-bg);
             border-bottom: 1px solid var(--border-color);
+            width: 100%;
         }
         .sec-btn {
             background: var(--bg-color);
@@ -150,12 +166,12 @@
         }
         .sec-btn.active {
             background: var(--text-dark);
-            color: #ffffff;
+            color: var(--card-bg);
             border-color: var(--text-dark);
         }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 16px 8px; }
-        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .container { max-width: 1200px; width: 100%; margin: 0 auto; padding: 16px 12px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
         .product-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -168,16 +184,18 @@
         }
         .product-image {
             width: 100%;
-            height: 160px;
-            background: #f8fafc;
+            height: 150px;
+            background: var(--bg-color);
             border-radius: 6px;
             margin-bottom: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            position: relative;
         }
-        .product-image img { width: 100%; height: 100%; object-fit: cover; }
+        .product-image img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s ease; }
+        .product-image img.loading { opacity: 0.3; filter: blur(5px); }
         
         .status-badge {
             position: absolute;
@@ -206,7 +224,7 @@
             color: #ffffff;
             z-index: 2;
         }
-        .product-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .product-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-dark); }
         .price-container { margin-top: auto; padding-top: 4px; display: flex; flex-direction: column; gap: 2px; margin-bottom: 8px; }
         .price-current { font-weight: 800; font-size: 14px; color: var(--text-dark); }
         .price-old { text-decoration: line-through; color: var(--text-muted); font-size: 10px; }
@@ -223,14 +241,14 @@
             text-transform: uppercase;
             cursor: pointer;
         }
-        .btn:disabled { background: #f1f5f9; color: #94a3b8; cursor: not-allowed; }
+        .btn:disabled { background: var(--border-color); color: var(--text-muted); cursor: not-allowed; }
 
         #floating-cart-btn {
             position: fixed;
             bottom: 20px;
             right: 20px;
             background: var(--text-dark);
-            color: #ffffff;
+            color: var(--card-bg);
             border: none;
             width: 50px;
             height: 50px;
@@ -263,7 +281,7 @@
             width: 100%;
             max-width: 420px;
             height: 100vh;
-            background: #ffffff;
+            background: var(--card-bg);
             border-left: 1px solid var(--border-color);
             z-index: 300;
             display: none;
@@ -274,48 +292,55 @@
         .close-sidebar-btn { background: transparent; border: none; font-size: 26px; color: var(--text-muted); cursor: pointer; }
         
         .cart-scroll-area { flex-grow: 1; overflow-y: auto; margin-bottom: 16px; }
-        .cart-item-row { border-bottom: 1px solid var(--border-color); padding: 12px 0; display: flex; justify-content: space-between; align-items: center; }
+        .cart-item-row { border-bottom: 1px solid var(--border-color); padding: 12px 0; display: flex; justify-content: space-between; align-items: center; color: var(--text-dark); }
         .remove-item-btn { background: transparent; border: none; color: #dc2626; font-size: 11px; font-weight: 700; margin-top: 4px; display: block; cursor: pointer; }
         
-        .checkout-inputs { background: #f8fafc; padding: 12px; border-radius: 8px; margin-bottom: 16px; border: 1px solid var(--border-color); }
-        .checkout-inputs input { width: 100%; padding: 8px 10px; font-size: 13px; border-radius: 6px; border: 1px solid #cbd5e1; margin-bottom: 10px; outline: none; }
+        .checkout-inputs { background: var(--bg-color); padding: 12px; border-radius: 8px; margin-bottom: 16px; border: 1px solid var(--border-color); }
+        .checkout-inputs input { width: 100%; padding: 8px 10px; font-size: 13px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-dark); margin-bottom: 10px; outline: none; }
         
-        .summary-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
+        .summary-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; color: var(--text-dark); }
         
-        .admin-box { background: #ffffff; border: 2px solid var(--accent-primary); border-radius: 8px; padding: 16px; margin-bottom: 24px; }
+        .admin-box { background: var(--card-bg); border: 2px solid var(--accent-primary); border-radius: 8px; padding: 16px; margin-bottom: 24px; color: var(--text-dark); }
         .admin-grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin-bottom: 12px; }
-        .admin-grid-inputs input, .admin-grid-inputs select, .admin-grid-inputs textarea { border: 1px solid #cbd5e1; padding: 9px; font-size: 12px; border-radius: 6px; outline: none; width: 100%; }
+        .admin-grid-inputs input, .admin-grid-inputs select, .admin-grid-inputs textarea { border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-dark); padding: 9px; font-size: 12px; border-radius: 6px; outline: none; width: 100%; }
 
-        /* Color Theme Picker Widget */
-        .color-picker-box {
+        /* Tools Widget (Theme & Dark Mode) */
+        .widget-box {
             position: fixed;
             top: 15px;
             right: 15px;
-            background: #ffffff;
+            background: var(--card-bg);
             border: 1px solid var(--border-color);
             padding: 6px 10px;
             border-radius: 20px;
             z-index: 500;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             box-shadow: var(--shadow-sm);
         }
-        .color-picker-box input[type="color"] {
+        .widget-box input[type="color"] {
             border: none;
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             cursor: pointer;
             background: none;
+        }
+        .dark-mode-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Background Theme Customizer Tool -->
-    <div class="color-picker-box">
-        <span style="font-size:10px; font-weight:700;">Theme:</span>
+    <!-- Widgets Tool Box -->
+    <div class="widget-box">
+        <button type="button" class="dark-mode-toggle" onclick="toggleDarkMode()" id="dark-mode-btn">🌙</button>
+        <span style="font-size:10px; font-weight:700; color:var(--text-dark);">Theme:</span>
         <input type="color" id="bg-color-picker" onchange="changeBackgroundTheme(this.value)" value="#f8fafc">
     </div>
 
@@ -334,6 +359,7 @@
             <a onclick="switchTab('home', this)" id="nav-home" class="active">HOME</a>
             <a onclick="switchTab('about', this)" id="nav-about">ABOUT</a>
             <a onclick="switchTab('policy', this)" id="nav-policy">POLICY</a>
+            <a onclick="switchTab('track', this)" id="nav-track">TRACK ORDER</a>
             <a onclick="toggleCart()">CART (<span id="cart-counter">0</span>)</a>
         </nav>
     </header>
@@ -372,13 +398,13 @@
                 </div>
                 <!-- Picture File Upload Helper -->
                 <div style="margin-bottom:12px;">
-                    <label style="font-size:10px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:4px;">Upload Picture From Phone/PC:</label>
+                    <label style="font-size:10px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:4px;">Upload Picture From Phone/PC (Optimized):</label>
                     <input type="file" id="admin-img-file" accept="image/*" style="font-size:11px;" onchange="convertImageFile(event)">
                 </div>
 
                 <div style="display:flex; gap:10px; margin-bottom:16px;">
-                    <button type="button" class="btn" style="background:var(--text-dark); padding:10px;" onclick="adminUploadSecureLink()">PUBLISH LIVE TO STORE</button>
-                    <button type="button" class="btn" style="background:#e2e8f0; color:var(--text-dark); padding:10px; max-width:100px;" onclick="logoutAdmin()">EXIT</button>
+                    <button type="button" class="btn" style="background:var(--text-dark); color:var(--card-bg); padding:10px;" onclick="adminUploadSecureLink()">PUBLISH LIVE TO STORE</button>
+                    <button type="button" class="btn" style="background:var(--border-color); color:var(--text-dark); padding:10px; max-width:100px;" onclick="logoutAdmin()">EXIT</button>
                 </div>
 
                 <hr style="border:0; border-top:1px solid var(--border-color); margin:16px 0;">
@@ -398,11 +424,11 @@
             
             <!-- Hidden admin security login trigger door -->
             <div style="text-align:center; margin-top:60px; padding: 20px; opacity: 0.1;" onclick="handleSecretAdminTap()">
-                <span style="font-size: 10px; cursor: pointer;">[ TAP HERE 3 TIMES FOR ADMIN PORTAL ]</span>
+                <span style="font-size: 10px; cursor: pointer; color:var(--text-dark);">[ TAP HERE 3 TIMES FOR ADMIN PORTAL ]</span>
             </div>
         </div>
 
-        <!-- Info Secondary Subpages Frame (About / Policy) -->
+        <!-- Info Secondary Subpages Frame (About / Policy / Track) -->
         <div id="page-content" style="display:none; background:var(--card-bg); border:1px solid var(--border-color); padding:24px; border-radius:8px;">
             <div id="page-inner-content"></div>
         </div>
@@ -414,10 +440,17 @@
     <!-- Shopping Bag Sidebar Panel Overlay -->
     <div class="sidebar" id="cart-sidebar">
         <div class="sidebar-header">
-            <h2 style="font-size:16px; font-weight:800;">SHOPPING BAG</h2>
+            <h2 style="font-size:16px; font-weight:800; color:var(--text-dark);">SHOPPING BAG</h2>
             <button type="button" class="close-sidebar-btn" onclick="toggleCart()">×</button>
         </div>
         <div class="cart-scroll-area"><div id="cart-items-list"></div></div>
+        
+        <!-- Coupon Section -->
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+            <input type="text" id="coupon-code-input" placeholder="Coupon Code (e.g., ARISA10)" style="flex:1; padding:8px; font-size:11px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-dark); border-radius:6px; outline:none;">
+            <button type="button" class="btn" style="max-width: 80px; font-size:10px;" onclick="applyCoupon()">Apply</button>
+        </div>
+
         <div class="checkout-inputs">
             <input type="text" id="cust-name" placeholder="Your Name">
             <input type="tel" id="cust-phone" placeholder="WhatsApp Number">
@@ -425,6 +458,7 @@
         <div style="margin-bottom: 16px;">
             <div class="summary-row"><span>Subtotal:</span><strong><span id="cart-subtotal">0.00</span> NLE</strong></div>
             <div class="summary-row" style="color: #059669;"><span>Discount Applied:</span><strong><span id="cart-discount-label">0%</span></strong></div>
+            <div class="summary-row" style="color: #2563eb;" id="coupon-row" style="display:none;"><span>Coupon:</span><strong><span id="cart-coupon-label">None</span></strong></div>
             <hr style="border:0; border-top:1px solid var(--border-color); margin:8px 0;">
             <div class="summary-row" style="font-size:15px;"><span>Total Due:</span><strong><span id="cart-grand-total">0.00</span> NLE</strong></div>
         </div>
@@ -450,6 +484,7 @@
         const database = firebase.database();
         const catalogRef = database.ref('perfumes');
         const settingsRef = database.ref('settings');
+        const ordersRef = database.ref('orders');
 
         const SECURITY_PASS_KEY = "AMIRA_SECURE_KEY_2026"; 
 
@@ -459,11 +494,24 @@
         let currentSection = 'perfume'; 
         let secretClickCount = 0;
         let uploadedImageBase64 = "";
+        let appliedCouponDiscount = 0;
+        let appliedCouponName = "";
+
+        // Fast Loading Optimization: Local Cache Check
+        const cachedCatalog = localStorage.getItem('arisa_cached_catalog');
+        if (cachedCatalog) {
+            try {
+                itemsCollection = JSON.parse(cachedCatalog);
+                renderProducts();
+                hidePreloader();
+            } catch(e) {}
+        }
 
         // Real-time synchronization listeners
         catalogRef.on('value', (snapshot) => {
             const data = snapshot.val();
             itemsCollection = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
+            localStorage.setItem('arisa_cached_catalog', JSON.stringify(itemsCollection));
             renderProducts();
             hidePreloader();
         });
@@ -484,14 +532,33 @@
             }
         }
 
-        // Handle Image File conversion for local phone/PC uploads
+        // Fast Image Optimization & Compression Helper via Canvas
         function convertImageFile(event) {
             const file = event.target.files[0];
             if(file) {
                 const reader = new FileReader();
-                reader.onloadend = function() {
-                    uploadedImageBase64 = reader.result;
-                    document.getElementById('admin-p-img-link').value = "[Image Uploaded Successfully]";
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        let width = img.width;
+                        let height = img.height;
+                        const maxDim = 600; // Resize constraint for fast layout optimization
+                        if (width > height && width > maxDim) {
+                            height *= maxDim / width;
+                            width = maxDim;
+                        } else if (height > maxDim) {
+                            width *= maxDim / height;
+                            height = maxDim;
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
+                        uploadedImageBase64 = canvas.toDataURL('image/jpeg', 0.7); // 70% quality compression
+                        document.getElementById('admin-p-img-link').value = "[Optimized Image Ready]";
+                    }
                 }
                 reader.readAsDataURL(file);
             }
@@ -506,6 +573,19 @@
                 document.getElementById('home-content').style.display = 'block';
                 document.getElementById('category-section-bar').style.display = 'flex';
                 document.getElementById('page-content').style.display = 'none';
+            } else if(tabName === 'track') {
+                document.getElementById('home-content').style.display = 'none';
+                document.getElementById('category-section-bar').style.display = 'none';
+                document.getElementById('page-content').style.display = 'block';
+                document.getElementById('page-inner-content').innerHTML = `
+                    <h2 style="font-size:18px; margin-bottom:12px; font-weight:800; color:var(--text-dark);">ORDER TRACKING</h2>
+                    <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">Enter your Order Tracking ID provided during checkout:</p>
+                    <div style="display:flex; gap:8px; margin-bottom:16px;">
+                        <input type="text" id="track-id-input" placeholder="e.g., ARISA-1721..." style="flex:1; padding:9px; font-size:12px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-dark); border-radius:6px; outline:none;">
+                        <button type="button" class="btn" style="max-width:100px;" onclick="trackOrderLookup()">Check Status</button>
+                    </div>
+                    <div id="track-result-box" style="font-size:13px; color:var(--text-dark);"></div>
+                `;
             } else {
                 document.getElementById('home-content').style.display = 'none';
                 document.getElementById('category-section-bar').style.display = 'none';
@@ -560,7 +640,7 @@
                     <div class="product-card" onclick="${sold ? '' : `directAddToCart('${p.id}')`}">
                         <span class="status-badge ${p.status}">${p.status}</span>
                         ${p.isNewArrival === 'yes' ? '<span class="new-badge">NEW</span>' : ''}
-                        <div class="product-image"><img src="${p.image || 'https://via.placeholder.com/150'}"></div>
+                        <div class="product-image"><img src="${p.image || 'https://via.placeholder.com/150'}" loading="lazy" onload="this.classList.remove('loading')" class="loading"></div>
                         <div class="product-info">
                             <h3 class="product-title">${p.name}</h3>
                             <div class="price-container">${priceHTML}</div>
@@ -571,7 +651,7 @@
                             <button type="button" class="btn" style="background:#2563eb; font-size:9px;" onclick="event.stopPropagation(); toggleStatusLive('${p.id}', event)">Toggle Status</button>
                         </div>
                         <div style="margin-top:6px; display:flex; gap:4px; z-index:10;">
-                            <input type="text" id="quick-rename-${p.id}" value="${p.name}" style="font-size:10px; padding:4px; border:1px solid #cbd5e1; border-radius:4px; width:100%;" onclick="event.stopPropagation()">
+                            <input type="text" id="quick-rename-${p.id}" value="${p.name}" style="font-size:10px; padding:4px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-dark); border-radius:4px; width:100%;" onclick="event.stopPropagation()">
                             <button type="button" class="btn" style="background:#059669; font-size:9px; padding:4px 8px;" onclick="event.stopPropagation(); quickUpdateName('${p.id}')">Rename</button>
                         </div>` : ''}
                     </div>`;
@@ -592,7 +672,26 @@
             if (cart.length === 0) document.getElementById('floating-cart-btn').style.display = 'none';
         };
 
-        // Professional Pricing & Discount Engine (5% for 2 items, 10% for 3+ items)
+        // Coupon & Pricing Engine
+        window.applyCoupon = () => {
+            const code = document.getElementById('coupon-code-input').value.trim().toUpperCase();
+            if(code === "ARISA10" || code === "WELCOME10") {
+                appliedCouponDiscount = 0.10;
+                appliedCouponName = "10% Off (" + code + ")";
+                alert("Coupon applied successfully!");
+            } else if(code === "ARISA20") {
+                appliedCouponDiscount = 0.20;
+                appliedCouponName = "20% Off (" + code + ")";
+                alert("Coupon applied successfully!");
+            } else {
+                alert("Invalid coupon code.");
+                appliedCouponDiscount = 0;
+                appliedCouponName = "";
+            }
+            updateCartUI();
+        };
+
+        // Professional Pricing & Discount Engine (5% for 2 items, 10% for 3+ items + Coupon System)
         function updateCartUI() {
             document.getElementById('cart-counter').innerText = cart.length;
             document.getElementById('floating-cart-counter').innerText = cart.length;
@@ -608,17 +707,20 @@
             let discountRate = 0;
             let discountText = "0%";
             if (cart.length >= 3) {
-                discountRate = 0.10; // 10% off for 3 or more items
+                discountRate = 0.10; 
                 discountText = "10% (3+ Items)";
             } else if (cart.length === 2) {
-                discountRate = 0.05; // 5% off for 2 items
+                discountRate = 0.05; 
                 discountText = "5% (2 Items)";
             }
 
-            let grandTotal = subtotal - (subtotal * discountRate);
+            let calculatedDiscount = subtotal * discountRate;
+            let couponDiscountAmount = (subtotal - calculatedDiscount) * appliedCouponDiscount;
+            let grandTotal = subtotal - calculatedDiscount - couponDiscountAmount;
 
             document.getElementById('cart-subtotal').innerText = subtotal.toFixed(2);
             document.getElementById('cart-discount-label').innerText = discountText;
+            document.getElementById('cart-coupon-label').innerText = appliedCouponName || "None";
             document.getElementById('cart-grand-total').innerText = grandTotal.toFixed(2);
         }
 
@@ -713,8 +815,28 @@
         };
 
         window.changeBackgroundTheme = function(colorHex) {
-            document.body.style.backgroundColor = colorHex;
+            document.documentElement.style.setProperty('--bg-color', colorHex);
         };
+
+        // Dark Mode Controller
+        window.toggleDarkMode = function() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                document.documentElement.removeAttribute('data-theme');
+                document.getElementById('dark-mode-btn').innerText = '🌙';
+                localStorage.setItem('arisa_theme', 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.getElementById('dark-mode-btn').innerText = '☀️';
+                localStorage.setItem('arisa_theme', 'dark');
+            }
+        };
+
+        // Load saved theme preference
+        if (localStorage.getItem('arisa_theme') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.getElementById('dark-mode-btn').innerText = '☀️';
+        }
 
         window.toggleCart = () => {
             const el = document.getElementById('cart-sidebar');
@@ -741,22 +863,61 @@
             renderProducts();
         };
 
+        // Order Tracking Functionality
+        window.trackOrderLookup = () => {
+            const trackingId = document.getElementById('track-id-input').value.trim();
+            const resultBox = document.getElementById('track-result-box');
+            if(!trackingId) {
+                resultBox.innerHTML = `<span style="color:#dc2626;">Please enter a valid tracking ID.</span>`;
+                return;
+            }
+            resultBox.innerHTML = "Searching records...";
+            ordersRef.child(trackingId).once('value', (snapshot) => {
+                const orderData = snapshot.val();
+                if(orderData) {
+                    resultBox.innerHTML = `
+                        <div style="background:var(--bg-color); padding:12px; border-radius:6px; border:1px solid var(--border-color);">
+                            <p><strong>Customer:</strong> ${orderData.name}</p>
+                            <p><strong>Status:</strong> <span style="color:#059669;">${orderData.status}</span></p>
+                            <p><strong>Total Due:</strong> ${orderData.total} NLE</p>
+                            <p><strong>Date:</strong> ${new Date(orderData.timestamp).toLocaleString()}</p>
+                        </div>
+                    `;
+                } else {
+                    resultBox.innerHTML = `<span style="color:#dc2626;">No order found with tracking ID: ${trackingId}</span>`;
+                }
+            });
+        };
+
         window.checkoutWhatsApp = () => {
             const name = document.getElementById('cust-name').value.trim();
             const phone = document.getElementById('cust-phone').value.trim();
             const grandTotal = document.getElementById('cart-grand-total').innerText;
             const discountLabel = document.getElementById('cart-discount-label').innerText;
+            const couponLabel = appliedCouponName ? ` | Coupon: ${appliedCouponName}` : '';
             
             if(!name || !phone || cart.length === 0) {
                 alert("Please fill in your Name and WhatsApp phone number.");
                 return;
             }
 
-            let msg = `*ARISA COLLECTION ORDER*\nCustomer: ${name}\nPhone: ${phone}\nDiscount Applied: ${discountLabel}\nTotal Due: ${grandTotal} NLE\n\n*Ordered Items:*\n`;
+            const trackingId = 'ARISA-' + Date.now().toString().slice(-6);
+            
+            // Save order to database for order tracking
+            ordersRef.child(trackingId).set({
+                name: name,
+                phone: phone,
+                total: grandTotal,
+                status: 'Processing / Confirmed',
+                timestamp: Date.now()
+            });
+
+            let msg = `*ARISA COLLECTION ORDER*\nTracking ID: ${trackingId}\nCustomer: ${name}\nPhone: ${phone}\nDiscount Applied: ${discountLabel}${couponLabel}\nTotal Due: ${grandTotal} NLE\n\n*Ordered Items:*\n`;
             cart.forEach(i => { msg += `• ${i.name} (${i.price} NLE)\n`; });
 
             window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`, '_blank');
-            cart = []; updateCartUI(); toggleCart();
+            alert("Order placed successfully! Your Tracking ID is: " + trackingId);
+            cart = []; appliedCouponDiscount = 0; appliedCouponName = ""; updateCartUI(); toggleCart();
         };
     </script>
 </body>
