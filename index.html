@@ -287,12 +287,13 @@
             display: none;
             flex-direction: column;
             padding: 20px;
+            overflow-y: auto;
         }
         .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 16px; }
         .close-sidebar-btn { background: transparent; border: none; font-size: 26px; color: var(--text-muted); cursor: pointer; }
         
-        .cart-scroll-area { flex-grow: 1; overflow-y: auto; margin-bottom: 16px; }
-        .cart-item-row { border-bottom: 1px solid var(--border-color); padding: 12px 0; display: flex; justify-content: space-between; align-items: center; color: var(--text-dark); }
+        .cart-scroll-area { max-height: 220px; overflow-y: auto; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
+        .cart-item-row { border-bottom: 1px solid var(--border-color); padding: 8px 0; display: flex; justify-content: space-between; align-items: center; color: var(--text-dark); }
         .remove-item-btn { background: transparent; border: none; color: #dc2626; font-size: 11px; font-weight: 700; margin-top: 4px; display: block; cursor: pointer; }
         
         .checkout-inputs { background: var(--bg-color); padding: 12px; border-radius: 8px; margin-bottom: 16px; border: 1px solid var(--border-color); }
@@ -439,30 +440,37 @@
 
     <!-- Shopping Bag Sidebar Panel Overlay -->
     <div class="sidebar" id="cart-sidebar">
-        <div class="sidebar-header">
-            <h2 style="font-size:16px; font-weight:800; color:var(--text-dark);">SHOPPING BAG</h2>
+        <div class="sidebar-header" style="display:flex; justify-content:space-between; align-items:center;">
+            <button type="button" class="btn" style="background:var(--border-color); color:var(--text-dark); width:auto; padding:6px 12px; font-size:10px;" onclick="toggleCart()">← Back</button>
+            <h2 style="font-size:16px; font-weight:800; color:var(--text-dark); margin:0;">SHOPPING BAG</h2>
             <button type="button" class="close-sidebar-btn" onclick="toggleCart()">×</button>
         </div>
-        <div class="cart-scroll-area"><div id="cart-items-list"></div></div>
         
-        <!-- Coupon Section -->
-        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-            <input type="text" id="coupon-code-input" placeholder="Coupon Code (e.g., ARISA10)" style="flex:1; padding:8px; font-size:11px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-dark); border-radius:6px; outline:none;">
-            <button type="button" class="btn" style="max-width: 80px; font-size:10px;" onclick="applyCoupon()">Apply</button>
+        <!-- Cart Controls & Buttons Stacked at Top -->
+        <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+            <div style="display: flex; gap: 8px;">
+                <input type="text" id="coupon-code-input" placeholder="Coupon Code (e.g., ARISA10)" style="flex:1; padding:8px; font-size:11px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-dark); border-radius:6px; outline:none;">
+                <button type="button" class="btn" style="max-width: 80px; font-size:10px;" onclick="applyCoupon()">Apply</button>
+            </div>
+
+            <div class="checkout-inputs" style="margin-bottom:0;">
+                <input type="text" id="cust-name" placeholder="Your Name">
+                <input type="tel" id="cust-phone" placeholder="WhatsApp Number">
+            </div>
+
+            <button type="button" class="btn" style="padding:12px;" onclick="checkoutWhatsApp()">ORDER ON WHATSAPP</button>
         </div>
 
-        <div class="checkout-inputs">
-            <input type="text" id="cust-name" placeholder="Your Name">
-            <input type="tel" id="cust-phone" placeholder="WhatsApp Number">
-        </div>
-        <div style="margin-bottom: 16px;">
+        <div style="margin-bottom: 12px;">
             <div class="summary-row"><span>Subtotal:</span><strong><span id="cart-subtotal">0.00</span> NLE</strong></div>
             <div class="summary-row" style="color: #059669;"><span>Discount Applied:</span><strong><span id="cart-discount-label">0%</span></strong></div>
-            <div class="summary-row" style="color: #2563eb;" id="coupon-row" style="display:none;"><span>Coupon:</span><strong><span id="cart-coupon-label">None</span></strong></div>
+            <div class="summary-row" style="color: #2563eb;" id="coupon-row"><span>Coupon:</span><strong><span id="cart-coupon-label">None</span></strong></div>
             <hr style="border:0; border-top:1px solid var(--border-color); margin:8px 0;">
             <div class="summary-row" style="font-size:15px;"><span>Total Due:</span><strong><span id="cart-grand-total">0.00</span> NLE</strong></div>
         </div>
-        <button type="button" class="btn" style="padding:12px;" onclick="checkoutWhatsApp()">ORDER ON WHATSAPP</button>
+
+        <div style="font-size:11px; font-weight:700; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase;">Cart Items:</div>
+        <div class="cart-scroll-area"><div id="cart-items-list"></div></div>
     </div>
 
     <script>
