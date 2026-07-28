@@ -529,8 +529,7 @@
                 status: status,
                 isNewArrival: isArrival,
                 category: category,
-                image: imgLink,
-                secretAdminKey: SECURITY_PASS_KEY 
+                image: imgLink
             }, (error) => {
                 if (!error) {
                     document.getElementById('admin-p-name').value = '';
@@ -549,11 +548,7 @@
         window.deleteProductLive = function(id, event) {
             if(event) event.stopPropagation();
             if(confirm("Permanently wipe item from live catalogs?")) {
-                database.ref('perfumes/' + id).update({
-                    secretAdminKey: SECURITY_PASS_KEY
-                }).then(() => {
-                    database.ref('perfumes/' + id).remove();
-                });
+                database.ref('perfumes/' + id).remove();
             }
         };
 
@@ -563,8 +558,7 @@
             if(item) {
                 const nextStatus = item.status === 'available' ? 'sold-out' : 'available';
                 database.ref('perfumes/' + id).update({ 
-                    status: nextStatus,
-                    secretAdminKey: SECURITY_PASS_KEY
+                    status: nextStatus
                 });
             }
         };
@@ -576,8 +570,7 @@
             if(!newName) { alert("Name cannot be empty."); return; }
 
             database.ref('perfumes/' + id).update({
-                name: newName,
-                secretAdminKey: SECURITY_PASS_KEY
+                name: newName
             }, (error) => {
                 if(!error) alert("Product name updated successfully!");
                 else alert("Error updating name: " + error.message);
@@ -589,8 +582,7 @@
             if(!textVal) return;
             
             settingsRef.update({
-                [type]: textVal,
-                secretAdminKey: SECURITY_PASS_KEY
+                [type]: textVal
             }, (error) => {
                 if(!error) alert(`${type.toUpperCase()} page updated successfully!`);
                 else alert("Error: " + error.message);
@@ -599,12 +591,12 @@
 
         window.saveBannerSetting = function() {
             const val = document.getElementById('admin-banner-input').value.trim();
-            settingsRef.update({ banner: val, secretAdminKey: SECURITY_PASS_KEY }, () => { alert("Banner updated successfully!"); });
+            settingsRef.update({ banner: val }, () => { alert("Banner updated successfully!"); });
         };
 
         window.saveDeliveryFeeSetting = function() {
             const val = document.getElementById('admin-delivery-fee-input').value.trim();
-            settingsRef.update({ deliveryFee: parseFloat(val || 0), secretAdminKey: SECURITY_PASS_KEY }, () => { alert("Delivery fee updated!"); });
+            settingsRef.update({ deliveryFee: parseFloat(val || 0) }, () => { alert("Delivery fee updated!"); });
         };
 
         window.saveNewCouponSetting = function() {
@@ -612,7 +604,7 @@
             if(!val) return;
             let currentCoupons = storeSettings.coupons || {"ARISA10": 0.10, "WELCOME10": 0.10, "ARISA20": 0.20};
             currentCoupons[val] = 0.15; // default 15% for custom added
-            settingsRef.update({ coupons: currentCoupons, secretAdminKey: SECURITY_PASS_KEY }, () => { alert("New coupon added!"); });
+            settingsRef.update({ coupons: currentCoupons }, () => { alert("New coupon added!"); });
         };
 
         window.openAdminCustomerManagement = function() {
