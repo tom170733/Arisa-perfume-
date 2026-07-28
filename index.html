@@ -3,579 +3,313 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARISA COLLECTION | PROFESSIONAL SHOWROOM</title>
-    
-    <!-- Core Firebase SDK Modules -->
+    <title>Arisa Collection</title>
+    <!-- Firebase App (Core) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <!-- Firebase Realtime Database -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
     <style>
         :root {
             --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --accent-primary: #ff6b8b; 
-            --accent-light: #fff1f2;
             --text-dark: #0f172a;
-            --text-muted: #475569;
+            --text-muted: #64748b;
             --border-color: #e2e8f0;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --card-bg: #ffffff;
+            --primary: #0f172a;
         }
+
         [data-theme="dark"] {
-            --bg-color: #0b0f19;
-            --card-bg: #1e293b;
-            --accent-primary: #ff6b8b;
-            --accent-light: #33141b;
+            --bg-color: #0f172a;
             --text-dark: #f8fafc;
             --text-muted: #94a3b8;
             --border-color: #334155;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+            --card-bg: #1e293b;
+            --primary: #f8fafc;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-dark);
-            padding-bottom: 80px;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            width: 100%;
-            overflow-x: hidden;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        body { background: var(--bg-color); color: var(--text-dark); padding-bottom: 80px; transition: background 0.3s, color 0.3s; }
 
-        #app-preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: #0b0f19;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.4s ease;
-        }
-        .spinner-container {
-            position: relative;
-            width: 120px;
-            height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .glow-ring {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 4px solid transparent;
-            border-top: 4px solid #ff6b8b;
-            border-right: 4px solid #ff477e;
-            box-shadow: 0 0 15px rgba(255, 107, 139, 0.5);
-            animation: spinNeon 1.2s linear infinite;
-        }
-        .loading-text {
-            position: absolute;
-            color: #ff6b8b;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-        @keyframes spinNeon {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        header { background: var(--card-bg); border-bottom: 1px solid var(--border-color); padding: 16px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        h1 { font-size: 20px; font-weight: 900; letter-spacing: -0.5px; }
 
-        header {
-            background: var(--card-bg);
-            padding: 20px;
-            text-align: center;
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow-sm);
-            width: 100%;
-        }
-        header h1 {
-            color: var(--text-dark);
-            font-size: clamp(18px, 4vw, 22px);
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            font-weight: 800;
-            cursor: pointer;
-            margin-bottom: 14px;
-        }
-        header h1 span { color: var(--accent-primary); }
-        
-        /* Navigation with Active Line Indicator */
-        nav { display: flex; justify-content: center; gap: clamp(12px, 3vw, 24px); flex-wrap: wrap; }
-        nav a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            position: relative;
-            padding-bottom: 6px;
-        }
-        nav a.active { color: var(--text-dark); }
-        nav a.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--accent-primary);
-        }
+        .nav-buttons { display: flex; gap: 8px; align-items: center; }
+        .btn { background: var(--primary); color: var(--bg-color); border: none; padding: 8px 12px; font-size: 11px; font-weight: 700; border-radius: 6px; cursor: pointer; text-align: center; display: inline-block; width: 100%; }
+        .icon-btn { background: none; border: 1px solid var(--border-color); padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 14px; color: var(--text-dark); }
 
-        /* Section Bar with Active Line Indicator */
-        .section-bar {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px;
-            background: var(--card-bg);
-            border-bottom: 1px solid var(--border-color);
-            width: 100%;
-        }
-        .sec-btn {
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            padding: 8px 16px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            border-radius: 20px;
-            cursor: pointer;
-            flex: 1;
-            max-width: 180px;
-            text-align: center;
-            position: relative;
-        }
-        .sec-btn.active {
-            background: var(--text-dark);
-            color: var(--card-bg);
-            border-color: var(--text-dark);
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 16px; }
 
-        .container { max-width: 1200px; width: 100%; margin: 0 auto; padding: 16px 12px; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
-        .product-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 10px;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            box-shadow: var(--shadow-sm);
-        }
-        .product-image {
-            width: 100%;
-            height: 150px;
-            background: var(--bg-color);
-            border-radius: 6px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
-        }
-        .product-image img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s ease; }
-        .product-image img.loading { opacity: 0.3; filter: blur(5px); }
-        
-        .status-badge {
-            position: absolute;
-            top: 14px;
-            left: 14px;
-            font-size: 8px;
-            padding: 2px 6px;
-            border-radius: 3px;
-            text-transform: uppercase;
-            font-weight: 700;
-            z-index: 2;
-        }
-        .status-badge.available { background: #e2f8f0; color: #065f46; }
-        .status-badge.sold-out { background: #fee2e2; color: #991b1b; }
-        
-        .new-badge {
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            font-size: 8px;
-            padding: 2px 6px;
-            border-radius: 3px;
-            text-transform: uppercase;
-            font-weight: 700;
-            background: var(--accent-primary);
-            color: #ffffff;
-            z-index: 2;
-        }
-        .product-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-dark); }
-        .price-container { margin-top: auto; padding-top: 4px; display: flex; flex-direction: column; gap: 2px; margin-bottom: 8px; }
-        .price-current { font-weight: 800; font-size: 14px; color: var(--text-dark); }
-        .price-old { text-decoration: line-through; color: var(--text-muted); font-size: 10px; }
-        
-        .btn {
-            background: var(--accent-primary);
-            border: none;
-            color: #ffffff;
-            width: 100%;
-            padding: 10px 8px;
-            font-size: 11px;
-            font-weight: 700;
-            border-radius: 6px;
-            text-transform: uppercase;
-            cursor: pointer;
-        }
-        .btn:disabled { background: var(--border-color); color: var(--text-muted); cursor: not-allowed; }
+        /* Section Switcher Tabs */
+        .section-bar { display: flex; border-bottom: 1px solid var(--border-color); margin-bottom: 16px; background: var(--card-bg); border-radius: 8px 8px 0 0; overflow: hidden; }
+        .sec-btn { flex: 1; padding: 12px; background: none; border: none; font-size: 13px; font-weight: 700; color: var(--text-muted); cursor: pointer; text-align: center; border-bottom: 2px solid transparent; }
+        .sec-btn.active { color: var(--text-dark); border-bottom-color: var(--text-dark); background: var(--bg-color); }
 
-        #floating-cart-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--text-dark);
-            color: var(--card-bg);
-            border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            font-size: 18px;
-            cursor: pointer;
-            z-index: 200;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-            display: none;
-        }
-        #floating-cart-counter {
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            background: var(--accent-primary);
-            color: white;
-            font-size: 9px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-        }
-        .sidebar {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 100%;
-            max-width: 420px;
-            height: 100vh;
-            background: var(--card-bg);
-            border-left: 1px solid var(--border-color);
-            z-index: 300;
-            display: none;
-            flex-direction: column;
-            padding: 20px;
-            overflow-y: auto;
-        }
-        .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 16px; }
-        .close-sidebar-btn { background: transparent; border: none; font-size: 26px; color: var(--text-muted); cursor: pointer; }
+        /* Product Grid */
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+        .product-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between; position: relative; cursor: pointer; transition: transform 0.2s; }
+        .product-card:hover { transform: translateY(-2px); }
+        .product-image { width: 100%; height: 140px; background: var(--border-color); border-radius: 6px; overflow: hidden; margin-bottom: 8px; position: relative; }
+        .product-image img { width: 100%; height: 100%; object-fit: cover; }
         
-        .cart-scroll-area { max-height: 220px; overflow-y: auto; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
-        .cart-item-row { border-bottom: 1px solid var(--border-color); padding: 8px 0; display: flex; justify-content: space-between; align-items: center; color: var(--text-dark); }
-        .remove-item-btn { background: transparent; border: none; color: #dc2626; font-size: 11px; font-weight: 700; margin-top: 4px; display: block; cursor: pointer; }
-        
-        .checkout-inputs { background: var(--bg-color); padding: 12px; border-radius: 8px; margin-bottom: 16px; border: 1px solid var(--border-color); }
-        .checkout-inputs input { width: 100%; padding: 8px 10px; font-size: 13px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-dark); margin-bottom: 10px; outline: none; }
-        
-        .summary-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; color: var(--text-dark); }
-        
-        .admin-box { background: var(--card-bg); border: 2px solid var(--accent-primary); border-radius: 8px; padding: 16px; margin-bottom: 24px; color: var(--text-dark); }
-        .admin-grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin-bottom: 12px; }
-        .admin-grid-inputs input, .admin-grid-inputs select, .admin-grid-inputs textarea { border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-dark); padding: 9px; font-size: 12px; border-radius: 6px; outline: none; width: 100%; }
+        .status-badge { position: absolute; top: 6px; left: 6px; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; z-index: 2; }
+        .status-badge.available { background: #059669; color: #fff; }
+        .status-badge.sold-out { background: #dc2626; color: #fff; }
+        .status-badge.few { background: #d97706; color: #fff; }
+        .new-badge { position: absolute; top: 6px; right: 6px; background: #2563eb; color: #fff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px; z-index: 2; }
 
-        /* Tools Widget (Theme & Dark Mode) */
-        .widget-box {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 6px 10px;
-            border-radius: 20px;
-            z-index: 500;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: var(--shadow-sm);
-        }
-        .widget-box input[type="color"] {
-            border: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            cursor: pointer;
-            background: none;
-        }
-        .dark-mode-toggle {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-        }
+        .product-title { font-size: 12px; font-weight: 700; margin-bottom: 4px; color: var(--text-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .price-container { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; }
+        .price-current { font-size: 12px; font-weight: 800; color: var(--text-dark); }
+        .price-old { font-size: 10px; text-decoration: line-through; color: var(--text-muted); }
+
+        /* Cart Sidebar */
+        #cart-sidebar { position: fixed; top: 0; right: 0; width: 100%; max-width: 380px; height: 100%; background: var(--card-bg); border-left: 1px solid var(--border-color); z-index: 1000; display: none; flex-direction: column; padding: 16px; box-shadow: -4px 0 16px rgba(0,0,0,0.1); }
+        .cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; }
+        .cart-items { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+        .cart-item-row { display: flex; justify-content: space-between; align-items: center; background: var(--bg-color); padding: 8px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 12px; }
+        .remove-item-btn { background: none; border: none; color: #dc2626; font-size: 10px; cursor: pointer; font-weight: 700; }
+
+        /* Admin Panel Overlay */
+        #admin-panel { display: none; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; margin-bottom: 24px; }
+        .admin-input { width: 100%; padding: 8px; font-size: 12px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-dark); border-radius: 6px; margin-bottom: 8px; outline: none; }
+
+        /* Floating Cart Trigger */
+        #floating-cart-btn { position: fixed; bottom: 16px; right: 16px; background: var(--primary); color: var(--bg-color); padding: 12px 20px; border-radius: 30px; font-weight: 800; font-size: 12px; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 99; display: none; }
+        
+        /* Live Chat Widget Styles */
+        #live-chat-widget { position: fixed; bottom: 16px; left: 16px; z-index: 999; }
+        #chat-popup-box { position: absolute; bottom: 60px; left: 0; width: 300px; height: 380px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; display: none; flex-direction: column; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
     </style>
 </head>
 <body>
 
-    <!-- Widgets Tool Box -->
-    <div class="widget-box">
-        <button type="button" class="dark-mode-toggle" onclick="toggleDarkMode()" id="dark-mode-btn">🌙</button>
-        <span style="font-size:10px; font-weight:700; color:var(--text-dark);">Theme:</span>
-        <input type="color" id="bg-color-picker" onchange="changeBackgroundTheme(this.value)" value="#f8fafc">
-    </div>
-
-    <!-- Preloader Screen -->
-    <div id="app-preloader">
-        <div class="spinner-container">
-            <div class="glow-ring"></div>
-            <div class="loading-text">LOADING</div>
-        </div>
-    </div>
-
-    <!-- Main Store Header -->
     <header>
-        <h1 onclick="switchTab('home', document.getElementById('nav-home'))">ARISA <span>COLLECTION</span></h1>
-        <nav>
-            <a onclick="switchTab('home', this)" id="nav-home" class="active">HOME</a>
-            <a onclick="switchTab('about', this)" id="nav-about">ABOUT</a>
-            <a onclick="switchTab('policy', this)" id="nav-policy">POLICY</a>
-            <a onclick="switchTab('track', this)" id="nav-track">TRACK ORDER</a>
-            <a onclick="toggleCart()">CART (<span id="cart-counter">0</span>)</a>
-        </nav>
+        <h1 onclick="handleSecretAdminTap()" style="cursor:pointer;">ARISA COLLECTION</h1>
+        <div class="nav-buttons">
+            <button class="icon-btn" id="dark-mode-btn" onclick="toggleDarkMode()">🌙</button>
+            <button class="icon-btn" onclick="switchTab('home')">🏠</button>
+            <button class="icon-btn" onclick="switchTab('track')">📦</button>
+            <button class="icon-btn" onclick="switchTab('wishlist')">❤️</button>
+            <button class="icon-btn" onclick="switchTab('about')">ℹ️</button>
+            <button class="icon-btn" onclick="switchTab('policy')">📜</button>
+            <button class="icon-btn" onclick="toggleCart()" style="position:relative;">🛒 <span id="cart-counter" style="background:#dc2626; color:#fff; font-size:9px; padding:1px 4px; border-radius:10px; position:absolute; top:-4px; right:-4px;">0</span></button>
+        </div>
     </header>
 
-    <!-- Navigation Section Bar -->
-    <div class="section-bar" id="category-section-bar">
-        <button type="button" class="sec-btn active" id="sec-perfume" onclick="switchSection('perfume', this)">Perfumes & Body Care</button>
-        <button type="button" class="sec-btn" id="sec-clothing" onclick="switchSection('clothing', this)">Clothing & Apparel</button>
-    </div>
-
     <div class="container">
-        <div id="home-content">
+        <!-- Dynamic Banner Section -->
+        <div id="store-banner-container" style="margin-bottom:16px; border-radius:8px; overflow:hidden;"></div>
+
+        <!-- Admin Panel -->
+        <div id="admin-panel">
+            <h3 style="font-size:14px; font-weight:800; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
+                Admin Control Hub 
+                <button class="btn" style="width:auto; background:#dc2626; font-size:9px;" onclick="logoutAdmin()">Logout</button>
+            </h3>
             
-            <!-- Live Secure Control Console (Admin Panel) -->
-            <div id="admin-panel" class="admin-box" style="display:none;">
-                <h2 style="font-size: 12px; margin-bottom: 12px; text-transform: uppercase; color:var(--accent-primary); font-weight:800;">ARISA SECURE STORAGE MANAGER & EDITOR</h2>
-                
-                <p style="font-size:11px; font-weight:700; margin-bottom:6px;">Add New Product / Item</p>
-                <div class="admin-grid-inputs">
-                    <input type="text" id="admin-p-name" placeholder="Product Name">
-                    <input type="number" id="admin-p-price" placeholder="Price (NLE)">
-                    <input type="text" id="admin-p-img-link" placeholder="Image URL (or upload below)">
-                    <input type="number" id="admin-p-discount-percentage" placeholder="Discount % (Optional)">
-                    <select id="admin-p-status">
-                        <option value="available">Available</option>
-                        <option value="sold-out">Sold Out</option>
-                    </select>
-                    <select id="admin-p-arrival">
-                        <option value="no">Regular Stock</option>
-                        <option value="yes">New Arrival</option>
-                    </select>
-                    <select id="admin-p-category">
-                        <option value="perfume">Perfumes & Body Care</option>
-                        <option value="clothing">Clothing & Apparel</option>
-                    </select>
-                </div>
-                <!-- Picture File Upload Helper -->
-                <div style="margin-bottom:12px;">
-                    <label style="font-size:10px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:4px;">Upload Picture From Phone/PC (Optimized):</label>
-                    <input type="file" id="admin-img-file" accept="image/*" style="font-size:11px;" onchange="convertImageFile(event)">
-                </div>
-
-                <div style="display:flex; gap:10px; margin-bottom:16px;">
-                    <button type="button" class="btn" style="background:var(--text-dark); color:var(--card-bg); padding:10px;" onclick="adminUploadSecureLink()">PUBLISH LIVE TO STORE</button>
-                    <button type="button" class="btn" style="background:var(--border-color); color:var(--text-dark); padding:10px; max-width:100px;" onclick="logoutAdmin()">EXIT</button>
-                </div>
-
-                <hr style="border:0; border-top:1px solid var(--border-color); margin:16px 0;">
-
-                <p style="font-size:11px; font-weight:700; margin-bottom:6px;">Edit Store Pages (About & Policy)</p>
-                <div style="display:grid; gap:8px;">
-                    <textarea id="admin-about-text" rows="2" placeholder="Edit About page text content..."></textarea>
-                    <button type="button" class="btn" style="background:#2563eb; font-size:10px; padding:6px;" onclick="saveSettingContent('about')">Update About Page</button>
-                    
-                    <textarea id="admin-policy-text" rows="2" placeholder="Edit Policy page text content..."></textarea>
-                    <button type="button" class="btn" style="background:#2563eb; font-size:10px; padding:6px;" onclick="saveSettingContent('policy')">Update Policy Page</button>
+            <div style="background:var(--bg-color); padding:10px; border-radius:6px; border:1px solid var(--border-color); margin-bottom:12px;">
+                <p style="font-size:12px; font-weight:800; margin-bottom:8px;">📊 Admin Quick Insights</p>
+                <div style="font-size:11px; display:flex; flex-direction:column; gap:4px;">
+                    <div id="admin-top-selling"><strong>Top Selling Perfumes:</strong> Loading analytics...</div>
+                    <div id="admin-low-stock"><strong>Low Stock Alerts:</strong> None</div>
                 </div>
             </div>
 
-            <!-- Showcase Catalogue Display Grid -->
-            <div class="product-grid" id="products-catalogue-grid"></div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                <input type="text" id="admin-p-name" placeholder="Item Name" class="admin-input">
+                <input type="number" id="admin-p-price" placeholder="Price (NLE)" class="admin-input">
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                <input type="text" id="admin-p-discount-percentage" placeholder="Discount % (e.g. 10)" class="admin-input">
+                <select id="admin-p-category" class="admin-input">
+                    <option value="perfumes">Perfumes</option>
+                    <option value="clothing">Clothing</option>
+                </select>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                <select id="admin-p-status" class="admin-input">
+                    <option value="available">In Stock</option>
+                    <option value="few">Only Three Left</option>
+                    <option value="sold-out">Out Of Stock</option>
+                </select>
+                <select id="admin-p-arrival" class="admin-input">
+                    <option value="no">Regular Item</option>
+                    <option value="yes">New Arrival</option>
+                </select>
+            </div>
+            <input type="text" id="admin-p-img-link" placeholder="Image URL / Link" class="admin-input">
+            <input type="file" id="admin-img-file" class="admin-input" onchange="handleImageUpload(event)" accept="image/*">
+            <button class="btn" style="margin-bottom:16px;" onclick="adminUploadSecureLink()">Publish New Product</button>
             
-            <!-- Hidden admin security login trigger door -->
-            <div style="text-align:center; margin-top:60px; padding: 20px; opacity: 0.1;" onclick="handleSecretAdminTap()">
-                <span style="font-size: 10px; cursor: pointer; color:var(--text-dark);">[ TAP HERE 3 TIMES FOR ADMIN PORTAL ]</span>
+            <hr style="border:0; border-top:1px solid var(--border-color); margin:12px 0;">
+            <p style="font-size:11px; font-weight:700; margin-bottom:6px;">Store Management & Controls:</p>
+            
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+                <input type="text" id="admin-banner-input" placeholder="Banner Image URL / Text HTML" class="admin-input" style="margin:0;">
+                <button class="btn" style="background:#2563eb;" onclick="saveBannerSetting()">Update Banner</button>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+                <input type="number" id="admin-delivery-fee-input" placeholder="Delivery Fee (NLE)" class="admin-input" style="margin:0;">
+                <button class="btn" style="background:#2563eb;" onclick="saveDeliveryFeeSetting()">Set Delivery Fee</button>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px;">
+                <input type="text" id="admin-coupon-code-input" placeholder="New Coupon (e.g. SAVE15)" class="admin-input" style="margin:0;">
+                <button class="btn" style="background:#059669;" onclick="saveNewCouponSetting()">Add Coupon Code</button>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px;">
+                <button class="btn" style="background:#7c3aed;" onclick="openAdminCustomerManagement()">Customer Management</button>
+                <button class="btn" style="background:#7c3aed;" onclick="openAdminLiveChatHub()">Live Chat Inbox</button>
+            </div>
+
+            <textarea id="admin-about-text" class="admin-input" placeholder="About Store Content..." rows="2"></textarea>
+            <button class="btn" style="background:#059669; margin-bottom:8px;" onclick="saveSettingContent('about')">Save About Page</button>
+            <textarea id="admin-policy-text" class="admin-input" placeholder="Policy Content..." rows="2"></textarea>
+            <button class="btn" style="background:#059669;" onclick="saveSettingContent('policy')">Save Policy Page</button>
+        </div>
+
+        <!-- Main Home View -->
+        <div id="home-content">
+            <div class="section-bar" id="category-section-bar">
+                <button class="sec-btn active" onclick="switchSection('perfumes', this)">Perfumes</button>
+                <button class="sec-btn" onclick="switchSection('clothing', this)">Clothing</button>
+            </div>
+            <div class="products-grid" id="products-catalogue-grid">
+                <!-- Dynamically Populated Products -->
             </div>
         </div>
 
-        <!-- Info Secondary Subpages Frame (About / Policy / Track) -->
-        <div id="page-content" style="display:none; background:var(--card-bg); border:1px solid var(--border-color); padding:24px; border-radius:8px;">
+        <!-- Dynamic Pages View (Track, About, Policy, Wishlist) -->
+        <div id="page-content" style="display:none; background:var(--card-bg); border:1px solid var(--border-color); border-radius:8px; padding:16px;">
             <div id="page-inner-content"></div>
         </div>
     </div>
 
-    <!-- Sticky Cart Drawer Shortcut Badge -->
-    <button type="button" id="floating-cart-btn" onclick="toggleCart()">🛍️ <span id="floating-cart-counter">0</span></button>
-
-    <!-- Shopping Bag Sidebar Panel Overlay -->
-    <div class="sidebar" id="cart-sidebar">
-        <div class="sidebar-header" style="display:flex; justify-content:space-between; align-items:center;">
-            <button type="button" class="btn" style="background:var(--border-color); color:var(--text-dark); width:auto; padding:6px 12px; font-size:10px;" onclick="toggleCart()">← Back</button>
-            <h2 style="font-size:16px; font-weight:800; color:var(--text-dark); margin:0;">SHOPPING BAG</h2>
-            <button type="button" class="close-sidebar-btn" onclick="toggleCart()">×</button>
+    <!-- Live Chat Floating Widget -->
+    <div id="live-chat-widget">
+        <div id="chat-popup-box">
+            <div style="padding:10px; background:var(--primary); color:var(--bg-color); font-weight:800; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
+                <span>Live Customer Chat</span>
+                <button onclick="toggleChatPopup()" style="background:none; border:none; color:inherit; cursor:pointer;">✕</button>
+            </div>
+            <div id="chat-messages-container" style="flex:1; padding:8px; overflow-y:auto; font-size:11px; display:flex; flex-direction:column; gap:6px;">
+                <div style="background:var(--bg-color); padding:6px 8px; border-radius:6px; align-self:flex-start;">Hello! Welcome to Arisa Collection. How can we help you today?</div>
+            </div>
+            <div style="padding:8px; border-top:1px solid var(--border-color); display:flex; gap:4px;">
+                <input type="text" id="chat-user-msg" placeholder="Type a message..." style="flex:1; padding:6px; font-size:11px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-dark); border-radius:4px; outline:none;">
+                <button type="button" class="btn" style="width:auto; padding:6px 10px; font-size:10px;" onclick="sendCustomerChatMessage()">Send</button>
+            </div>
         </div>
-        
-        <!-- Cart Controls & Buttons Stacked at Top -->
-        <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
-            <div style="display: flex; gap: 8px;">
-                <input type="text" id="coupon-code-input" placeholder="Coupon Code (e.g., ARISA10)" style="flex:1; padding:8px; font-size:11px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-dark); border-radius:6px; outline:none;">
-                <button type="button" class="btn" style="max-width: 80px; font-size:10px;" onclick="applyCoupon()">Apply</button>
+        <button onclick="toggleChatPopup()" class="btn" style="border-radius:30px; padding:10px 16px; box-shadow:0 4px 12px rgba(0,0,0,0.2);">💬 Live Chat</button>
+    </div>
+
+    <!-- Floating Cart Button -->
+    <button id="floating-cart-btn" onclick="toggleCart()">🛒 Cart (<span id="floating-cart-counter">0</span>)</button>
+
+    <!-- Cart Sidebar Drawer -->
+    <div id="cart-sidebar">
+        <div class="cart-header">
+            <h3 style="font-size:14px; font-weight:800;">Your Cart</h3>
+            <button class="icon-btn" onclick="toggleCart()">✕</button>
+        </div>
+        <div class="cart-items" id="cart-items-list">
+            <!-- Items added to cart -->
+        </div>
+        <div style="border-top:1px solid var(--border-color); padding-top:12px;">
+            <!-- Coupon Section -->
+            <div style="display:flex; gap:6px; margin-bottom:8px;">
+                <input type="text" id="coupon-code-input" placeholder="Coupon Code" style="flex:1; padding:6px; font-size:11px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-dark); border-radius:4px; outline:none;">
+                <button type="button" class="btn" style="width:auto; padding:6px 10px; font-size:10px;" onclick="applyCoupon()">Apply</button>
+            </div>
+            
+            <div style="font-size:11px; display:flex; flex-direction:column; gap:4px; margin-bottom:12px;">
+                <div style="display:flex; justify-content:space-between;"><span>Subtotal:</span> <span><span id="cart-subtotal">0.00</span> NLE</span></div>
+                <div style="display:flex; justify-content:space-between;"><span>Volume Discount:</span> <span id="cart-discount-label">0%</span></div>
+                <div style="display:flex; justify-content:space-between;"><span>Coupon:</span> <span id="cart-coupon-label">None</span></div>
+                <div style="display:flex; justify-content:space-between;"><span>Delivery Fee:</span> <span><span id="cart-delivery-fee">0.00</span> NLE</span></div>
+                <div style="display:flex; justify-content:space-between; font-weight:800; font-size:13px; border-top:1px solid var(--border-color); padding-top:4px;"><span>Total Due:</span> <span><span id="cart-grand-total">0.00</span> NLE</span></div>
             </div>
 
-            <div class="checkout-inputs" style="margin-bottom:0;">
-                <input type="text" id="cust-name" placeholder="Your Name">
-                <input type="tel" id="cust-phone" placeholder="WhatsApp Number">
-            </div>
-
-            <button type="button" class="btn" style="padding:12px;" onclick="checkoutWhatsApp()">ORDER ON WHATSAPP</button>
+            <input type="text" id="cust-name" placeholder="Your Full Name" class="admin-input" style="margin-bottom:6px;">
+            <input type="text" id="cust-phone" placeholder="WhatsApp Phone Number" class="admin-input" style="margin-bottom:6px;">
+            <input type="text" id="cust-referrer" placeholder="Referral Code (Optional)" class="admin-input" style="margin-bottom:12px;">
+            <button class="btn" style="background:#25d366; color:#fff;" onclick="checkoutWhatsApp()">Checkout via WhatsApp</button>
         </div>
-
-        <div style="margin-bottom: 12px;">
-            <div class="summary-row"><span>Subtotal:</span><strong><span id="cart-subtotal">0.00</span> NLE</strong></div>
-            <div class="summary-row" style="color: #059669;"><span>Discount Applied:</span><strong><span id="cart-discount-label">0%</span></strong></div>
-            <div class="summary-row" style="color: #2563eb;" id="coupon-row"><span>Coupon:</span><strong><span id="cart-coupon-label">None</span></strong></div>
-            <hr style="border:0; border-top:1px solid var(--border-color); margin:8px 0;">
-            <div class="summary-row" style="font-size:15px;"><span>Total Due:</span><strong><span id="cart-grand-total">0.00</span> NLE</strong></div>
-        </div>
-
-        <div style="font-size:11px; font-weight:700; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase;">Cart Items:</div>
-        <div class="cart-scroll-area"><div id="cart-items-list"></div></div>
     </div>
 
     <script>
-        const myWhatsAppNumber = "23274170733"; 
-
-        // 🔴 PASTE YOUR ACTUAL FIREBASE CONFIG DETAILS HERE:
+        // Firebase Configuration & Initialization
         const firebaseConfig = {
-            apiKey: "YOUR_FIREBASE_API_KEY",
-            authDomain: "arisa-perfume-store.firebaseapp.com",
-            databaseURL: "https://arisa-perfume-store-default-rtdb.firebaseio.com/",
-            projectId: "arisa-perfume-store",
-            storageBucket: "arisa-perfume-store.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            databaseURL: "https://arisacollection-default-rtdb.firebaseio.com/"
         };
-
-        // Initialize App Network Services
-        firebase.initializeApp(firebaseConfig);
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         const database = firebase.database();
         const catalogRef = database.ref('perfumes');
         const settingsRef = database.ref('settings');
         const ordersRef = database.ref('orders');
+        const chatsRef = database.ref('chats');
+        const reviewsRef = database.ref('reviews');
+        const customersRef = database.ref('customers');
 
-        const SECURITY_PASS_KEY = "AMIRA_SECURE_KEY_2026"; 
+        const SECURITY_PASS_KEY = "ARISA_SECURE_ADMIN_9922";
+        const myWhatsAppNumber = "23279000000"; // Update with actual business WhatsApp number if needed
 
-        let itemsCollection = []; 
-        let storeSettings = { about: "Welcome to Arisa Collection premium showroom.", policy: "Standard delivery terms apply." };
+        let currentSection = 'perfumes';
+        let itemsCollection = [];
+        let storeSettings = { about: "Welcome to Arisa Collection.", policy: "Standard store policy applies.", deliveryFee: 0, banner: "", coupons: {"ARISA10": 0.10, "WELCOME10": 0.10, "ARISA20": 0.20} };
         let cart = [];
-        let currentSection = 'perfume'; 
-        let secretClickCount = 0;
-        let uploadedImageBase64 = "";
+        let wishlist = JSON.parse(localStorage.getItem('arisa_wishlist') || '[]');
         let appliedCouponDiscount = 0;
         let appliedCouponName = "";
+        let secretClickCount = 0;
+        let uploadedImageBase64 = "";
 
-        // Fast Loading Optimization: Local Cache Check
-        const cachedCatalog = localStorage.getItem('arisa_cached_catalog');
-        if (cachedCatalog) {
-            try {
-                itemsCollection = JSON.parse(cachedCatalog);
-                renderProducts();
-                hidePreloader();
-            } catch(e) {}
-        }
-
-        // Real-time synchronization listeners
-        catalogRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            itemsCollection = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
-            localStorage.setItem('arisa_cached_catalog', JSON.stringify(itemsCollection));
-            renderProducts();
-            hidePreloader();
-        });
-
-        settingsRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            if(data) {
-                if(data.about) storeSettings.about = data.about;
-                if(data.policy) storeSettings.policy = data.policy;
-            }
-        });
-
-        function hidePreloader() {
-            const preloader = document.getElementById('app-preloader');
-            if(preloader) {
-                preloader.style.opacity = '0';
-                setTimeout(() => preloader.style.display = 'none', 400);
-            }
-        }
-
-        // Fast Image Optimization & Compression Helper via Canvas
-        function convertImageFile(event) {
+        // Image Base64 Handler for local uploads
+        function handleImageUpload(event) {
             const file = event.target.files[0];
             if(file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const img = new Image();
-                    img.src = e.target.result;
-                    img.onload = function() {
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        let width = img.width;
-                        let height = img.height;
-                        const maxDim = 600; // Resize constraint for fast layout optimization
-                        if (width > height && width > maxDim) {
-                            height *= maxDim / width;
-                            width = maxDim;
-                        } else if (height > maxDim) {
-                            width *= maxDim / height;
-                            height = maxDim;
-                        }
-                        canvas.width = width;
-                        canvas.height = height;
-                        ctx.drawImage(img, 0, 0, width, height);
-                        uploadedImageBase64 = canvas.toDataURL('image/jpeg', 0.7); // 70% quality compression
-                        document.getElementById('admin-p-img-link').value = "[Optimized Image Ready]";
-                    }
-                }
+                    uploadedImageBase64 = e.target.result;
+                };
                 reader.readAsDataURL(file);
             }
         }
 
-        // Tab Switching with Active Bottom Line Line Indicator
-        window.switchTab = function(tabName, element) {
-            document.querySelectorAll('header nav a').forEach(a => a.classList.remove('active'));
-            if(element) element.classList.add('active');
+        // Realtime Database Listeners
+        catalogRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            itemsCollection = [];
+            let lowStockCount = 0;
+            if (data) {
+                Object.keys(data).forEach(key => {
+                    let item = { id: key, ...data[key] };
+                    itemsCollection.push(item);
+                    if(item.status === 'few') lowStockCount++;
+                });
+            }
+            renderProducts();
+            document.getElementById('admin-low-stock').innerHTML = `<strong>Low Stock Alerts:</strong> ${lowStockCount} items running low (Only 3 left)`;
+            updateTopSellingAnalytics(itemsCollection);
+        });
 
+        settingsRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                storeSettings = { ...storeSettings, ...data };
+                if(storeSettings.banner) {
+                    document.getElementById('store-banner-container').innerHTML = `<div style="background:var(--card-bg); border:1px solid var(--border-color); padding:10px; border-radius:8px; text-align:center; font-size:12px; font-weight:700;">${storeSettings.banner}</div>`;
+                }
+                updateCartUI();
+            }
+        });
+
+        // Tab Switching Logic
+        window.switchTab = function(tabName) {
             if(tabName === 'home') {
                 document.getElementById('home-content').style.display = 'block';
                 document.getElementById('category-section-bar').style.display = 'flex';
@@ -593,6 +327,11 @@
                     </div>
                     <div id="track-result-box" style="font-size:13px; color:var(--text-dark);"></div>
                 `;
+            } else if(tabName === 'wishlist') {
+                document.getElementById('home-content').style.display = 'none';
+                document.getElementById('category-section-bar').style.display = 'none';
+                document.getElementById('page-content').style.display = 'block';
+                renderWishlistPage();
             } else {
                 document.getElementById('home-content').style.display = 'none';
                 document.getElementById('category-section-bar').style.display = 'none';
@@ -634,6 +373,10 @@
 
             filteredItems.forEach(p => {
                 const sold = p.status === 'sold-out';
+                const isFew = p.status === 'few';
+                const statusText = sold ? 'Out of Stock' : (isFew ? 'Only Three Left' : 'In Stock');
+                const badgeClass = sold ? 'sold-out' : (isFew ? 'few' : 'available');
+                
                 const originalPrice = parseFloat(p.price);
                 let priceHTML = `<span class="price-current">${originalPrice.toFixed(2)} NLE</span>`;
 
@@ -643,14 +386,18 @@
                     priceHTML = `<span class="price-current">${finalPrice.toFixed(2)} NLE</span> <span class="price-old">${originalPrice.toFixed(2)} NLE</span>`;
                 }
 
+                const isWishlisted = wishlist.includes(p.id);
+
                 grid.innerHTML += `
                     <div class="product-card" onclick="${sold ? '' : `directAddToCart('${p.id}')`}">
-                        <span class="status-badge ${p.status}">${p.status}</span>
+                        <span class="status-badge ${badgeClass}">${statusText}</span>
                         ${p.isNewArrival === 'yes' ? '<span class="new-badge">NEW</span>' : ''}
+                        <button type="button" onclick="event.stopPropagation(); toggleWishlist('${p.id}')" style="position:absolute; top:6px; right:${p.isNewArrival === 'yes' ? '42px' : '6px'}; background:none; border:none; font-size:14px; cursor:pointer; z-index:5;">${isWishlisted ? '❤️' : '🤍'}</button>
                         <div class="product-image"><img src="${p.image || 'https://via.placeholder.com/150'}" loading="lazy" onload="this.classList.remove('loading')" class="loading"></div>
                         <div class="product-info">
                             <h3 class="product-title">${p.name}</h3>
                             <div class="price-container">${priceHTML}</div>
+                            <div style="font-size:10px; color:var(--text-muted); margin-bottom:4px;">⭐ 4.8 / 5.0</div>
                             <button type="button" class="btn" ${sold ? 'disabled' : ''}>${sold ? 'OUT OF STOCK' : 'ADD TO CART'}</button>
                         </div>
                         ${isAdmin ? `<div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-top:8px; z-index:10;">
@@ -663,6 +410,36 @@
                         </div>` : ''}
                     </div>`;
             });
+        }
+
+        window.toggleWishlist = (productId) => {
+            if(wishlist.includes(productId)) {
+                wishlist = wishlist.filter(id => id !== productId);
+                alert("Removed from Wishlist");
+            } else {
+                wishlist.push(productId);
+                alert("Added to Wishlist");
+            }
+            localStorage.setItem('arisa_wishlist', JSON.stringify(wishlist));
+            renderProducts();
+        };
+
+        function renderWishlistPage() {
+            const container = document.getElementById('page-inner-content');
+            const wishItems = itemsCollection.filter(i => wishlist.includes(i.id));
+            if(wishItems.length === 0) {
+                container.innerHTML = `<h2 style="font-size:18px; margin-bottom:12px; font-weight:800; color:var(--text-dark);">MY WISHLIST</h2><p style="font-size:13px; color:var(--text-muted);">Your wishlist is empty.</p>`;
+                return;
+            }
+            let html = `<h2 style="font-size:18px; margin-bottom:12px; font-weight:800; color:var(--text-dark);">MY WISHLIST</h2><div class="products-grid">`;
+            wishItems.forEach(p => {
+                html += `<div class="product-card" onclick="directAddToCart('${p.id}')">
+                    <div class="product-image"><img src="${p.image || 'https://via.placeholder.com/150'}"></div>
+                    <div class="product-info"><h3 class="product-title">${p.name}</h3><span class="price-current">${p.price} NLE</span></div>
+                </div>`;
+            });
+            html += `</div>`;
+            container.innerHTML = html;
         }
 
         window.directAddToCart = (productId) => {
@@ -682,13 +459,10 @@
         // Coupon & Pricing Engine
         window.applyCoupon = () => {
             const code = document.getElementById('coupon-code-input').value.trim().toUpperCase();
-            if(code === "ARISA10" || code === "WELCOME10") {
-                appliedCouponDiscount = 0.10;
-                appliedCouponName = "10% Off (" + code + ")";
-                alert("Coupon applied successfully!");
-            } else if(code === "ARISA20") {
-                appliedCouponDiscount = 0.20;
-                appliedCouponName = "20% Off (" + code + ")";
+            const activeCoupons = storeSettings.coupons || {"ARISA10": 0.10, "WELCOME10": 0.10, "ARISA20": 0.20};
+            if(activeCoupons[code] !== undefined) {
+                appliedCouponDiscount = activeCoupons[code];
+                appliedCouponName = (activeCoupons[code] * 100) + "% Off (" + code + ")";
                 alert("Coupon applied successfully!");
             } else {
                 alert("Invalid coupon code.");
@@ -698,7 +472,7 @@
             updateCartUI();
         };
 
-        // Professional Pricing & Discount Engine (5% for 2 items, 10% for 3+ items + Coupon System)
+        // Professional Pricing & Discount Engine
         function updateCartUI() {
             document.getElementById('cart-counter').innerText = cart.length;
             document.getElementById('floating-cart-counter').innerText = cart.length;
@@ -723,11 +497,13 @@
 
             let calculatedDiscount = subtotal * discountRate;
             let couponDiscountAmount = (subtotal - calculatedDiscount) * appliedCouponDiscount;
-            let grandTotal = subtotal - calculatedDiscount - couponDiscountAmount;
+            let deliveryFee = parseFloat(storeSettings.deliveryFee || 0);
+            let grandTotal = subtotal - calculatedDiscount - couponDiscountAmount + deliveryFee;
 
             document.getElementById('cart-subtotal').innerText = subtotal.toFixed(2);
             document.getElementById('cart-discount-label').innerText = discountText;
             document.getElementById('cart-coupon-label').innerText = appliedCouponName || "None";
+            document.getElementById('cart-delivery-fee').innerText = deliveryFee.toFixed(2);
             document.getElementById('cart-grand-total').innerText = grandTotal.toFixed(2);
         }
 
@@ -821,8 +597,59 @@
             });
         };
 
-        window.changeBackgroundTheme = function(colorHex) {
-            document.documentElement.style.setProperty('--bg-color', colorHex);
+        window.saveBannerSetting = function() {
+            const val = document.getElementById('admin-banner-input').value.trim();
+            settingsRef.update({ banner: val, secretAdminKey: SECURITY_PASS_KEY }, () => { alert("Banner updated successfully!"); });
+        };
+
+        window.saveDeliveryFeeSetting = function() {
+            const val = document.getElementById('admin-delivery-fee-input').value.trim();
+            settingsRef.update({ deliveryFee: parseFloat(val || 0), secretAdminKey: SECURITY_PASS_KEY }, () => { alert("Delivery fee updated!"); });
+        };
+
+        window.saveNewCouponSetting = function() {
+            const val = document.getElementById('admin-coupon-code-input').value.trim().toUpperCase();
+            if(!val) return;
+            let currentCoupons = storeSettings.coupons || {"ARISA10": 0.10, "WELCOME10": 0.10, "ARISA20": 0.20};
+            currentCoupons[val] = 0.15; // default 15% for custom added
+            settingsRef.update({ coupons: currentCoupons, secretAdminKey: SECURITY_PASS_KEY }, () => { alert("New coupon added!"); });
+        };
+
+        window.openAdminCustomerManagement = function() {
+            customersRef.once('value', (snap) => {
+                const data = snap.val() || {};
+                let listStr = Object.values(data).map(c => `• ${c.name} (${c.phone})`).join('\n') || "No registered customers yet.";
+                alert("CUSTOMER MANAGEMENT:\n\n" + listStr);
+            });
+        };
+
+        window.openAdminLiveChatHub = function() {
+            chatsRef.once('value', (snap) => {
+                const data = snap.val() || {};
+                let chatStr = Object.values(data).map(m => `[${m.sender}]: ${m.text}`).join('\n') || "No active messages.";
+                alert("LIVE CHAT INBOX:\n\n" + chatStr);
+            });
+        };
+
+        function updateTopSellingAnalytics(items) {
+            let topHtml = items.slice(0, 3).map(i => i.name).join(', ') || "None yet";
+            const el = document.getElementById('admin-top-selling');
+            if(el) el.innerHTML = `<strong>Top Selling Perfumes:</strong> ${topHtml}`;
+        }
+
+        window.toggleChatPopup = function() {
+            const box = document.getElementById('chat-popup-box');
+            box.style.display = box.style.display === 'flex' ? 'none' : 'flex';
+        };
+
+        window.sendCustomerChatMessage = function() {
+            const input = document.getElementById('chat-user-msg');
+            const text = input.value.trim();
+            if(!text) return;
+            chatsRef.push({ sender: 'Customer', text: text, timestamp: Date.now() });
+            const container = document.getElementById('chat-messages-container');
+            container.innerHTML += `<div style="background:var(--primary); color:var(--bg-color); padding:6px 8px; border-radius:6px; align-self:flex-end;">${text}</div>`;
+            input.value = '';
         };
 
         // Dark Mode Controller
@@ -899,6 +726,7 @@
         window.checkoutWhatsApp = () => {
             const name = document.getElementById('cust-name').value.trim();
             const phone = document.getElementById('cust-phone').value.trim();
+            const referrer = document.getElementById('cust-referrer').value.trim();
             const grandTotal = document.getElementById('cart-grand-total').innerText;
             const discountLabel = document.getElementById('cart-discount-label').innerText;
             const couponLabel = appliedCouponName ? ` | Coupon: ${appliedCouponName}` : '';
@@ -919,7 +747,11 @@
                 timestamp: Date.now()
             });
 
-            let msg = `*ARISA COLLECTION ORDER*\nTracking ID: ${trackingId}\nCustomer: ${name}\nPhone: ${phone}\nDiscount Applied: ${discountLabel}${couponLabel}\nTotal Due: ${grandTotal} NLE\n\n*Ordered Items:*\n`;
+            // Save customer record for Customer Management
+            customersRef.push({ name: name, phone: phone, referrer: referrer || 'None', timestamp: Date.now() });
+
+            let referralMsg = referrer ? `\nReferral Code Used: ${referrer} (Reward unlocked!)` : '';
+            let msg = `*ARISA COLLECTION ORDER*\nTracking ID: ${trackingId}\nCustomer: ${name}\nPhone: ${phone}${referralMsg}\nDiscount Applied: ${discountLabel}${couponLabel}\nTotal Due: ${grandTotal} NLE\n\n*Ordered Items:*\n`;
             cart.forEach(i => { msg += `• ${i.name} (${i.price} NLE)\n`; });
 
             window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`, '_blank');
