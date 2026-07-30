@@ -64,29 +64,36 @@
         }
         .spinner-container {
             position: relative;
-            width: 120px;
-            height: 120px;
+            width: 140px;
+            height: 140px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
+        /* Dotted glowing ring spinner */
         .glow-ring {
-            width: 100px;
-            height: 100px;
+            position: absolute;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            border: 4px solid transparent;
-            border-top: 4px solid #ff6b8b;
-            border-right: 4px solid #ff477e;
-            box-shadow: 0 0 15px rgba(255, 107, 139, 0.5);
-            animation: spinNeon 1.2s linear infinite;
+            animation: spinNeon 1.4s linear infinite;
+        }
+        .glow-ring::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 4px dashed #00d2ff;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.6), inset 0 0 15px rgba(0, 210, 255, 0.6);
         }
         .loading-text {
             position: absolute;
-            color: #ff6b8b;
-            font-size: 11px;
+            color: #00d2ff;
+            font-size: 12px;
             font-weight: 700;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.8);
         }
         @keyframes spinNeon {
             0% { transform: rotate(0deg); }
@@ -661,6 +668,11 @@
                         <div style="margin-top:6px; display:flex; gap:4px; z-index:10;">
                             <input type="text" id="quick-rename-${p.id}" value="${p.name}" style="font-size:10px; padding:4px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-dark); border-radius:4px; width:100%;" onclick="event.stopPropagation()">
                             <button type="button" class="btn" style="background:#059669; font-size:9px; padding:4px 8px;" onclick="event.stopPropagation(); quickUpdateName('${p.id}')">Rename</button>
+                        </div>
+                        <div style="margin-top:6px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:4px; z-index:10;">
+                            <input type="number" id="quick-price-${p.id}" value="${p.price}" placeholder="Price" style="font-size:10px; padding:4px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-dark); border-radius:4px; width:100%;" onclick="event.stopPropagation()">
+                            <input type="number" id="quick-discount-${p.id}" value="${p.discountPercentage || 0}" placeholder="Disc %" style="font-size:10px; padding:4px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-dark); border-radius:4px; width:100%;" onclick="event.stopPropagation()">
+                            <button type="button" class="btn" style="background:#d97706; font-size:9px; padding:4px 4px;" onclick="event.stopPropagation(); quickUpdatePriceDiscount('${p.id}')">Save Price</button>
                         </div>` : ''}
                     </div>`;
             });
@@ -669,7 +681,14 @@
         window.directAddToCart = (productId) => {
             const item = itemsCollection.find(p => p.id === productId);
             if (!item || item.status === 'sold-out') return;
-            cart.push({ ...item, cartId: Date.now() }); 
+            
+            let effectivePrice = parseFloat(item.price);
+            if (item.discountPercentage && parseFloat(item.discountPercentage) > 0) {
+                let pct = parseFloat(item.discountPercentage);
+                effectivePrice = effectivePrice - (effectivePrice * (pct / 100));
+            }
+
+            cart.push({ ...item, effectivePrice: effectivePrice, cartId: Date.now() }); 
             updateCartUI();
             document.getElementById('floating-cart-btn').style.display = 'block';
         };
@@ -707,7 +726,7 @@
             let subtotal = 0;
             const list = document.getElementById('cart-items-list');
             list.innerHTML = cart.map(i => {
-                const price = parseFloat(i.price);
+                const price = parseFloat(i.effectivePrice !== undefined ? i.effectivePrice : i.price);
                 subtotal += price;
                 return `<div class="cart-item-row"><div><h4>${i.name}</h4><button type="button" class="remove-item-btn" onclick="removeCartItem(${i.cartId})">Remove</button></div><span>${price.toFixed(2)} NLE</span></div>`;
             }).join('');
@@ -742,7 +761,7 @@
             const category = document.getElementById('admin-p-category').value;
             
             if (!name || !price || !imgLink) { 
-                alert("Please provide the Name, Price, and an Image."); 
+                alert("Please provide the Name,Price, and an Image."); 
                 return; 
             }
 
@@ -806,6 +825,26 @@
             }, (error) => {
                 if(!error) alert("Product name updated successfully!");
                 else alert("Error updating name: " + error.message);
+            });
+        };
+
+        window.quickUpdatePriceDiscount = function(id) {
+            const priceField = document.getElementById(`quick-price-${id}`);
+            const discountField = document.getElementById(`quick-discount-${id}`);
+            if(!priceField || !discountField) return;
+
+            const newPrice = priceField.value.trim();
+            const newDiscount = discountField.value.trim() || "0";
+
+            if(!newPrice) { alert("Price cannot be empty."); return; }
+
+            database.ref('perfumes/' + id).update({
+                price: newPrice,
+                discountPercentage: newDiscount,
+                secretAdminKey: SECURITY_PASS_KEY
+            }, (error) => {
+                if(!error) alert("Price and discount updated successfully!");
+                else alert("Error updating pricing: " + error.message);
             });
         };
 
@@ -921,7 +960,7 @@
             });
 
             let msg = `*ARISA COLLECTION ORDER*\nTracking ID: ${trackingId}\nCustomer: ${name}\nPhone: ${phone}\nDiscount Applied: ${discountLabel}${couponLabel}\nTotal Due: ${grandTotal} NLE\n\n*Ordered Items:*\n`;
-            cart.forEach(i => { msg += `• ${i.name} (${i.price} NLE)\n`; });
+            cart.forEach(i => { msg += `• ${i.name} (${i.effectivePrice !== undefined ? i.effectivePrice.toFixed(2) : i.price} NLE)\n`; });
 
             window.open(`https://wa.me/${myWhatsAppNumber}?text=${encodeURIComponent(msg)}`, '_blank');
             alert("Order placed successfully! Your Tracking ID is: " + trackingId);
